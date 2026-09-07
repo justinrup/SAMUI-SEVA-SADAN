@@ -1,0 +1,74 @@
+import os
+import secrets
+import time
+import smtplib
+from email.message import EmailMessage
+from flask import Flask, request, jsonify, send_from_directory
+
+app = Flask(__name__)
+
+otp_data = {}
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def load_env():
+    env = {}
+    if os.path.exists(os.path.join(BASE_DIR, ".env")):
+        with open(os.path.join(BASE_DIR, ".env")) as f:
+            for line in f:
+                if "=" in line:
+                    k, v = line.strip().split("=", 1)
+                    env[k] = v
+    return env
+
+ENV = load_env()
+
+@app.route("/")
+def home():
+    return send_from_directory(BASE_DIR, "index.html")
+
+@app.route("/<path:path>")
+def files(path):
+    return send_from_directory(BASE_DIR, path)
+
+@app.route("/api/send-otp", methods=["POST"])
+def send_otp():
+    data = request.get_json() or {}
+    email = data.get("email", "").strip().lower()
+
+    admin_email = ENV.get("ADMIN_EMAIL", "").lower()
+
+    if not email or email != admin_email:
+        return jsonify({"ok": False, "message": "Invalid recovery email"}), 400
+
+    otp = str(secrets.randbelow(900000) + 100000)
+
+    otp_data[email] = {
+        "otp": otp,
+        "expires": time.time() + 300
+    }
+
+    msg = EmailMessage()
+    msg["Subject"] = "SAMUI SEVA SADAN - Admin OTP"
+    msg["From"] = ENV.get("MAIL_USERNAME")
+    msg["To"] = email
+    msg.set_content(
+        f"Your SAMUI SEVA SADAN Admin Password Reset OTP is: {otp}\n\n"
+        "This OTP is valid for 5 minutes."
+    )
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(
+                ENV.get("MAIL_USERNAME"),
+                ENV.get("MAIL_APP_PASSWORD")
+            )
+            smtp.send_message(msg)
+
+        return jsonify({"ok": True, "message": "OTP sent to your email"})
+    except Exception as e:
+        print("MAIL ERROR:", e)
+        return jsonify({"ok": False, "message": "Email could not be sent"}), 500
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8080, debug=False)

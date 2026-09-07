@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Samui Seva Sadan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+<h1>SAMUI SEVA SADAN</h1>
+<p>Nursing Home & Healthcare Centre</p>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="facilities.html">Facilities</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<section class="contact">
+<h2>Contact Us</h2>
+<div class="card">
+<h3>Samui Seva Sadan Nursing Home</h3>
+<p><strong>Phone:</strong> Add phone number</p>
+<p><strong>Email:</strong> Add email address</p>
+<p><strong>Address:</strong> Add nursing home address</p>
+<p><strong>Emergency:</strong> Add emergency contact number</p>
+</div>
+
+<div id="locationList">
+  <div class="card">
+    <h3>📍 Location</h3>
+    <p>Loading location...</p>
+  </div>
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Samui Seva Sadan Nursing Home</p>
+</footer>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+function esc(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+async function loadLocations(){
+
+  const card = document.getElementById("locationList");
+
+  if(!card) return;
+
+  try{
+
+    const snapshot =
+      await getDocs(collection(db,"locations"));
+
+    let html = "";
+
+    snapshot.forEach(item => {
+
+      const d = item.data();
+
+      if(d.published === true){
+
+        html += `
+          <div class="card">
+
+            <h3>📍 ${esc(d.name)}</h3>
+
+            <p>
+              <strong>Address:</strong><br>
+              ${esc(d.address)}
+            </p>
+
+            ${
+              d.mapLink
+              ? `
+                <p>
+                  <a
+                    href="${esc(d.mapLink)}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    🗺️ Open Location in Google Maps
+                  </a>
+                </p>
+              `
+              : ""
+            }
+
+          </div>
+        `;
+      }
+
+    });
+
+    if(!html){
+
+      html = `
+        <div class="card">
+          <h3>📍 Location</h3>
+          <p>Location information will be available here soon.</p>
+        </div>
+      `;
+
+    }
+
+    card.innerHTML = html;
+
+  }catch(error){
+
+    console.error(error);
+
+    card.innerHTML = `
+      <div class="card">
+        <h3>📍 Location</h3>
+        <p>Location information could not be loaded.</p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+loadLocations();
+
+</script>
+
+</body>
+</html>

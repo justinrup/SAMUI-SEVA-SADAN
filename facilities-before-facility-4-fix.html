@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilities | Samui Seva Sadan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+<h1>SAMUI SEVA SADAN</h1>
+<p>Nursing Home & Healthcare Centre</p>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="facilities.html">Facilities</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<section>
+<h2>Our Facilities</h2>
+<div class="services" id="facilitiesList">
+<div class="card"><h3>Patient Rooms</h3><p>Comfortable spaces for patient care and recovery.</p></div>
+<div class="card"><h3>Nursing Support</h3><p>Dedicated nursing assistance for patients.</p></div>
+<div class="card"><h3>Clean Environment</h3><p>A clean and comfortable healthcare environment.</p></div>
+<div class="card"><h3>Patient Care</h3><p>Supportive care focused on patient comfort.</p></div>
+</div>
+</section>
+
+<footer>
+<p>© 2026 Samui Seva Sadan Nursing Home</p>
+</footer>
+
+<!-- FACILITIES FIREBASE PUBLIC -->
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+}
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM4",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function loadPublishedFacilities() {
+  try {
+    const snapshot = await getDocs(collection(db, "facilities"));
+    const list = document.getElementById("facilitiesList");
+
+    snapshot.forEach(function(item) {
+      const data = item.data();
+
+      if (data.published === true) {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const title = document.createElement("h3");
+        title.textContent = data.name || "";
+
+        const description = document.createElement("p");
+        description.textContent = data.description || "";
+
+        card.appendChild(title);
+        card.appendChild(description);
+        list.appendChild(card);
+      }
+    });
+
+  } catch (error) {
+    console.error("Facilities load error:", error);
+  }
+}
+
+loadPublishedFacilities();
+</script>
+<!-- END FACILITIES FIREBASE PUBLIC -->
+
+</body>
+</html>

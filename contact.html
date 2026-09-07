@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Samui Seva Sadan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+<h1>SAMUI SEVA SADAN</h1>
+<p>Nursing Home & Healthcare Centre</p>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="facilities.html">Facilities</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<section class="contact">
+
+<h2>Contact Us</h2>
+
+<div id="contactInfo">
+
+  <div class="card">
+    <h3>Samui Seva Sadan Nursing Home</h3>
+
+    <p><strong>📞 Phone:</strong>
+      <span id="phone">Loading...</span>
+    </p>
+
+    <p><strong>✉️ Email:</strong>
+      <span id="email">Loading...</span>
+    </p>
+
+    <p><strong>📍 Address:</strong>
+      <span id="address">Loading...</span>
+    </p>
+
+    <p><strong>🚑 Emergency:</strong>
+      <span id="emergency">Loading...</span>
+    </p>
+
+  </div>
+
+</div>
+
+<div id="locationList">
+
+  <div class="card">
+    <h3>📍 LOCATION</h3>
+    <p>Loading location...</p>
+  </div>
+
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Samui Seva Sadan Nursing Home</p>
+</footer>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyDeJryLHlGc9Mx_kp1oiIhmqnLC5EVYGBvM",
+  authDomain:"samui-seva-sadan.firebaseapp.com",
+  projectId:"samui-seva-sadan",
+  storageBucket:"samui-seva-sadan.firebasestorage.app",
+  messagingSenderId:"358488171058",
+  appId:"1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId:"G-ML4BQ4QVLB"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function safe(value){
+  return String(value || "").trim();
+}
+
+async function loadContact(){
+
+  try{
+
+    const snapshot = await getDocs(collection(db, "locations"));
+
+    const published = [];
+
+    snapshot.forEach(item => {
+
+      const d = item.data();
+
+      if(d.published === true){
+        published.push(d);
+      }
+
+    });
+
+    if(published.length === 0){
+      document.getElementById("phone").textContent = "Phone number will be updated soon.";
+      document.getElementById("email").textContent = "Email will be updated soon.";
+      document.getElementById("address").textContent = "Address will be updated soon.";
+      document.getElementById("emergency").textContent = "Emergency number will be updated soon.";
+      return;
+    }
+
+    const d = published[0];
+
+    document.getElementById("phone").textContent =
+      safe(d.phone) || "Phone number not available";
+
+    document.getElementById("email").textContent =
+      safe(d.email) || "Email not available";
+
+    document.getElementById("address").textContent =
+      safe(d.address) || "Address not available";
+
+    document.getElementById("emergency").textContent =
+      safe(d.emergency) || "Emergency number not available";
+
+    const locationList = document.getElementById("locationList");
+
+    if(locationList){
+
+      let html = "";
+
+      published.forEach(d => {
+
+        html += `
+          <div class="card">
+            <h3>📍 ${safe(d.name) || "Nursing Home Location"}</h3>
+            <p>
+              <strong>Address:</strong><br>
+              ${safe(d.address) || "Address not available"}
+            </p>
+
+            ${d.mapLink ? `
+              <p>
+                <a href="${safe(d.mapLink)}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                   🗺️ Open Location in Google Maps
+                </a>
+              </p>
+            ` : ""}
+          </div>
+        `;
+
+      });
+
+      locationList.innerHTML = html;
+
+    }
+
+  }catch(error){
+
+    console.error("Contact loading error:", error);
+
+    document.getElementById("phone").textContent = "Unable to load phone number.";
+    document.getElementById("email").textContent = "Unable to load email.";
+    document.getElementById("address").textContent = "Unable to load address.";
+    document.getElementById("emergency").textContent = "Unable to load emergency number.";
+
+  }
+
+}
+
+loadContact();
+</script>
+
+</body>
+</html>

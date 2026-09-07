@@ -1,0 +1,1087 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Samui Seva Sadan</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2fafa;
+      color: #123;
+    }
+
+    header {
+      background: #008c95;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    input, textarea, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input, textarea {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      border: none;
+      background: #008c95;
+      color: white;
+      cursor: pointer;
+    }
+
+    .delete {
+      background: #d32f2f;
+    }
+
+    .edit {
+      background: #1976d2;
+    }
+
+    .patient {
+      padding: 15px;
+      margin-top: 12px;
+      background: #eefafa;
+      border-radius: 10px;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏥 Samui Seva Sadan</h1>
+  <p>Admin Dashboard</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>📌 Medical Admin Options</h2>
+
+    <button onclick="location.href='doctor-management.html'">
+      1️⃣ 👨‍⚕️ Doctor Admin
+    </button>
+
+    <button onclick="location.href='baby-details.html'">
+      2️⃣ 👶 Baby Details
+    </button>
+
+    <button onclick="location.href='anaesthesia-note.html'">
+      3️⃣ 🩺 Anaesthesia Note
+    </button>
+
+    <button onclick="location.href='doctor-treatment-ot.html'">
+      4️⃣ 📋 Doctor / Treatment / OT Note
+    </button>
+
+    <button onclick="location.href='blood-reports.html'">
+      5️⃣ 🩸 Blood Reports
+    </button>
+
+    <button onclick="location.href='document-upload.html'">
+      6️⃣ 📄 Document Upload
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📋 Patient Management</h2>
+    <p>Add Patient • Patient Search • Patient Records</p>
+  </div>
+
+  <div class="card">
+    <h2>➕ Add Patient</h2>
+
+    <input id="patientName" placeholder="Patient Name">
+    <input id="slNo" placeholder="SL No.">
+    <input id="roomNo" placeholder="Room No.">
+    <input id="phone" placeholder="Phone Number">
+
+    <textarea id="note" placeholder="Patient Note"></textarea>
+
+    <button id="savePatient">Save Patient</button>
+
+    <div id="message"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔎 Patient Search</h2>
+
+    <input id="searchInput"
+      placeholder="Patient Name / SL No. / Room No.">
+
+    <button id="searchButton">Search</button>
+
+    <div id="searchResult"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Patient Records</h2>
+
+    <div id="patientList">Loading...</div>
+  </div>
+
+
+  <div class="card">
+    <h2>📍 Contact / Location Management</h2>
+
+    <input id="locationName" placeholder="Location Name">
+    <textarea id="locationAddress" placeholder="Full Location / Address"></textarea>
+    <input id="locationPhone" placeholder="Phone Number">
+    <input id="locationEmergency" placeholder="Emergency Contact Number">
+    <input id="locationEmail" placeholder="Email Address">
+    <input id="locationMap" placeholder="Google Maps Link (Optional)">
+
+    <button id="saveLocation">➕ Add Location</button>
+
+    <div id="locationMessage"></div>
+    <div id="locationList">Loading locations...</div>
+  </div>
+
+  <div class="card">
+    <h2>🏥 Facilities Management</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+      <input id="facilityName" placeholder="Facility Name">
+      <textarea id="facilityDescription" placeholder="Facility Description"></textarea>
+      <button id="saveFacility">➕ Add Facility</button>
+    </div>
+
+    <button id="setupDefaultFacilities" style="margin:10px 0;">💾 Setup Existing 4 Facilities</button>
+  <div id="setupFacilityMessage"></div>
+  <div id="facilityMessage"></div>
+    <div id="facilityList">Loading facilities...</div>
+  </div>
+
+  <div class="card">
+    <button id="logoutButton" class="delete">
+      🚪 Logout
+    </button>
+  </div>
+
+</div>
+
+
+
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// Admin protection
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+    window.location.href = "admin.html";
+  }
+
+});
+
+
+// ADD PATIENT
+
+document.getElementById("savePatient").addEventListener(
+  "click",
+  async () => {
+
+    const name =
+      document.getElementById("patientName").value.trim();
+
+    const slNo =
+      document.getElementById("slNo").value.trim();
+
+    const roomNo =
+      document.getElementById("roomNo").value.trim();
+
+    const phone =
+      document.getElementById("phone").value.trim();
+
+    const note =
+      document.getElementById("note").value.trim();
+
+    const message =
+      document.getElementById("message");
+
+
+    if (!name) {
+      message.textContent = "⚠️ Patient Name দিন।";
+      return;
+    }
+
+
+    try {
+
+      await addDoc(
+        collection(db, "patients"),
+        {
+          name,
+          slNo,
+          roomNo,
+          phone,
+          note,
+          createdAt: new Date().toISOString()
+        }
+      );
+
+
+      message.textContent =
+        "✅ Patient সফলভাবে Save হয়েছে।";
+
+
+      document.getElementById("patientName").value = "";
+      document.getElementById("slNo").value = "";
+      document.getElementById("roomNo").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("note").value = "";
+
+
+      loadPatients();
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.textContent =
+        "❌ Patient Save করা যায়নি।";
+
+    }
+
+  }
+);
+
+
+// LOAD PATIENTS
+
+async function loadPatients() {
+
+  const list =
+    document.getElementById("patientList");
+
+  try {
+
+    const snapshot =
+      await getDocs(collection(db, "patients"));
+
+    if (snapshot.empty) {
+
+      list.innerHTML =
+        "<p>কোনো Patient Record নেই।";
+
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    snapshot.forEach((item) => {
+
+      const data = item.data();
+
+      const div =
+        document.createElement("div");
+
+      div.className = "patient";
+
+
+      div.innerHTML = `
+        <strong>${data.name || ""}</strong><br>
+        SL No: ${data.slNo || ""}<br>
+        Room: ${data.roomNo || ""}<br>
+        Phone: ${data.phone || ""}<br>
+        Note: ${data.note || ""}
+
+        <br><br>
+
+        <button class="edit"
+          onclick="editPatient('${item.id}')">
+          ✏️ Edit
+        </button>
+
+        <button class="delete"
+          onclick="deletePatient('${item.id}')">
+          🗑️ Delete
+        </button>
+      `;
+
+
+      list.appendChild(div);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    list.innerHTML =
+      "<p>❌ Records load করা যায়নি।</p>";
+
+  }
+
+}
+
+
+// DELETE
+
+window.deletePatient = async function(id) {
+
+  const ok =
+    confirm("এই Patient Record কি Delete করতে চান?");
+
+  if (!ok) return;
+
+
+  try {
+
+    await deleteDoc(
+      doc(db, "patients", id)
+    );
+
+    alert("✅ Patient Record Delete হয়েছে।");
+
+    loadPatients();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("❌ Delete করা যায়নি।");
+
+  }
+
+};
+
+
+// EDIT
+
+window.editPatient = async function(id) {
+
+  const name =
+    prompt("Patient Name:");
+
+  if (name === null) return;
+
+
+  const slNo =
+    prompt("SL No.:");
+
+  if (slNo === null) return;
+
+
+  const roomNo =
+    prompt("Room No.:");
+
+  if (roomNo === null) return;
+
+
+  const phone =
+    prompt("Phone Number:");
+
+  if (phone === null) return;
+
+
+  const note =
+    prompt("Patient Note:");
+
+  if (note === null) return;
+
+
+  try {
+
+    await updateDoc(
+      doc(db, "patients", id),
+      {
+        name: name.trim(),
+        slNo: slNo.trim(),
+        roomNo: roomNo.trim(),
+        phone: phone.trim(),
+        note: note.trim()
+      }
+    );
+
+
+    alert("✅ Patient Record Update হয়েছে.");
+
+    loadPatients();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("❌ Update করা যায়নি.");
+
+  }
+
+};
+
+
+// SEARCH
+
+document.getElementById("searchButton")
+.addEventListener("click", async () => {
+
+  const value =
+    document.getElementById("searchInput")
+    .value.trim()
+    .toLowerCase();
+
+  const result =
+    document.getElementById("searchResult");
+
+
+  if (!value) {
+
+    result.innerHTML =
+      "<p>Search করার জন্য কিছু লিখুন।</p>";
+
+    return;
+
+  }
+
+
+  try {
+
+    const snapshot =
+      await getDocs(collection(db, "patients"));
+
+    let found = false;
+
+    result.innerHTML = "";
+
+
+    snapshot.forEach((item) => {
+
+      const data = item.data();
+
+      const name =
+        (data.name || "").toLowerCase();
+
+      const slNo =
+        (data.slNo || "").toLowerCase();
+
+      const roomNo =
+        (data.roomNo || "").toLowerCase();
+
+
+      if (
+        name.includes(value) ||
+        slNo.includes(value) ||
+        roomNo.includes(value)
+      ) {
+
+        found = true;
+
+        result.innerHTML += `
+          <div class="patient">
+            <strong>${data.name || ""}</strong><br>
+            SL No: ${data.slNo || ""}<br>
+            Room: ${data.roomNo || ""}<br>
+            Phone: ${data.phone || ""}<br>
+            Note: ${data.note || ""}
+          </div>
+        `;
+
+      }
+
+    });
+
+
+    if (!found) {
+
+      result.innerHTML =
+        "<p>❌ Patient পাওয়া যায়নি।";
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    result.innerHTML =
+      "<p>❌ Search করা যায়নি।";
+
+  }
+
+});
+
+
+
+// ===============================
+// CONTACT LOCATION MANAGEMENT
+// ===============================
+
+let editingLocationId = null;
+
+const locationName = document.getElementById("locationName");
+const locationAddress = document.getElementById("locationAddress");
+const locationPhone = document.getElementById("locationPhone");
+const locationEmergency = document.getElementById("locationEmergency");
+const locationEmail = document.getElementById("locationEmail");
+const locationMap = document.getElementById("locationMap");
+const saveLocation = document.getElementById("saveLocation");
+const locationMessage = document.getElementById("locationMessage");
+const locationList = document.getElementById("locationList");
+
+
+async function loadLocations(){
+
+  try{
+
+    const snapshot =
+      await getDocs(collection(db, "locations"));
+
+    if(snapshot.empty){
+
+      locationList.innerHTML =
+        "<p>কোনো Location এখনো যোগ করা হয়নি।</p>";
+
+      return;
+    }
+
+    locationList.innerHTML = "";
+
+    snapshot.forEach(item => {
+
+      const d = item.data();
+
+      const div = document.createElement("div");
+      div.className = "patient";
+
+      const status =
+        d.published === true
+        ? "✅ Published"
+        : "⏳ Unpublished";
+
+      div.innerHTML = `
+        <strong>📍 ${d.name || ""}</strong><br>
+        Address: ${d.address || ""}<br>
+        ${d.mapLink ? `Map: <a href="${d.mapLink}" target="_blank">Open Map</a><br>` : ""}
+        Status: <b>${status}</b>
+
+        <br><br>
+
+        <button class="edit"
+          onclick="editLocation('${item.id}')">
+          ✏️ Edit
+        </button>
+
+        <button
+          onclick="toggleLocation('${item.id}', ${d.published === true})">
+          ${d.published === true ? "⛔ Unpublish" : "✅ Publish"}
+        </button>
+
+        <button class="delete"
+          onclick="deleteLocation('${item.id}')">
+          🗑️ Delete
+        </button>
+      `;
+
+      locationList.appendChild(div);
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    locationList.innerHTML =
+      "<p>❌ Location load করা যায়নি।</p>";
+  }
+}
+
+
+saveLocation.addEventListener("click", async () => {
+
+  const name = locationName.value.trim();
+  const address = locationAddress.value.trim();
+  const phone = locationPhone.value.trim();
+  const emergency = locationEmergency.value.trim();
+  const email = locationEmail.value.trim();
+  const mapLink = locationMap.value.trim();
+
+  if(!name || !address){
+
+    locationMessage.textContent =
+      "⚠️ Location Name এবং Address দিন।";
+
+    return;
+  }
+
+  try{
+
+    if(editingLocationId){
+
+      await updateDoc(
+        doc(db, "locations", editingLocationId),
+        {
+          name,
+          address,
+          phone,
+          emergency,
+          email,
+          mapLink
+        }
+      );
+
+      locationMessage.textContent =
+        "✅ Location Update হয়েছে.";
+
+      editingLocationId = null;
+      saveLocation.textContent = "➕ Add Location";
+
+    }else{
+
+      await addDoc(
+        collection(db, "locations"),
+        {
+          name,
+          address,
+          phone,
+          emergency,
+          email,
+          mapLink,
+          published: false,
+          createdAt: new Date().toISOString()
+        }
+      );
+
+      locationMessage.textContent =
+        "✅ Location Add হয়েছে। এখন Publish করতে পারবেন.";
+    }
+
+    locationName.value = "";
+    locationAddress.value = "";
+    locationPhone.value = "";
+    locationEmergency.value = "";
+    locationEmail.value = "";
+    locationMap.value = "";
+
+    await loadLocations();
+
+  }catch(error){
+
+    console.error(error);
+
+    locationMessage.textContent =
+      "❌ Location Save করা যায়নি: " + error.message;
+  }
+
+});
+
+
+window.editLocation = async (id) => {
+
+  try{
+
+    const snapshot =
+      await getDocs(collection(db, "locations"));
+
+    let found = null;
+
+    snapshot.forEach(item => {
+
+      if(item.id === id){
+        found = item.data();
+      }
+
+    });
+
+    if(!found) return;
+
+    editingLocationId = id;
+
+    locationName.value = found.name || "";
+    locationAddress.value = found.address || "";
+    locationPhone.value = found.phone || "";
+    locationEmergency.value = found.emergency || "";
+    locationEmail.value = found.email || "";
+    locationMap.value = found.mapLink || "";
+
+    saveLocation.textContent = "💾 Update Location";
+
+    locationMessage.textContent =
+      "✏️ Location edit mode চালু হয়েছে.";
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Location edit করা যায়নি।");
+  }
+};
+
+
+window.toggleLocation = async (id, status) => {
+
+  try{
+
+    await updateDoc(
+      doc(db, "locations", id),
+      {
+        published: !status
+      }
+    );
+
+    await loadLocations();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Publish status পরিবর্তন করা যায়নি।");
+  }
+};
+
+
+window.deleteLocation = async (id) => {
+
+  if(!confirm("এই Location Delete করতে চান?")) return;
+
+  try{
+
+    await deleteDoc(
+      doc(db, "locations", id)
+    );
+
+    await loadLocations();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Location Delete করা যায়নি।");
+  }
+};
+
+
+loadLocations();
+
+
+
+
+
+
+// FACILITIES FIREBASE MANAGEMENT
+
+const facilityName = document.getElementById("facilityName");
+const facilityDescription = document.getElementById("facilityDescription");
+const saveFacility = document.getElementById("saveFacility");
+const facilityMessage = document.getElementById("facilityMessage");
+const facilityList = document.getElementById("facilityList");
+
+let editingFacilityId = null;
+
+async function loadFacilities() {
+  try {
+    const snap = await getDocs(collection(db, "facilities"));
+
+    facilityList.innerHTML = "";
+
+    if (snap.empty) {
+      facilityList.innerHTML = "<p>No facilities added yet.</p>";
+      return;
+    }
+
+    snap.forEach(function(item) {
+      const data = item.data();
+
+      const box = document.createElement("div");
+      box.style.border = "1px solid #ddd";
+      box.style.padding = "12px";
+      box.style.marginTop = "10px";
+      box.style.borderRadius = "8px";
+
+      const title = document.createElement("h3");
+      title.textContent = data.name || "";
+      box.appendChild(title);
+
+      const description = document.createElement("p");
+      description.textContent = data.description || "";
+      box.appendChild(description);
+
+      const status = document.createElement("p");
+      status.textContent = data.published ? "🌐 Published" : "🔒 Unpublished";
+      box.appendChild(status);
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "✏️ Edit";
+      editButton.onclick = function() {
+        facilityName.value = data.name || "";
+        facilityDescription.value = data.description || "";
+        editingFacilityId = item.id;
+        saveFacility.textContent = "💾 Update Facility";
+        window.scrollTo(0, 0);
+      };
+      box.appendChild(editButton);
+
+      const publishButton = document.createElement("button");
+      publishButton.textContent = data.published ? "🔒 Unpublish" : "🌐 Publish";
+      publishButton.style.marginLeft = "8px";
+
+      publishButton.onclick = async function() {
+        try {
+          await updateDoc(doc(db, "facilities", item.id), {
+            published: !data.published
+          });
+
+          facilityMessage.textContent = data.published
+            ? "Facility Unpublished successfully."
+            : "Facility Published successfully.";
+
+          await loadFacilities();
+        } catch (error) {
+          facilityMessage.textContent = "Error: " + error.message;
+        }
+      };
+
+      box.appendChild(publishButton);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "🗑️ Delete";
+      deleteButton.style.marginLeft = "8px";
+
+      deleteButton.onclick = async function() {
+        if (!confirm("এই Facility টি Delete করতে চান?")) {
+          return;
+        }
+
+        try {
+          await deleteDoc(doc(db, "facilities", item.id));
+
+          facilityMessage.textContent = "Facility deleted successfully.";
+
+          await loadFacilities();
+        } catch (error) {
+          facilityMessage.textContent = "Error: " + error.message;
+        }
+      };
+
+      box.appendChild(deleteButton);
+
+      facilityList.appendChild(box);
+    });
+
+  } catch (error) {
+    facilityList.textContent = "Error loading facilities: " + error.message;
+  }
+}
+
+saveFacility.addEventListener("click", async function() {
+
+  const name = facilityName.value.trim();
+  const description = facilityDescription.value.trim();
+
+  if (!name || !description) {
+    facilityMessage.textContent = "Facility Name এবং Description দিন।";
+    return;
+  }
+
+  try {
+
+    if (editingFacilityId) {
+
+      await updateDoc(doc(db, "facilities", editingFacilityId), {
+        name: name,
+        description: description
+      });
+
+      facilityMessage.textContent = "Facility updated successfully.";
+
+      editingFacilityId = null;
+      saveFacility.textContent = "➕ Add Facility";
+
+    } else {
+
+      await addDoc(collection(db, "facilities"), {
+        name: name,
+        description: description,
+        published: false,
+        createdAt: new Date().toISOString()
+      });
+
+      facilityMessage.textContent = "Facility added successfully.";
+    }
+
+    facilityName.value = "";
+    facilityDescription.value = "";
+
+    await loadFacilities();
+
+  } catch (error) {
+    facilityMessage.textContent = "Error: " + error.message;
+  }
+});
+
+loadFacilities();
+
+
+
+// SETUP EXISTING 4 FACILITIES
+
+const setupDefaultFacilities = document.getElementById("setupDefaultFacilities");
+const setupFacilityMessage = document.getElementById("setupFacilityMessage");
+
+if (setupDefaultFacilities) {
+  setupDefaultFacilities.addEventListener("click", async function() {
+
+    const defaultFacilities = [
+      ["Patient Rooms", "Comfortable spaces for patient care and recovery."],
+      ["Nursing Support", "Dedicated nursing assistance for patients."],
+      ["Clean Environment", "A clean and comfortable healthcare environment."],
+      ["Patient Care", "Supportive care focused on patient comfort."]
+    ];
+
+    try {
+
+      setupFacilityMessage.textContent =
+        "Checking existing facilities...";
+
+      const snap = await getDocs(collection(db, "facilities"));
+
+      const existingNames = new Set();
+
+      snap.forEach(function(item) {
+        const data = item.data();
+
+        if (data.name) {
+          existingNames.add(
+            data.name.trim().toLowerCase()
+          );
+        }
+      });
+
+      let added = 0;
+
+      for (const facility of defaultFacilities) {
+
+        const name = facility[0];
+        const description = facility[1];
+
+        if (!existingNames.has(name.toLowerCase())) {
+
+          await addDoc(collection(db, "facilities"), {
+            name: name,
+            description: description,
+            published: true,
+            isDefaultFacility: true,
+            createdAt: new Date().toISOString()
+          });
+
+          added++;
+        }
+      }
+
+      setupFacilityMessage.textContent =
+        added + " existing facilities added successfully.";
+
+      await loadFacilities();
+
+    } catch (error) {
+
+      setupFacilityMessage.textContent =
+        "Error: " + error.message;
+
+      console.error(error);
+    }
+
+  });
+}
+
+// END SETUP EXISTING 4 FACILITIES
+
+
+// LOGOUT
+
+document.getElementById("logoutButton")
+.addEventListener("click", async () => {
+
+  await signOut(auth);
+
+  window.location.href = "admin.html";
+
+});
+
+
+loadPatients();
+
+</script>
+
+</body>
+</html>

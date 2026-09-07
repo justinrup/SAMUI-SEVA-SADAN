@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baby Details - Samui Seva Sadan</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f2fafa;color:#123}
+header{background:#008c95;color:white;padding:18px;text-align:center}
+.container{max-width:700px;margin:auto;padding:20px}
+.card{background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+input,select,button{width:100%;box-sizing:border-box;padding:12px;margin-top:10px;border-radius:8px;font-size:16px}
+input,select{border:1px solid #ccc}
+button{border:0;background:#008c95;color:white;cursor:pointer}
+.delete{background:#d32f2f}
+.edit{background:#1976d2}
+.publish{background:#388e3c}
+.back{background:#555}
+.baby2{display:none}
+.record{padding:15px;margin-top:12px;background:#eefafa;border-radius:10px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🏥 Samui Seva Sadan</h1>
+<p>👶 Baby Details</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>👶 Baby Details Form</h2>
+
+<input id="motherName" placeholder="Baby of Mother's Name">
+<input id="dob" type="date" placeholder="Date of Birth">
+<input id="birthTime" type="time">
+
+<select id="sex">
+<option value="">Select Sex / Gender</option>
+<option>Boy</option>
+<option>Girl</option>
+<option>Others</option>
+</select>
+
+<input id="weight" placeholder="Weight (e.g. 2.8 kg)">
+
+<select id="deliveryCategory">
+<option value="">Delivery Category</option>
+<option>LUCS</option>
+<option>Normal Delivery</option>
+</select>
+
+<input id="room" placeholder="Room">
+<input id="slNo" placeholder="SL No.">
+
+<label style="display:block;margin-top:15px">
+<input id="twin" type="checkbox" style="width:auto">
+ Twin Baby
+</label>
+
+<div id="baby2" class="baby2">
+<h3>👶 Baby 2</h3>
+
+<input id="sex2" placeholder="Baby 2 Sex / Gender">
+
+<input id="weight2" placeholder="Baby 2 Weight">
+
+<input id="baby2Time" type="time">
+
+</div>
+
+<button id="saveButton">💾 Save Baby Details</button>
+<button id="publishButton" class="publish">📢 Publish</button>
+<button class="back" onclick="location.href='admin-dashboard.html'">
+⬅️ Back to Admin Panel
+</button>
+
+<p id="message"></p>
+</div>
+
+<div class="card">
+<h2>📋 Saved Baby Records</h2>
+<div id="babyList">Loading...</div>
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey:"AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+authDomain:"samui-seva-sadan.firebaseapp.com",
+projectId:"samui-seva-sadan",
+storageBucket:"samui-seva-sadan.firebasestorage.app",
+messagingSenderId:"358488171058",
+appId:"1:358488171058:web:8be9c94e38f6618049522b",
+measurementId:"G-ML4BQ4QVLB"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let editId=null;
+
+onAuthStateChanged(auth,user=>{
+if(!user){
+location.href="admin.html";
+}
+});
+
+document.getElementById("twin").addEventListener("change",function(){
+document.getElementById("baby2").style.display=
+this.checked ? "block" : "none";
+});
+
+async function loadBabies(){
+
+const list=document.getElementById("babyList");
+list.innerHTML="Loading...";
+
+const snapshot=await getDocs(collection(db,"babies"));
+
+if(snapshot.empty){
+list.innerHTML="<p>No baby records available.</p>";
+return;
+}
+
+list.innerHTML="";
+
+snapshot.forEach(item=>{
+
+const d=item.data();
+
+const div=document.createElement("div");
+div.className="record";
+
+div.innerHTML=`
+<strong>${d.motherName||""}</strong><br>
+DOB
+: ${d.dob||""}<br>
+Time: ${d.birthTime||""}<br>
+Sex: ${d.sex||""}<br>
+Weight: ${d.weight||""}<br>
+Delivery: ${d.deliveryCategory||""}<br>
+Room: ${d.room||""}<br>
+SL No: ${d.slNo||""}<br>
+${d.twin ? "👶 Twin Baby: Yes<br>Baby 2: "+(d.sex2||"")+" / "+(d.weight2||"") : ""}
+<br>
+Status: ${d.published ? "Published" : "Unpublished"}
+<br>
+<button class="edit">✏️ Edit</button>
+<button class="delete">🗑️ Delete</button>
+`;
+
+div.querySelector(".edit").onclick=()=>{
+editBaby(item.id,d);
+};
+
+div.querySelector(".delete").onclick=async()=>{
+if(confirm("Delete this baby record?")){
+await deleteDoc(doc(db,"babies",item.id));
+loadBabies();
+}
+};
+
+list.appendChild(div);
+});
+}
+
+function editBaby(id,d){
+editId=id;
+
+document.getElementById("motherName").value=d.motherName||"";
+document.getElementById("dob").value=d.dob||"";
+document.getElementById("birthTime").value=d.birthTime||"";
+document.getElementById("sex").value=d.sex||"";
+document.getElementById("weight").value=d.weight||"";
+document.getElementById("deliveryCategory").value=d.deliveryCategory||"";
+document.getElementById("room").value=d.room||"";
+document.getElementById("slNo").value=d.slNo||"";
+document.getElementById("twin").checked=!!d.twin;
+document.getElementById("baby2").style.display=d.twin?"block":"none";
+document.getElementById("sex2").value=d.sex2||"";
+document.getElementById("weight2").value=d.weight2||"";
+document.getElementById("baby2Time").value=d.baby2Time||"";
+
+document.getElementById("saveButton").innerText="🔄 Update Baby Details";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.getElementById("saveButton").onclick=async()=>{
+const data={
+motherName:document.getElementById("motherName").value,
+dob:document.getElementById("dob").value,
+birthTime:document.getElementById("birthTime").value,
+sex:document.getElementById("sex").value,
+weight:document.getElementById("weight").value,
+deliveryCategory:document.getElementById("deliveryCategory").value,
+room:document.getElementById("room").value,
+slNo:document.getElementById("slNo").value,
+twin:document.getElementById("twin").checked,
+sex2:document.getElementById("sex2").value,
+weight2:document.getElementById("weight2").value,
+baby2Time:document.getElementById("baby2Time").value,
+published:false
+};
+
+if(editId){
+await updateDoc(doc(db,"babies",editId),data);
+editId=null;
+document.getElementById("saveButton").innerText="💾 Save Baby Details";
+document.getElementById("message").innerText="Baby details updated.";
+}else{
+await addDoc(collection(db,"babies"),data);
+document.getElementById("message").innerText="Baby details saved.";
+}
+loadBabies();
+</script>
+</body>
+</html>

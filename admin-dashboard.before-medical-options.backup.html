@@ -1,0 +1,528 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Samui Seva Sadan</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2fafa;
+      color: #123;
+    }
+
+    header {
+      background: #008c95;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    input, textarea, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input, textarea {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      border: none;
+      background: #008c95;
+      color: white;
+      cursor: pointer;
+    }
+
+    .delete {
+      background: #d32f2f;
+    }
+
+    .edit {
+      background: #1976d2;
+    }
+
+    .patient {
+      padding: 15px;
+      margin-top: 12px;
+      background: #eefafa;
+      border-radius: 10px;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏥 Samui Seva Sadan</h1>
+  <p>Admin Dashboard</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>➕ Add Patient</h2>
+
+    <input id="patientName" placeholder="Patient Name">
+    <input id="slNo" placeholder="SL No.">
+    <input id="roomNo" placeholder="Room No.">
+    <input id="phone" placeholder="Phone Number">
+
+    <textarea id="note" placeholder="Patient Note"></textarea>
+
+    <button id="savePatient">Save Patient</button>
+
+    <div id="message"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔎 Patient Search</h2>
+
+    <input id="searchInput"
+      placeholder="Patient Name / SL No. / Room No.">
+
+    <button id="searchButton">Search</button>
+
+    <div id="searchResult"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Patient Records</h2>
+
+    <div id="patientList">Loading...</div>
+  </div>
+
+  <div class="card">
+    <button id="logoutButton" class="delete">
+      🚪 Logout
+    </button>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// Admin protection
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+    window.location.href = "admin.html";
+  }
+
+});
+
+
+// ADD PATIENT
+
+document.getElementById("savePatient").addEventListener(
+  "click",
+  async () => {
+
+    const name =
+      document.getElementById("patientName").value.trim();
+
+    const slNo =
+      document.getElementById("slNo").value.trim();
+
+    const roomNo =
+      document.getElementById("roomNo").value.trim();
+
+    const phone =
+      document.getElementById("phone").value.trim();
+
+    const note =
+      document.getElementById("note").value.trim();
+
+    const message =
+      document.getElementById("message");
+
+
+    if (!name) {
+      message.textContent = "⚠️ Patient Name দিন।";
+      return;
+    }
+
+
+    try {
+
+      await addDoc(
+        collection(db, "patients"),
+        {
+          name,
+          slNo,
+          roomNo,
+          phone,
+          note,
+          createdAt: new Date().toISOString()
+        }
+      );
+
+
+      message.textContent =
+        "✅ Patient সফলভাবে Save হয়েছে।";
+
+
+      document.getElementById("patientName").value = "";
+      document.getElementById("slNo").value = "";
+      document.getElementById("roomNo").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("note").value = "";
+
+
+      loadPatients();
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.textContent =
+        "❌ Patient Save করা যায়নি।";
+
+    }
+
+  }
+);
+
+
+// LOAD PATIENTS
+
+async function loadPatients() {
+
+  const list =
+    document.getElementById("patientList");
+
+  try {
+
+    const snapshot =
+      await getDocs(collection(db, "patients"));
+
+    if (snapshot.empty) {
+
+      list.innerHTML =
+        "<p>কোনো Patient Record নেই।";
+
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    snapshot.forEach((item) => {
+
+      const data = item.data();
+
+      const div =
+        document.createElement("div");
+
+      div.className = "patient";
+
+
+      div.innerHTML = `
+        <strong>${data.name || ""}</strong><br>
+        SL No: ${data.slNo || ""}<br>
+        Room: ${data.roomNo || ""}<br>
+        Phone: ${data.phone || ""}<br>
+        Note: ${data.note || ""}
+
+        <br><br>
+
+        <button class="edit"
+          onclick="editPatient('${item.id}')">
+          ✏️ Edit
+        </button>
+
+        <button class="delete"
+          onclick="deletePatient('${item.id}')">
+          🗑️ Delete
+        </button>
+      `;
+
+
+      list.appendChild(div);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    list.innerHTML =
+      "<p>❌ Records load করা যায়নি।</p>";
+
+  }
+
+}
+
+
+// DELETE
+
+window.deletePatient = async function(id) {
+
+  const ok =
+    confirm("এই Patient Record কি Delete করতে চান?");
+
+  if (!ok) return;
+
+
+  try {
+
+    await deleteDoc(
+      doc(db, "patients", id)
+    );
+
+    alert("✅ Patient Record Delete হয়েছে।");
+
+    loadPatients();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("❌ Delete করা যায়নি।");
+
+  }
+
+};
+
+
+// EDIT
+
+window.editPatient = async function(id) {
+
+  const name =
+    prompt("Patient Name:");
+
+  if (name === null) return;
+
+
+  const slNo =
+    prompt("SL No.:");
+
+  if (slNo === null) return;
+
+
+  const roomNo =
+    prompt("Room No.:");
+
+  if (roomNo === null) return;
+
+
+  const phone =
+    prompt("Phone Number:");
+
+  if (phone === null) return;
+
+
+  const note =
+    prompt("Patient Note:");
+
+  if (note === null) return;
+
+
+  try {
+
+    await updateDoc(
+      doc(db, "patients", id),
+      {
+        name: name.trim(),
+        slNo: slNo.trim(),
+        roomNo: roomNo.trim(),
+        phone: phone.trim(),
+        note: note.trim()
+      }
+    );
+
+
+    alert("✅ Patient Record Update হয়েছে.");
+
+    loadPatients();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("❌ Update করা যায়নি.");
+
+  }
+
+};
+
+
+// SEARCH
+
+document.getElementById("searchButton")
+.addEventListener("click", async () => {
+
+  const value =
+    document.getElementById("searchInput")
+    .value.trim()
+    .toLowerCase();
+
+  const result =
+    document.getElementById("searchResult");
+
+
+  if (!value) {
+
+    result.innerHTML =
+      "<p>Search করার জন্য কিছু লিখুন।</p>";
+
+    return;
+
+  }
+
+
+  try {
+
+    const snapshot =
+      await getDocs(collection(db, "patients"));
+
+    let found = false;
+
+    result.innerHTML = "";
+
+
+    snapshot.forEach((item) => {
+
+      const data = item.data();
+
+      const name =
+        (data.name || "").toLowerCase();
+
+      const slNo =
+        (data.slNo || "").toLowerCase();
+
+      const roomNo =
+        (data.roomNo || "").toLowerCase();
+
+
+      if (
+        name.includes(value) ||
+        slNo.includes(value) ||
+        roomNo.includes(value)
+      ) {
+
+        found = true;
+
+        result.innerHTML += `
+          <div class="patient">
+            <strong>${data.name || ""}</strong><br>
+            SL No: ${data.slNo || ""}<br>
+            Room: ${data.roomNo || ""}<br>
+            Phone: ${data.phone || ""}<br>
+            Note: ${data.note || ""}
+          </div>
+        `;
+
+      }
+
+    });
+
+
+    if (!found) {
+
+      result.innerHTML =
+        "<p>❌ Patient পাওয়া যায়নি।";
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    result.innerHTML =
+      "<p>❌ Search করা যায়নি।";
+
+  }
+
+});
+
+
+// LOGOUT
+
+document.getElementById("logoutButton")
+.addEventListener("click", async () => {
+
+  await signOut(auth);
+
+  window.location.href = "admin.html";
+
+});
+
+
+loadPatients();
+
+</script>
+
+</body>
+</html>
