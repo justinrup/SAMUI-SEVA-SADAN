@@ -130,7 +130,7 @@ def admin_login():
         with open(password_file, "r") as f:
             saved_password = f.read().strip()
     else:
-        saved_password = "REMOVED_ADMIN_PASSWORD"
+        saved_password =None
 
     if password == saved_password:
         return jsonify({"ok": True, "message": "Login successful"})
