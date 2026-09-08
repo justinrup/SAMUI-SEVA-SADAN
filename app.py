@@ -22,6 +22,7 @@ def load_env():
     return env
 
 ENV = load_env()
+ENV.update(os.environ)
 
 @app.route("/")
 def home():
