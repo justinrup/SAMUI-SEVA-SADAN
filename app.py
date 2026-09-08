@@ -59,7 +59,7 @@ def send_otp():
     )
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as smtp:
             smtp.login(
                 ENV.get("MAIL_USERNAME"),
                 ENV.get("MAIL_APP_PASSWORD")
