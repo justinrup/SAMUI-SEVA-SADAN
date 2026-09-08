@@ -184,7 +184,7 @@ def reset_password():
 
     return jsonify({
         "ok": True,
-        "message": "Password reset successfully. Update ADMIN_PASSWORD on Render with the new password."
+        "message": "Password reset successfully."
     })
 
 
@@ -201,7 +201,15 @@ def admin_login():
             "message": "Invalid Admin Name or Password"
         }), 401
 
-    saved_password = ENV.get("ADMIN_PASSWORD", "").strip()
+    reset_file = os.path.join(BASE_DIR, ".admin_password")
+    saved_password = ""
+
+    if os.path.exists(reset_file):
+        with open(reset_file, "r") as f:
+            saved_password = f.read().strip()
+
+    if not saved_password:
+        saved_password = ENV.get("ADMIN_PASSWORD", "").strip()
 
     if password and saved_password and password == saved_password:
         return jsonify({
