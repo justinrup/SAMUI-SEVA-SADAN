@@ -205,8 +205,10 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
   } catch(e) {
 
+    console.error("Admin login error:", e);
+
     error.textContent =
-      "❌ Server connection error.";
+      "❌ " + (e.message || "Server connection error.");
 
   }
 
