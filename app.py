@@ -125,13 +125,7 @@ def admin_login():
     if username != "admin":
         return jsonify({"ok": False, "message": "Invalid Admin Name or Password"}), 401
 
-    password_file = os.path.join(BASE_DIR, ".admin_password")
-
-    if os.path.exists(password_file):
-        with open(password_file, "r") as f:
-            saved_password = f.read().strip()
-    else:
-        saved_password =None
+    saved_password = ENV.get("ADMIN_PASSWORD", "").strip()
 
     if password == saved_password:
         return jsonify({"ok": True, "message": "Login successful"})
