@@ -34,6 +34,7 @@ button{border:0;background:#008c95;color:white;cursor:pointer}
 <h2>👶 Baby Details Form</h2>
 
 <input id="motherName" placeholder="Baby of Mother's Name">
+<input id="drName" placeholder="Dr. Name">
 <input id="dob" type="date" placeholder="Date of Birth">
 <input id="birthTime" type="time">
 
@@ -142,7 +143,7 @@ async function loadBabies(){
 const list=document.getElementById("babyList");
 list.innerHTML="Loading...";
 
-const snapshot=await getDocs(collection(db,"babies"));
+let snapshot;try{snapshot=await getDocs(collection(db,"babies"));}catch(error){console.error(error);list.innerHTML="<p>Load Error: "+error.message+"</p>";return;}
 
 if(snapshot.empty){
 list.innerHTML="<p>No baby records available.</p>";
@@ -195,6 +196,7 @@ function editBaby(id,d){
 editId=id;
 
 document.getElementById("motherName").value=d.motherName||"";
+document.getElementById("drName").value=d.drName||"";
 document.getElementById("dob").value=d.dob||"";
 document.getElementById("birthTime").value=d.birthTime||"";
 document.getElementById("sex").value=d.sex||"";
@@ -212,32 +214,8 @@ document.getElementById("saveButton").innerText="🔄 Update Baby Details";
 window.scrollTo({top:0,behavior:"smooth"});
 }
 
-document.getElementById("saveButton").onclick=async()=>{
-const data={
-motherName:document.getElementById("motherName").value,
-dob:document.getElementById("dob").value,
-birthTime:document.getElementById("birthTime").value,
-sex:document.getElementById("sex").value,
-weight:document.getElementById("weight").value,
-deliveryCategory:document.getElementById("deliveryCategory").value,
-room:document.getElementById("room").value,
-slNo:document.getElementById("slNo").value,
-twin:document.getElementById("twin").checked,
-sex2:document.getElementById("sex2").value,
-weight2:document.getElementById("weight2").value,
-baby2Time:document.getElementById("baby2Time").value,
-published:false
-};
-
-if(editId){
-await updateDoc(doc(db,"babies",editId),data);
-editId=null;
-document.getElementById("saveButton").innerText="💾 Save Baby Details";
-document.getElementById("message").innerText="Baby details updated.";
-}else{
-await addDoc(collection(db,"babies"),data);
-document.getElementById("message").innerText="Baby details saved.";
-}
+document.getElementById("saveButton").onclick=async()=>{try{const data={motherName:document.getElementById("motherName").value,drName:document.getElementById("drName").value,dob:document.getElementById("dob").value,birthTime:document.getElementById("birthTime").value,sex:document.getElementById("sex").value,weight:document.getElementById("weight").value,deliveryCategory:document.getElementById("deliveryCategory").value,room:document.getElementById("room").value,slNo:document.getElementById("slNo").value,twin:document.getElementById("twin").checked,sex2:document.getElementById("sex2").value,weight2:document.getElementById("weight2").value,baby2Time:document.getElementById("baby2Time").value,published:false};if(editId){await updateDoc(doc(db,"babies",editId),data);document.getElementById("message").innerText="Baby details updated.";}else{const ref=await addDoc(collection(db,"babies"),data);editId=ref.id;document.getElementById("message").innerText="Baby details saved. Now press Publish.";}await loadBabies();}catch(error){console.error(error);document.getElementById("message").innerText="Save Error: "+error.message;}};
+document.getElementById("publishButton").onclick=async()=>{try{if(!editId){document.getElementById("message").innerText="First save or edit a baby record.";return;}await updateDoc(doc(db,"babies",editId),{published:true});document.getElementById("message").innerText="Baby details published successfully.";await loadBabies();}catch(error){console.error(error);document.getElementById("message").innerText="Publish Error: "+error.message;}};
 loadBabies();
 </script>
 </body>
