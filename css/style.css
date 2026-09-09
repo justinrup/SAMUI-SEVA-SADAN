@@ -56,3 +56,112 @@ footer{background:#043f63;color:#fff;padding:30px 7% 10px}.footer-inner{max-widt
   transform:scale(1.04);
   transition:transform .35s ease;
 }
+
+/* New homepage care cards */
+.quick-care-section{
+  background:#f5fbfc;
+}
+
+.quick-care-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+.quick-care-card{
+  display:block;
+  background:#fff;
+  border:1px solid #d8edf1;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 7px 20px rgba(13,75,95,.09);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+
+.quick-care-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 12px 28px rgba(13,75,95,.15);
+}
+
+.quick-care-image{
+  height:190px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eaf7fa;
+}
+
+.quick-care-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.quick-care-image span{
+  font-size:72px;
+}
+
+.ambulance-care{
+  background:linear-gradient(135deg,#eaf7ff,#dff5f2);
+}
+
+.medicine-care{
+  background:linear-gradient(135deg,#e8f7ff,#d9f4ec);
+}
+
+.quick-care-caption{
+  padding:13px 14px 15px;
+  text-align:center;
+}
+
+.quick-care-caption h3{
+  margin:0 0 5px;
+  font-size:15px;
+  color:#075985;
+}
+
+.quick-care-caption p{
+  margin:0;
+  font-size:9px;
+  color:#68808a;
+}
+
+@media(max-width:800px){
+  .quick-care-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quick-care-image{
+    height:170px;
+  }
+}
+
+@media(max-width:520px){
+  .quick-care-grid{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .quick-care-image{
+    height:135px;
+  }
+
+  .quick-care-image span{
+    font-size:52px;
+  }
+
+  .quick-care-caption{
+    padding:10px 6px 12px;
+  }
+
+  .quick-care-caption h3{
+    font-size:12px;
+  }
+
+  .quick-care-caption p{
+    font-size:8px;
+  }
+}
