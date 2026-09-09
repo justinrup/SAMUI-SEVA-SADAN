@@ -1,0 +1,9 @@
+<section id="gallery" class="department-section">
+  <div class="section-shell">
+    <div class="section-heading"><div><span class="section-kicker">→ Our Care Areas</span><h2>Modern Medical Facilities</h2></div><a href="facilities.html" class="outline-btn">View All Facilities →</a></div>
+    <div class="department-grid">
+      <article class="department-card"><img src="images/ot.jpg" alt="Operation Theatre"><div class="department-caption"><b>Operation Theatre (OT)</b><span>Safe Surgery &nbsp; | &nbsp; Advanced Care</span></div></article>
+      <article class="department-card"><img src="images/er.jpg" alt="Emergency Room"><div class="department-caption"><b>Emergency (ER)</b><span>24/7 Care &nbsp; | &nbsp; Always Ready</span></div></article>
+      <article class="department-card"><img src="images/dental.jpg" alt="Dental Care"><div class="department-caption"><b>Dental Care</b><span>Healthy Smile &nbsp; | &nbsp; Brighter Future</span></div></article>
+    </div>
+  </div>

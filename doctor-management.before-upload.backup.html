@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doctor Management - SAMUI SEVA SADAN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f8f8;color:#173b3b}
+header{background:#087f8c;color:#fff;text-align:center;padding:18px}
+main{max-width:900px;margin:20px auto;padding:12px}
+.card{background:#fff;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 3px 15px #0002}
+h2{color:#087f8c;margin-top:0}
+label{display:block;font-weight:bold;margin-top:11px}
+input,select{width:100%;padding:11px;margin-top:5px;border:1px solid #bbb;border-radius:8px;font-size:16px}
+button{border:0;border-radius:8px;padding:10px 14px;margin:6px 4px 0 0;font-size:15px;cursor:pointer}
+.save{background:#087f8c;color:#fff}
+.cancel{background:#777;color:#fff}
+.edit{background:#e6a700;color:#fff}
+.del{background:#d93025;color:#fff}
+.pub{background:#168a45;color:#fff}
+.unpub{background:#555;color:#fff}
+.back{background:#173b3b;color:#fff}
+.logout{background:#d93025;color:#fff}
+.doctor{border:1px solid #ddd;border-radius:10px;padding:15px;margin-top:12px}
+.doctor h3{color:#087f8c;margin:0 0 8px}
+.status{font-weight:bold}
+.ok{color:#168a45}
+.no{color:#777}
+#message{font-weight:bold;margin-top:10px;color:#087f8c}
+</style>
+</head>
+<body>
+
+<header>
+<h1>👨‍⚕️ Doctor Management</h1>
+<div>SAMUI SEVA SADAN</div>
+</header>
+
+<main>
+
+<div style="margin-bottom:15px">
+<button class="back" onclick="location.href='admin-dashboard.html'">← Admin Dashboard</button>
+<button class="logout" onclick="logoutAdmin()">Logout</button>
+</div>
+
+<section class="card">
+<h2 id="title">➕ Add Doctor</h2>
+
+<input id="doctorId" type="hidden">
+
+<label>Doctor Name</label>
+<input id="doctorName" placeholder="Doctor name">
+
+<label>Hospital Name</label>
+<input id="hospitalName" placeholder="Hospital name">
+
+<label>Doctor Specialist</label>
+<select id="specialist">
+<option value="">Select Specialist</option>
+<option>Gynae</option>
+<option>Surgeon</option>
+<option>DCH</option>
+<option>Cardio</option>
+<option>General Surgeon</option>
+<option>Medicine</option>
+<option>Other</option>
+</select>
+
+<label>Doctor Qualification</label>
+<input id="qualification" placeholder="Example: MBBS, MD">
+
+<label>Doctor Added on Hospital</label>
+<input id="addedOn" type="date">
+
+<label>Doctor Time</label>
+<input id="doctorTime" placeholder="Example: 10 AM - 2 PM">
+
+<button class="save" onclick="saveDoctor()">💾 <span id="saveText">Save Doctor</span></button>
+
+<button id="cancel" class="cancel" onclick="cancelEdit()" style="display:none">
+Cancel
+</button>
+
+<div id="message"></div>
+</section>
+
+<section class="card">
+<h2>📋 Doctor Records</h2>
+<div id="doctorList">Checking login...</div>
+</section>
+
+</main>
+
+<script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,collection,addDoc,getDocs,deleteDoc,doc,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+authDomain:"samui-seva-sadan.firebaseapp.com",
+projectId:"samui-seva-sadan",
+storageBucket:"samui-seva-sadan.firebasestorage.app",
+messagingSenderId:"358488171058",
+appId:"1:358488171058:web:8be9c94e38f6618049522b",
+measurementId:"G-ML4BQ4QVLB"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let user=null,cache={};
+
+onAuthStateChanged(auth,async u=>{
+if(!u){location.href="admin.html";return}
+user=u;
+loadDoctors();
+});
+
+function val(id){
+return document.getElementById(id).value.trim();
+}
+
+window.saveDoctor=async()=>{
+if(!user)return alert("Admin login required.");
+
+const id=val("doctorId");
+const data={
+name:val("doctorName"),
+hospitalName:val("hospitalName"),
+specialist:document.getElementById("specialist").value,
+qualification:val("qualification"),
+addedOnHospital:val("addedOn"),
+doctorTime:val("doctorTime")
+};
+
+if(!data.name||!data.hospitalName||!data.specialist||!data.qualification||!data.addedOnHospital||!data.doctorTime){
+return alert("Please fill all doctor fields.");
+}
+
+try{
+if(id){
+await updateDoc(doc(db,"doctors",id),data);
+msg("Doctor updated successfully.");
+}else{
+await addDoc(collection(db,"doctors"),{
+...data,
+published:false,
+createdAt:new Date().toISOString()
+});
+msg("Doctor added successfully.");
+}
+clearForm();
+await loadDoctors();
+}catch(e){
+console.error(e);
+alert("Save error: "+e.message);
+}
+};
+
+async function loadDoctors(){
+const box=document.getElementById("doctorList");
+box.textContent="Loading doctors...";
+
+try{
+const s=await getDocs(collection(db,"doctors"));
+cache={};
+
+if(s.empty){
+box.textContent="No doctors added yet.";
+return;
+}
+
+box.innerHTML="";
+
+s.forEach(x=>{
+const d=x.data();
+cache[x.id]=d;
+const div=document.createElement("div");
+div.className="doctor";
+
+const published=d.published===true;
+
+div.innerHTML=`
+<h3>👨‍⚕️ ${esc(d.name)}</h3>
+<p><b>Hospital:</b> ${esc(d.hospitalName)}</p>
+<p><b>Specialist:</b> ${esc(d.specialist)}</p>
+<p><b>Qualification:</b> ${esc(d.qualification)}</p>
+<p><b>Added on Hospital:</b> ${esc(d.addedOnHospital)}</p>
+<p><b>Doctor Time:</b> ${esc(d.doctorTime)}</p>
+<p><b>Status:</b> <span class="status ${published?"ok":"no"}">${published?"Published":"Unpublished"}</span></p>
+
+<button class="edit" onclick="editDoctor('${x.id}')">✏️ Edit</button>
+<button class="del" onclick="deleteDoctor('${x.id}')">🗑️ Delete</button>
+<button class="${published?"unpub":"pub"}" onclick="togglePublish('${x.id}',${published})">
+${published?"🚫 Unpublish":"🌐 Publish"}
+</button>
+`;
+
+box.appendChild(div);
+});
+}catch(e){
+console.error(e);
+box.innerHTML="<b>Firebase error:</b> "+esc(e.message);
+}
+}
+
+window.editDoctor=id=>{
+const d=cache[id];
+if(!d)return alert("Doctor not found.");
+
+document.getElementById("doctorId").value=id;
+document.getElementById("doctorName").value=d.name||"";
+document.getElementById("hospitalName").value=d.hospitalName||"";
+document.getElementById("specialist").value=d.specialist||"";
+document.getElementById("qualification").value=d.qualification||"";
+document.getElementById("addedOn").value=d.addedOnHospital||"";
+document.getElementById("doctorTime").value=d.doctorTime||"";
+
+document.getElementById("title").textContent="✏️ Edit Doctor";
+document.getElementById("saveText").textContent="Update Doctor";
+document.getElementById("cancel").style.display="inline-block";
+
+scrollTo({top:0,behavior:"smooth"});
+};
+
+window.deleteDoctor=async id=>{
+if(!confirm("Delete this doctor?"))return;
+
+try{
+await deleteDoc(doc(db,"doctors",id));
+msg("Doctor deleted.");
+loadDoctors();
+}catch(e){
+alert("Delete error: "+e.message);
+}
+};
+
+window.togglePublish=async(id,status)=>{
+try{
+await updateDoc(doc(db,"doctors",id),{published:!status});
+msg(status?"Doctor unpublished.":"Doctor published.");
+loadDoctors();
+}catch(e){
+alert("Publish error: "+e.message);
+}
+};
+
+window.cancelEdit=()=>{
+clearForm();
+};
+
+function clearForm(){
+["doctorId","doctorName","hospitalName","qualification","addedOn","doctorTime"]
+.forEach(id=>document.getElementById(id).value="");
+
+document.getElementById("specialist").value="";
+document.getElementById("title").textContent="➕ Add Doctor";
+document.getElementById("saveText").textContent="Save Doctor";
+document.getElementById("cancel").style.display="none";
+}
+
+function msg(t){
+document.getElementById("message").textContent=t;
+setTimeout(()=>document.getElementById("message").textContent="",2500);
+}
+
+function esc(t){
+return String(t??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[c]));
+}
+
+window.logoutAdmin=async()=>{
+await signOut(auth);
+location.href="admin.html";
+};
+</script>
+
+</body>
+</html>

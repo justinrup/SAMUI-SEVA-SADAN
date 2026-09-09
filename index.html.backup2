@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMUI SEVA SADAN NURSING HOME</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="top-header">
+    <div class="brand">
+      <div class="logo">🏥</div>
+      <div>
+        <h1>SAMUI SEVA SADAN</h1>
+        <p>NURSING HOME</p>
+      </div>
+    </div>
+
+    <div class="emergency">
+      <span>Emergency</span>
+      <strong>📞 +91 XXXXX XXXXX</strong>
+    </div>
+  </header>
+
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="#services">Services</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#contact">Contact</a>
+    <a href="#map">Location</a>
+  </nav>
+
+  <section class="hero">
+
+    <div class="hero-text">
+      <span class="welcome">WELCOME TO</span>
+
+      <h2>SAMUI SEVA SADAN<br>NURSING HOME</h2>
+
+      <p>
+        Quality healthcare, compassionate care and
+        trusted medical services for you and your family.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#services" class="btn">Our Services</a>
+        <a href="#contact" class="btn secondary">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img src="images/nursing-home.png" alt="Samui Seva Sadan Nursing Home">
+    </div>
+
+  </section>
+
+  <section class="search-section">
+    <h2>🔎 Search Patient / Records</h2>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Patient Name, SL No., Room No. or Patient ID"
+      >
+      <button onclick="searchPatient()">Search</button>
+    </div>
+
+    <p id="searchResult"></p>
+  </section>
+
+  <section id="services" class="section">
+
+    <div class="section-title">
+      <span>OUR SERVICES</span>
+      <h2>Medical & Nursing Home Services</h2>
+    </div>
+
+    <div class="service-grid">
+
+      <div class="service-card">
+        <div>👶</div>
+        <h3>Baby Note</h3>
+        <p>Baby birth and newborn records.</p>
+      </div>
+
+      <div class="service-card">
+        <div>🤱</div>
+        <h3>Mother Note</h3>
+        <p>Mother and delivery related records.</p>
+      </div>
+
+      <a href="doctors.html" class="service-card">
+        <div>👨‍⚕️</div>
+        <h3>Doctors</h3>
+        <p>Doctor name, degree and department.</p>
+      </a>
+
+      <div class="service-card">
+        <div>💉</div>
+        <h3>Anaesthesia</h3>
+        <p>Anaesthesia notes and document upload.</p>
+      </div>
+
+      <div class="service-card">
+        <div>🏥</div>
+        <h3>OT Note</h3>
+        <p>Operation theatre records.</p>
+      </div>
+
+      <div class="service-card">
+        <div>🚑</div>
+        <h3>ER</h3>
+        <p>Emergency patient records.</p>
+      </div>
+
+      <div class="service-card">
+        <div>🩸</div>
+        <h3>Blood Report</h3>
+        <p>Blood tests, results and report upload.</p>
+      </div>
+
+      <div class="service-card">
+        <div>📄</div>
+        <h3>Documents</h3>
+        <p>Upload and manage medical documents.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="doctors" class="info-section">
+
+    <div>
+      <span>MEDICAL TEAM</span>
+      <h2>Our Doctors</h2>
+      <p>
+        Doctor information will be added and updated
+        from the Admin Panel.
+      </p>
+    </div>
+
+    <div class="doctor-box">
+      <div class="doctor-icon">👨‍⚕️</div>
+      <h3>Doctor Management</h3>
+      <p>Name • Degree • Department • Other Information</p>
+    </div>
+
+  </section>
+
+  <section id="contact" class="contact-section">
+
+    <div class="section-title">
+      <span>CONTACT US</span>
+      <h2>Nursing Home Information</h2>
+    </div>
+
+    <div class="contact-grid">
+
+      <div class="contact-card">
+        <strong>📍 Address</strong>
+        <p>
+          SAMUI SEVA SADAN NURSING HOME<br>
+          Address will be updated from Admin Panel.
+        </p>
+      </div>
+
+      <div class="contact-card">
+        <strong>📞 Phone</strong>
+        <p>+91 XXXXX XXXXX</p>
+      </div>
+
+      <div class="contact-card">
+        <strong>🚑 Emergency</strong>
+        <p>Emergency Contact Number</p>
+      </div>
+
+      <div class="contact-card">
+        <strong>✉️ Email</strong>
+        <p>nursinghome@example.com</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="map" class="map-section">
+
+    <div class="section-title">
+      <span>LOCATION</span>
+      <h2>Find Our Nursing Home</h2>
+    </div>
+
+    <div class="map-placeholder">
+      <div>
+        <div class="map-icon">📍</div>
+        <h3>Google Map</h3>
+        <p>Google Map location will be added here.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+
+    <h2>SAMUI SEVA SADAN NURSING HOME</h2>
+
+    <p>
+      Quality Care • Trusted Service • Compassion
+    </p>
+
+    <p class="copyright">
+      © 2026 SAMUI SEVA SADAN NURSING HOME. All Rights Reserved.
+    </p>
+
+  </footer>
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>

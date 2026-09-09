@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Samui Seva Sadan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+<h1>SAMUI SEVA SADAN</h1>
+<p>Nursing Home & Healthcare Centre</p>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="facilities.html">Facilities</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<section class="contact">
+
+<h2>Contact Us</h2>
+
+<div id="contactInfo">
+
+  <div class="card">
+    <h3>Samui Seva Sadan Nursing Home</h3>
+
+    <p><strong>📞 Phone:</strong>
+      <span id="phone">Loading...</span>
+    </p>
+
+    <p><strong>✉️ Email:</strong>
+      <span id="email">Loading...</span>
+    </p>
+
+    <p><strong>📍 Address:</strong>
+      <span id="address">Loading...</span>
+    </p>
+
+    <p><strong>🚑 Emergency:</strong>
+      <span id="emergency">Loading...</span>
+    </p>
+
+  </div>
+
+</div>
+
+<div id="locationList">
+
+  <div class="card">
+    <h3>📍 LOCATION</h3>
+    <p>Loading location...</p>
+  </div>
+
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Samui Seva Sadan Nursing Home</p>
+</footer>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+function esc(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+async function loadContact(){
+
+  try{
+
+    const snapshot =
+      await getDocs(collection(db,"locations"));
+
+    let published = [];
+
+    snapshot.forEach(item => {
+
+      const d = item.data();
+
+      if(d.published === true){
+
+        published.push(d);
+
+      }
+
+    });
+
+
+    // Latest published location
+    if(published.length > 0){
+
+      const d = published[published.length - 1];
+
+      document.getElementById("phone").textContent =
+        d.phone || "+91 XXXXX XXXXX";
+
+      document.getElementById("email").textContent =
+        d.email || "nursinghome@example.com";
+
+      document.getElementById("address").textContent =
+        d.address || "Address will be updated from Admin Panel.";
+
+      document.getElementById("emergency").textContent =
+        d.emergency || "Emergency Contact Number";
+
+
+      let html = "";
+
+      published.forEach(location => {
+
+        html += `
+          <div class="card">
+
+            <h3>📍 ${esc(location.name || "Location")}</h3>
+
+            <p>
+              <strong>Address:</strong><br>
+              ${esc(location.address || "")}
+            </p>
+
+            ${
+              location.mapLink
+              ? `
+                <p>
+                  <a
+                    href="${esc(location.mapLink)}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    🗺️ Google Map
+                  </a>
+                </p>
+              `
+              : `
+                <p>Google Map location will be added here.</p>
+              `
+            }
+
+          </div>
+        `;
+
+      });
+
+      document.getElementById("locationList").innerHTML = html;
+
+    }else{
+
+      document.getElementById("phone").textContent =
+        "+91 XXXXX XXXXX";
+
+      document.getElementById("email").textContent =
+        "nursinghome@example.com";
+
+      document.getElementById("address").textContent =
+        "Address will be updated from Admin Panel.";
+
+      document.getElementById("emergency").textContent =
+        "Emergency Contact Number";
+
+      document.getElementById("locationList").innerHTML = `
+        <div class="card">
+          <h3>📍 LOCATION</h3>
+          <p>Google Map location will be added here.</p>
+        </div>
+      `;
+
+    }
+
+  }catch(error){
+
+    console.error("Contact loading error:", error);
+
+  }
+
+}
+
+
+loadContact();
+
+</script>
+
+</body>
+</html>

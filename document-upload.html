@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Document Upload</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  margin:0;
+  padding:20px;
+}
+.card{
+  max-width:700px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 2px 10px #ccc;
+}
+h2{margin-top:0}
+input,textarea,select{
+  width:100%;
+  padding:11px;
+  margin:7px 0 14px;
+  box-sizing:border-box;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+button{
+  padding:10px 15px;
+  margin:4px;
+  border:0;
+  border-radius:6px;
+  cursor:pointer;
+}
+.save{background:#168a3b;color:white}
+.back{background:#555;color:white}
+.edit{background:#1677d2;color:white}
+.publish{background:#8a5a00;color:white}
+.delete{background:#c62828;color:white}
+.cancel{background:#777;color:white}
+.record{
+  border:1px solid #ddd;
+  padding:15px;
+  margin-top:12px;
+  border-radius:8px;
+  background:#fafafa;
+}
+.record img{
+  max-width:100%;
+  max-height:350px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+.pub{
+  color:green;
+  font-weight:bold;
+}
+.unpub{
+  color:#c00;
+  font-weight:bold;
+}
+#editStatus{
+  color:#1677d2;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>📄 Document Upload</h2>
+
+<div id="editStatus"></div>
+
+<label>Patient Name</label>
+<input id="patientName" placeholder="Patient Name">
+
+<label>Patient ID / SL No</label>
+<input id="patientId" placeholder="Patient ID / SL No">
+
+<label>Date</label>
+<input id="date" type="date">
+
+<label>Document Name / Type</label>
+<input id="documentName" placeholder="Example: Aadhaar / Prescription / Discharge Paper">
+
+<label>Description</label>
+<textarea id="description" rows="4" placeholder="Document details"></textarea>
+
+<label>Upload Document Image</label>
+<input id="documentFile" type="file" accept="image/*">
+
+<div id="preview"></div>
+
+<button class="save" onclick="saveDocument()">💾 Save Document</button>
+<button class="cancel" onclick="cancelEdit()">❌ Clear</button>
+<button class="back" onclick="location.href='admin-dashboard.html'">
+⬅️ Back to Admin Panel
+</button>
+
+<h2>📋 Saved Documents</h2>
+
+<div id="records"></div>
+
+</div>
+
+<script>
+
+let editIndex = -1;
+let selectedImage = "";
+
+function getRecords(){
+  return JSON.parse(
+    localStorage.getItem("uploadedDocuments") || "[]"
+  );
+}
+
+document.getElementById("documentFile").addEventListener("change", function(){
+
+  const file = this.files[0];
+
+  if(!file){
+    selectedImage = "";
+    document.getElementById("preview").innerHTML = "";
+    return;
+  }
+
+  if(!file.type.startsWith("image/")){
+    alert("Please select an image file.");
+    this.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    selectedImage = e.target.result;
+
+    document.getElementById("preview").innerHTML =
+      "<p><b>Preview:</b></p>" +
+      "<img src='" + selectedImage + "' style='max-width:100%;max-height:250px;border-radius:8px;'>";
+  };
+
+  reader.readAsDataURL(file);
+});
+
+function saveDocument(){
+
+  let records = getRecords();
+
+  if(!patientName.value.trim()){
+    alert("Please enter Patient Name.");
+    return;
+  }
+
+  if(!documentName.value.trim()){
+    alert("Please enter Document Name / Type.");
+    return;
+  }
+
+  if(editIndex < 0 && !selectedImage){
+    alert("Please upload a document image.");
+    return;
+  }
+
+  let data = {
+    patientName: patientName.value,
+    patientId: patientId.value,
+    date: date.value,
+    documentName: documentName.value,
+    description: description.value,
+    image: selectedImage,
+    published: false
+  };
+
+  if(editIndex >= 0){
+
+    data.published =
+      records[editIndex].published || false;
+
+    if(!selectedImage){
+      data.image = records[editIndex].image || "";
+    }
+
+    records[editIndex] = data;
+
+    editIndex = -1;
+
+    document.getElementById("editStatus").innerHTML = "";
+
+  }else{
+
+    records.push(data);
+
+  }
+
+  localStorage.setItem(
+    "uploadedDocuments",
+    JSON.stringify(records)
+  );
+
+  clearForm();
+  loadRecords();
+
+  alert("Document saved successfully.");
+}
+
+function editRecord(i){
+
+  let records = getRecords();
+  let r = records[i];
+
+  patientName.value = r.patientName || "";
+  patientId.value = r.patientId || "";
+  date.value = r.date || "";
+  documentName.value = r.documentName || "";
+  description.value = r.description || "";
+
+  selectedImage = r.image || "";
+
+  if(selectedImage){
+    document.getElementById("preview").innerHTML =
+      "<p><b>Current Document:</b></p>" +
+      "<img src='" + selectedImage + "' style='max-width:100%;max-height:250px;border-radius:8px;'>";
+  }
+
+  editIndex = i;
+
+  document.getElementById("editStatus").innerHTML =
+    "✏️ Editing Document — Save করলে Update হবে";
+
+  window.scrollTo(0,0);
+}
+
+function publishRecord(i){
+
+  let records = getRecords();
+
+  records[i].published =
+    !records[i].published;
+
+  localStorage.setItem(
+    "uploadedDocuments",
+    JSON.stringify(records)
+  );
+
+  loadRecords();
+}
+
+function deleteRecord(i){
+
+  if(!confirm("এই document টি Delete করতে চান?")){
+    return;
+  }
+
+  let records = getRecords();
+
+  records.splice(i,1);
+
+  localStorage.setItem(
+    "uploadedDocuments",
+    JSON.stringify(records)
+  );
+
+  loadRecords();
+}
+
+function cancelEdit(){
+
+  editIndex = -1;
+
+  document.getElementById("editStatus").innerHTML = "";
+
+  clearForm();
+}
+
+function clearForm(){
+
+  patientName.value = "";
+  patientId.value = "";
+  date.value = "";
+  documentName.value = "";
+  description.value = "";
+  documentFile.value = "";
+
+  selectedImage = "";
+
+  document.getElementById("preview").innerHTML = "";
+}
+
+function loadRecords(){
+
+  let records = getRecords();
+
+  let box = document.getElementById("records");
+
+  if(records.length === 0){
+
+    box.innerHTML = "<p>No documents saved.</p>";
+    return;
+
+  }
+
+  box.innerHTML = "";
+
+  records.forEach((r,i)=>{
+
+    box.innerHTML += `
+      <div class="record">
+
+        <b>Patient:</b>
+        ${r.patientName || "-"}<br>
+
+        <b>Patient ID / SL No:</b>
+        ${r.patientId || "-"}<br>
+
+        <b>Date:</b>
+        ${r.date || "-"}<br>
+
+        <b>Document:</b>
+        ${r.documentName || "-"}<br>
+
+        <b>Description:</b>
+        ${r.description || "-"}<br>
+
+        ${r.image ?
+          "<img src='" + r.image + "'>" :
+          "<p>No image</p>"
+        }
+
+        <p class="${r.published ? "pub" : "unpub"}">
+          ${r.published ? "📢 Published" : "🔒 Unpublished"}
+        </p>
+
+        <button class="edit"
+          onclick="editRecord(${i})">
+          ✏️ Edit
+        </button>
+
+        <button class="publish"
+          onclick="publishRecord(${i})">
+          ${r.published ? "↩️ Unpublish" : "📢 Publish"}
+        </button>
+
+        <button class="delete"
+          onclick="deleteRecord(${i})">
+          🗑️ Delete
+        </button>
+
+      </div>
+    `;
+
+  });
+}
+
+loadRecords();
+
+</script>
+
+</body>
+</html>

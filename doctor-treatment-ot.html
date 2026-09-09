@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doctor / Treatment / OT Note</title>
+<style>
+body{font-family:Arial;background:#f4f7fb;margin:0;padding:20px}
+.card{max-width:700px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px #ccc}
+input,textarea,select{width:100%;padding:10px;margin:7px 0 14px;box-sizing:border-box;border:1px solid #ccc;border-radius:6px}
+button{padding:10px 15px;margin:4px;border:0;border-radius:6px;cursor:pointer}
+.save{background:#168a3b;color:white}.back{background:#555;color:white}
+.edit{background:#1677d2;color:white}.publish{background:#8a5a00;color:white}.delete{background:#c62828;color:white}
+.record{border:1px solid #ddd;padding:15px;margin-top:12px;border-radius:8px}
+.pub{color:green;font-weight:bold}.unpub{color:#c00;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>📋 Doctor / Treatment / OT Note</h2>
+
+<input id="patientName" placeholder="Patient Name">
+<input id="patientId" placeholder="Patient ID / SL No">
+<input id="date" type="date">
+<input id="doctor" placeholder="Doctor Name">
+
+<select id="noteType">
+<option value="Doctor Note">Doctor Note</option>
+<option value="Treatment Note">Treatment Note</option>
+<option value="OT Note">OT Note</option>
+</select>
+
+<textarea id="details" rows="6" placeholder="Details"></textarea>
+
+<button class="save" onclick="saveNote()">💾 Save</button>
+<button class="back" onclick="location.href='admin-dashboard.html'">⬅️ Back to Admin Panel</button>
+
+<h2>📋 Saved Records</h2>
+<div id="records"></div>
+</div>
+
+<script>
+let editIndex=-1;
+
+function getRecords(){
+ return JSON.parse(localStorage.getItem("doctorTreatmentOTNotes")||"[]");
+}
+
+function saveNote(){
+ let records=getRecords();
+ let data={
+  patientName:patientName.value,
+  patientId:patientId.value,
+  date:date.value,
+  doctor:doctor.value,
+  noteType:noteType.value,
+  details:details.value,
+  published:false
+ };
+ if(editIndex>=0){
+  data.published=records[editIndex].published||false;
+  records[editIndex]=data;
+  editIndex=-1;
+ }else records.push(data);
+ localStorage.setItem("doctorTreatmentOTNotes",JSON.stringify(records));
+ clearForm();
+ loadRecords();
+ alert("Note saved.");
+}
+
+function editRecord(i){
+ let r=getRecords()[i];
+ patientName.value=r.patientName||"";
+ patientId.value=r.patientId||"";
+ date.value=r.date||"";
+ doctor.value=r.doctor||"";
+ noteType.value=r.noteType||"Doctor Note";
+ details.value=r.details||"";
+ editIndex=i;
+ window.scrollTo(0,0);
+}
+
+function publishRecord(i){
+ let records=getRecords();
+ records[i].published=!records[i].published;
+ localStorage.setItem("doctorTreatmentOTNotes",JSON.stringify(records));
+ loadRecords();
+}
+
+function deleteRecord(i){
+ if(!confirm("Delete this record?"))return;
+ let records=getRecords();
+ records.splice(i,1);
+ localStorage.setItem("doctorTreatmentOTNotes",JSON.stringify(records));
+ loadRecords();
+}
+
+function clearForm(){
+ patientName.value="";patientId.value="";date.value="";
+ doctor.value="";noteType.value="Doctor Note";details.value="";
+}
+
+function loadRecords(){
+ let records=getRecords();
+ let box=document.getElementById("records");
+ box.innerHTML=records.length?"":"<p>No records saved.</p>";
+ records.forEach((r,i)=>{
+  box.innerHTML+=`<div class="record">
+  <b>Patient:</b> ${r.patientName||"-"}<br>
+  <b>ID:</b> ${r.patientId||"-"}<br>
+  <b>Date:</b> ${r.date||"-"}<br>
+  <b>Doctor:</b> ${r.doctor||"-"}<br>
+  <b>Type:</b> ${r.noteType||"-"}<br>
+  <b>Details:</b> ${r.details||"-"}<br>
+  <p class="${r.published?'pub':'unpub'}">${r.published?'📢 Published':'🔒 Unpublished'}</p>
+  <button class="edit" onclick="editRecord(${i})">✏️ Edit</button>
+  <button class="publish" onclick="publishRecord(${i})">${r.published?'↩️ Unpublish':'📢 Publish'}</button>
+  <button class="delete" onclick="deleteRecord(${i})">🗑️ Delete</button>
+  </div>`;
+ });
+}
+loadRecords();
+</script>
+</body>
+</html>

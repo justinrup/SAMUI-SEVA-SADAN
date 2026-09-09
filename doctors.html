@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Doctors | Samui Seva Sadan</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.doctors-container{
+  max-width:1000px;
+  margin:25px auto;
+  padding:0 15px;
+}
+
+.doctor-card{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 3px 12px rgba(0,0,0,.10);
+}
+
+.doctor-card h3{
+  margin-top:0;
+  color:#008f95;
+  font-size:22px;
+}
+
+.doctor-card p{
+  margin:8px 0;
+  line-height:1.5;
+}
+
+.doctor-photo{
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  border-radius:10px;
+  display:block;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+}
+
+.attachment{
+  display:inline-block;
+  margin-top:8px;
+  padding:9px 14px;
+  background:#008f95;
+  color:#fff;
+  text-decoration:none;
+  border-radius:7px;
+}
+
+.loading{
+  text-align:center;
+  padding:30px;
+}
+
+.no-doctors{
+  text-align:center;
+  padding:30px;
+  background:#fff;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>SAMUI SEVA SADAN</h1>
+    <p>Nursing Home & Healthcare Centre</p>
+  </div>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <a href="services.html">Services</a>
+  <a href="doctors.html">Doctors</a>
+  <a href="facilities.html">Facilities</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+  <div class="doctors-container">
+
+    <h2>Our Doctors & Medical Team</h2>
+
+    <div id="doctorsList">
+      <div class="loading">
+        Loading doctors...
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Samui Seva Sadan Nursing Home</p>
+</footer>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey:"AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain:"samui-seva-sadan.firebaseapp.com",
+  projectId:"samui-seva-sadan",
+  storageBucket:"samui-seva-sadan.firebasestorage.app",
+  messagingSenderId:"358488171058",
+  appId:"1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId:"G-ML4BQ4QVLB"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const doctorsList = document.getElementById("doctorsList");
+
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+async function loadDoctors(){
+
+  try{
+
+    const snapshot = await getDocs(
+      collection(db,"doctors")
+    );
+
+    const doctors = [];
+
+    snapshot.forEach(docSnap => {
+
+      const d = docSnap.data();
+
+      if(d.published === true){
+
+        doctors.push(d);
+
+      }
+
+    });
+
+
+    if(doctors.length === 0){
+
+      doctorsList.innerHTML = `
+        <div class="no-doctors">
+          <h3>Medical Team</h3>
+          <p>Doctor information will be available here soon.</p>
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    doctorsList.innerHTML = doctors.map(d => {
+
+      let attachmentHTML = "";
+
+      if(d.attachment && d.attachment.data){
+
+        if(
+          d.attachment.type &&
+          d.attachment.type.startsWith("image/")
+        ){
+
+          attachmentHTML = `
+            <img
+              class="doctor-photo"
+              src="${d.attachment.data}"
+              alt="${esc(d.name || "Doctor")}"
+            >
+
+            <a
+              class="attachment"
+              href="${d.attachment.data}"
+              download="${esc(d.attachment.name || "doctor-photo")}"
+              target="_blank"
+            >
+              📎 View / Download Photo
+            </a>
+          `;
+
+        }else{
+
+          attachmentHTML = `
+            <a
+              class="attachment"
+              href="${d.attachment.data}"
+              download="${esc(d.attachment.name || "document")}"
+              target="_blank"
+            >
+              📎 View / Download Document
+            </a>
+          `;
+
+        }
+
+      }
+
+
+      return `
+        <div class="doctor-card">
+
+          ${attachmentHTML}
+
+          <h3>👨‍⚕️ ${esc(d.name)}</h3>
+
+          <p>
+            <b>🏥 Hospital:</b>
+            ${esc(d.hospitalName)}
+          </p>
+
+          <p>
+            <b>🩺 Specialist:</b>
+            ${esc(d.specialist)}
+          </p>
+
+          <p>
+            <b>🎓 Qualification:</b>
+            ${esc(d.qualification)}
+          </p>
+
+          <p>
+            <b>📅 Available From:</b>
+            ${esc(d.addedOnHospital)}
+          </p>
+
+          <p>
+            <b>🕐 Doctor Time:</b>
+            ${esc(d.doctorTime)}
+          </p>
+
+        </div>
+      `;
+
+    }).join("");
+
+
+  }catch(error){
+
+    console.error(error);
+
+    doctorsList.innerHTML = `
+      <div class="no-doctors">
+        <h3>Unable to load doctors</h3>
+        <p>Please try again later.</p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+loadDoctors();
+
+</script>
+
+</body>
+</html>

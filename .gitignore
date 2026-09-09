@@ -1,0 +1,4 @@
+.env
+uploads/
+.admin_password
+__pycache__/
