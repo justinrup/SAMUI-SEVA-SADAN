@@ -6,6 +6,13 @@ from flask import Flask, request, jsonify, send_from_directory
 
 app = Flask(__name__)
 
+@app.after_request
+def add_cache_control(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 otp_data = {}
 
@@ -201,15 +208,7 @@ def admin_login():
             "message": "Invalid Admin Name or Password"
         }), 401
 
-    reset_file = os.path.join(BASE_DIR, ".admin_password")
-    saved_password = ""
-
-    if os.path.exists(reset_file):
-        with open(reset_file, "r") as f:
-            saved_password = f.read().strip()
-
-    if not saved_password:
-        saved_password = ENV.get("ADMIN_PASSWORD", "").strip()
+    saved_password = ENV.get("ADMIN_PASSWORD", "").strip()
 
     if password and saved_password and password == saved_password:
         return jsonify({
