@@ -118,4 +118,48 @@ async function loadPublishedDoctors() {
   }
 }
 
+async function loadPublishedBabies() {
+  const babyList = document.getElementById("publicBabyList");
+  if (!babyList) return;
+
+  try {
+    const q = query(
+      collection(db, "babies"),
+      where("published", "==", true)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      babyList.innerHTML = "<p>No baby birth notice available.</p>";
+      return;
+    }
+
+    babyList.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const d = docSnap.data();
+      const card = document.createElement("div");
+      card.className = "public-baby-card";
+
+      card.innerHTML = `
+        <h3>👶 Baby Birth Notice</h3>
+        <p><strong>Mother:</strong> ${d.motherName || ""}</p>
+        <p><strong>Doctor:</strong> ${d.drName || ""}</p>
+        <p><strong>Date of Birth:</strong> ${d.dob || ""}</p>
+        <p><strong>Birth Time:</strong> ${d.birthTime || ""}</p>
+        <p><strong>Gender:</strong> ${d.sex || ""}</p>
+        <p><strong>Weight:</strong> ${d.weight || ""}</p>
+        <p><strong>Delivery:</strong> ${d.deliveryCategory || ""}</p>
+      `;
+
+      babyList.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Baby loading error:", error);
+    babyList.innerHTML = "<p>Baby birth notice could not be loaded.</p>";
+  }
+}
+
 loadPublishedDoctors();
+loadPublishedBabies();
