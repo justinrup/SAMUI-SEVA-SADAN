@@ -165,3 +165,25 @@ footer{background:#043f63;color:#fff;padding:30px 7% 10px}.footer-inner{max-widt
     font-size:8px;
   }
 }
+
+/* Fix live homepage image visibility */
+.hero-photo-wrap,
+.hero-photo-wrap img,
+.quick-care-image,
+.quick-care-image img,
+.about-image,
+.about-image img,
+.department-card,
+.department-card img {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-photo-wrap img,
+.quick-care-image img,
+.about-image img,
+.department-card img {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
