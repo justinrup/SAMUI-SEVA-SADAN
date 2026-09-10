@@ -329,8 +329,8 @@ body{
 
 /* Emergency header */
 .header-emergency{
-  background:#fff4f4;
-  border:1px solid #ffd8d8;
+  background:#fff;
+  border:1px solid #d8edf1;
   border-radius:14px;
   padding:8px 13px;
   box-shadow:0 5px 16px rgba(200,40,40,.07);
