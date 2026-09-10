@@ -337,7 +337,7 @@ body{
 }
 
 .header-emergency span{
-  color:#18b95c;
+  color:#d00000;font-weight:900;text-transform:uppercase;
 }
 
 .header-emergency strong{
