@@ -228,3 +228,558 @@ footer{background:#043f63;color:#fff;padding:30px 7% 10px}.footer-inner{max-widt
     padding: 20px;
   }
 }
+
+/* =========================================================
+   SAMUI SEVA SADAN - NEW PROFESSIONAL MEDICAL THEME
+   Theme only - existing HTML/JS/functionality preserved
+   ========================================================= */
+
+:root{
+  --sss-blue:#075985;
+  --sss-blue-dark:#043b5c;
+  --sss-teal:#087f8c;
+  --sss-light:#eef9fb;
+  --sss-white:#ffffff;
+  --sss-text:#163447;
+  --sss-muted:#648092;
+  --sss-border:#d7edf2;
+  --sss-shadow:0 12px 35px rgba(4,59,92,.12);
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 10% 5%,rgba(8,127,140,.08),transparent 28%),
+    linear-gradient(180deg,#f7fdff 0%,#eef8fb 48%,#ffffff 100%);
+  color:var(--sss-text);
+}
+
+/* Top information bar */
+.top-strip{
+  background:linear-gradient(90deg,#043b5c,#075985,#087f8c);
+  color:#fff;
+  min-height:34px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+/* Main header */
+.site-header{
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--sss-border);
+  box-shadow:0 5px 22px rgba(4,59,92,.08);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+.header-inner{
+  min-height:76px;
+}
+
+.brand{
+  color:var(--sss-blue-dark);
+}
+
+.brand-mark{
+  background:linear-gradient(135deg,#087f8c,#075985);
+  box-shadow:0 7px 18px rgba(8,127,140,.25);
+}
+
+.brand h1{
+  color:var(--sss-blue-dark);
+  letter-spacing:.5px;
+}
+
+.brand p{
+  color:var(--sss-teal);
+  font-weight:900;
+}
+
+.brand small{
+  color:var(--sss-muted);
+}
+
+/* Old 3-dot button preserved */
+.sss-menu-button{
+  background:linear-gradient(135deg,#075985,#087f8c);
+  box-shadow:0 7px 18px rgba(7,89,133,.25);
+  transition:.2s ease;
+}
+
+.sss-menu-button:hover{
+  transform:scale(1.06);
+}
+
+/* Navigation */
+.main-nav a{
+  color:#244f67;
+  transition:.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active{
+  color:var(--sss-teal);
+  border-color:var(--sss-teal);
+}
+
+/* Emergency header */
+.header-emergency{
+  background:#fff4f4;
+  border:1px solid #ffd8d8;
+  border-radius:14px;
+  padding:8px 13px;
+  box-shadow:0 5px 16px rgba(200,40,40,.07);
+}
+
+.header-emergency span{
+  color:#b42323;
+}
+
+.header-emergency strong{
+  color:#8d1717;
+}
+
+/* Hero */
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(120deg,rgba(3,58,88,.96),rgba(5,105,126,.82)),
+    linear-gradient(180deg,#075985,#087f8c);
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,255,255,.16),transparent 25%),
+    radial-gradient(circle at 15% 80%,rgba(86,220,220,.14),transparent 30%);
+  pointer-events:none;
+}
+
+.hero-copy{
+  position:relative;
+  z-index:2;
+}
+
+.hero h2{
+  color:#fff;
+  text-shadow:0 4px 18px rgba(0,0,0,.2);
+}
+
+.hero h2 span{
+  color:#8ce8e8;
+}
+
+.hero p{
+  color:rgba(255,255,255,.88);
+}
+
+.eyebrow,
+.section-kicker{
+  color:var(--sss-teal);
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.hero .eyebrow{
+  color:#9df0ed;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,#087f8c,#075985);
+  border:0;
+  box-shadow:0 8px 22px rgba(4,59,92,.22);
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+}
+
+.btn-light{
+  background:#fff;
+  color:#075985;
+  box-shadow:0 8px 22px rgba(0,0,0,.12);
+}
+
+/* Main nursing home image */
+.hero-photo-wrap{
+  filter:drop-shadow(0 18px 28px rgba(0,0,0,.18));
+}
+
+.hero-photo-wrap img{
+  border:7px solid rgba(255,255,255,.9);
+  box-shadow:0 18px 45px rgba(0,0,0,.25);
+}
+
+/* Cards */
+.quick-care-card,
+.feature-card,
+.service-card,
+.department-card,
+.facility-card,
+.stats-card,
+.search-panel,
+.contact-panel{
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--sss-border);
+  box-shadow:var(--sss-shadow);
+}
+
+.quick-care-card,
+.service-card,
+.department-card,
+.facility-card{
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+
+.quick-care-card:hover,
+.service-card:hover,
+.department-card:hover,
+.facility-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 42px rgba(4,59,92,.17);
+}
+
+/* Quick care */
+.quick-care-image{
+  background:linear-gradient(135deg,#dff7fa,#eaf7fc);
+}
+
+.quick-care-caption h3{
+  color:var(--sss-blue-dark);
+}
+
+.quick-care-caption p{
+  color:var(--sss-muted);
+}
+
+/* Feature strip */
+.feature-strip{
+  background:#fff;
+  border:1px solid var(--sss-border);
+  box-shadow:0 10px 30px rgba(4,59,92,.08);
+}
+
+.feature-icon{
+  color:var(--sss-teal);
+}
+
+/* Section headings */
+.section-heading h2,
+.about h2,
+.facility-intro h2,
+.doctor-heading h2,
+.map-info h2,
+.contact-panel h2,
+.search-panel h2{
+  color:var(--sss-blue-dark);
+}
+
+/* Services */
+.services-section{
+  background:linear-gradient(180deg,#f6fdff,#eef9fb);
+}
+
+.service-card{
+  color:var(--sss-text);
+}
+
+.service-card h3{
+  color:var(--sss-blue-dark);
+}
+
+.service-card p{
+  color:var(--sss-muted);
+}
+
+.outline-btn{
+  color:var(--sss-blue);
+  border-color:#8bcfd8;
+}
+
+.outline-btn:hover{
+  background:var(--sss-teal);
+  color:#fff;
+  border-color:var(--sss-teal);
+}
+
+/* Medical facilities */
+.department-section{
+  background:#fff;
+}
+
+.department-card{
+  overflow:hidden;
+}
+
+.department-caption{
+  background:linear-gradient(180deg,rgba(3,58,88,.05),#fff);
+}
+
+.department-caption b{
+  color:var(--sss-blue-dark);
+}
+
+.department-caption span{
+  color:var(--sss-muted);
+}
+
+/* Facility area */
+.facilities-section{
+  background:
+    linear-gradient(135deg,rgba(238,249,251,.95),rgba(255,255,255,.98));
+}
+
+.facility-intro li{
+  color:#31586b;
+}
+
+.facility-card h3{
+  color:var(--sss-blue-dark);
+}
+
+.facility-card p{
+  color:var(--sss-muted);
+}
+
+/* Doctors */
+.doctors-section{
+  background:#f6fcfe;
+}
+
+.doctor-box{
+  background:#fff;
+  border:1px solid var(--sss-border);
+  box-shadow:var(--sss-shadow);
+  border-radius:18px;
+}
+
+/* Search/contact */
+.search-contact{
+  background:#fff;
+}
+
+.search-panel,
+.contact-panel{
+  border-radius:20px;
+}
+
+.search-box input{
+  border:1px solid #b9dce4;
+  background:#f9feff;
+}
+
+.search-box button{
+  background:linear-gradient(135deg,#075985,#087f8c);
+}
+
+/* Map */
+.map-section{
+  background:linear-gradient(135deg,#eaf8fb,#ffffff);
+}
+
+.real-map-box{
+  border:6px solid #fff;
+  box-shadow:var(--sss-shadow);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+/* Emergency */
+.emergency-banner{
+  background:linear-gradient(100deg,#043b5c,#075985,#087f8c);
+  box-shadow:0 -8px 30px rgba(4,59,92,.10);
+}
+
+.emergency-banner h2,
+.emergency-banner p{
+  color:#fff;
+}
+
+.emergency-actions a{
+  background:#fff;
+  color:#075985;
+  border-radius:14px;
+  box-shadow:0 8px 22px rgba(0,0,0,.14);
+}
+
+/* Footer */
+footer{
+  background:
+    linear-gradient(145deg,#032f4b,#043b5c 55%,#075985);
+  color:#dff7fa;
+}
+
+footer h3{
+  color:#fff;
+}
+
+footer a{
+  color:#bdecef;
+}
+
+footer a:hover{
+  color:#fff;
+}
+
+.footer-brand{
+  color:#fff;
+}
+
+.copyright{
+  border-top:1px solid rgba(255,255,255,.14);
+}
+
+/* =========================================================
+   OLD LEFT SIDE MENU - FUNCTIONALITY PRESERVED
+   ========================================================= */
+
+.sss-menu-overlay{
+  background:rgba(2,35,55,.62);
+  backdrop-filter:blur(3px);
+}
+
+.sss-side-menu{
+  background:
+    linear-gradient(180deg,rgba(3,59,91,.98),rgba(2,43,68,.99));
+  box-shadow:12px 0 35px rgba(0,0,0,.28);
+}
+
+.sss-menu-header{
+  background:rgba(255,255,255,.06);
+}
+
+.sss-menu-title{
+  color:#fff;
+}
+
+.sss-menu-list a{
+  transition:.2s ease;
+}
+
+.sss-menu-list a:hover,
+.sss-menu-list a:first-child{
+  background:linear-gradient(90deg,#087fbe,#087f8c);
+  box-shadow:0 5px 14px rgba(0,0,0,.12);
+}
+
+.sss-menu-list a b{
+  color:#fff;
+}
+
+/* Mobile polish */
+@media(max-width:800px){
+  .site-header{
+    position:sticky;
+    top:0;
+  }
+
+  .hero{
+    min-height:auto;
+  }
+
+  .hero-copy{
+    text-align:center;
+  }
+
+  .hero-actions{
+    justify-content:center;
+  }
+}
+
+@media(max-width:520px){
+  .sss-side-menu{
+    width:84vw;
+  }
+
+  .brand small{
+    display:none;
+  }
+}
+
+
+/* =========================================================
+   CONTROL PANEL - FOLDER MENU
+   Existing functionality preserved
+   ========================================================= */
+
+.control-panel-folder{
+  margin:24px 0;
+  border:1px solid rgba(8,127,190,.28);
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 10px 30px rgba(0,60,90,.12);
+}
+
+.control-panel-folder > summary{
+  list-style:none;
+  cursor:pointer;
+  padding:17px 20px;
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(90deg,#087fbe,#087f8c);
+  user-select:none;
+}
+
+.control-panel-folder > summary::-webkit-details-marker{
+  display:none;
+}
+
+.control-panel-folder > summary::after{
+  content:"▾";
+  float:right;
+  font-size:20px;
+  transition:transform .2s ease;
+}
+
+.control-panel-folder:not([open]) > summary::after{
+  transform:rotate(-90deg);
+}
+
+.control-panel-content{
+  padding:16px;
+  background:rgba(240,250,253,.72);
+}
+
+.control-panel-content > .card{
+  margin:0 0 14px;
+  border-radius:14px;
+  border:1px solid rgba(8,127,190,.16);
+  box-shadow:0 5px 18px rgba(0,60,90,.08);
+}
+
+.control-panel-content > .card:last-child{
+  margin-bottom:0;
+}
+
+/* Control Panel headings */
+.control-panel-content .card h2{
+  color:#075b82;
+}
+
+/* Mobile */
+@media(max-width:520px){
+  .control-panel-folder{
+    margin:18px 0;
+    border-radius:14px;
+  }
+
+  .control-panel-folder > summary{
+    padding:15px 16px;
+    font-size:16px;
+  }
+
+  .control-panel-content{
+    padding:10px;
+  }
+}
+
