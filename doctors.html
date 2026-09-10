@@ -146,6 +146,36 @@ function esc(value){
 
 }
 
+function dataUrlToBlobUrl(dataUrl){
+
+  try{
+
+    const parts = dataUrl.split(",");
+    const meta = parts[0];
+    const base64 = parts[1];
+
+    const mimeMatch = meta.match(/data:([^;]+);base64/);
+    const mime = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+
+    for(let i=0;i<binary.length;i++){
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const blob = new Blob([bytes],{type:mime});
+
+    return URL.createObjectURL(blob);
+
+  }catch(error){
+
+    console.error("Doctor photo conversion error:",error);
+    return "";
+
+  }
+}
+
 
 async function loadDoctors(){
 
@@ -195,22 +225,41 @@ async function loadDoctors(){
           d.attachment.type.startsWith("image/")
         ){
 
-          attachmentHTML = `
-            <img
-              class="doctor-photo"
-              src="${d.attachment.data}"
-              alt="${esc(d.name || "Doctor")}"
-            >
+          const photoData = String(d.attachment.data || "");
+          const photoUrl = dataUrlToBlobUrl(photoData);
 
-            <a
-              class="attachment"
-              href="${d.attachment.data}"
-              download="${esc(d.attachment.name || "doctor-photo")}"
-              target="_blank"
-            >
-              📎 View / Download Photo
-            </a>
-          `;
+          if(!photoUrl){
+
+            attachmentHTML = `
+              <div style="padding:15px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;color:#664d03;">
+                <b>⚠️ Doctor Photo Data Error</b>
+                <br>
+                Data length: ${photoData.length}
+                <br>
+                Starts with: ${esc(photoData.substring(0,40))}
+              </div>
+            `;
+
+          }else{
+
+            attachmentHTML = `
+              <img
+                class="doctor-photo"
+                src="${photoUrl}"
+                alt="${esc(d.name || "Doctor")}"
+              >
+
+              <a
+                class="attachment"
+                href="${photoUrl}"
+                download="${esc(d.attachment.name || "doctor-photo.jpg")}"
+                target="_blank"
+              >
+                📎 View / Download Photo
+              </a>
+            `;
+
+          }
 
         }else{
 
@@ -258,7 +307,7 @@ async function loadDoctors(){
           </p>
 
           <p>
-            <b>🕐 Doctor Time:</b>
+            <b>🕐 DOCTOR CHAMBER TIME:</b>
             ${esc(d.doctorTime)}
           </p>
 
