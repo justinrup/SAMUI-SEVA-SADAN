@@ -783,3 +783,11 @@ footer a:hover{
   }
 }
 
+
+
+/* Main page Plus icon - RED only */
+.brand-mark{
+  background:#fff !important;
+  color:#e00000 !important;
+  border:3px solid #e00000 !important;
+}
