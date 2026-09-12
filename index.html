@@ -23,6 +23,7 @@
         <p>NURSING HOME</p>
         <small>Care Today&nbsp; • &nbsp;Health Tomorrow</small>
       </div>
+      <img class="brand-logo" src="images/samui-logo.jpg" alt="Samui Seva Sadan Logo">
     </a>
     <nav class="main-nav">
       <a class="active" href="index.html">Home</a>
@@ -251,7 +252,7 @@
 <script type="module" src="js/app.js?v=2"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
   authDomain: "samui-seva-sadan.firebaseapp.com",
@@ -262,7 +263,28 @@ const firebaseConfig = {
   measurementId: "G-ML4BQ4QVLB"
 };
 const firebaseApp = initializeApp(firebaseConfig);
+
 const db = getFirestore(firebaseApp);
+
+// Website visitor counter
+(async function recordWebsiteVisit() {
+  try {
+    // Count once per browser session, so refreshing the page
+    // does not create unlimited visitor records.
+    if (sessionStorage.getItem("sss_visitor_recorded") === "1") return;
+
+    await addDoc(collection(db, "website_visitors"), {
+      page: "home",
+      visitedAt: serverTimestamp()
+    });
+
+    sessionStorage.setItem("sss_visitor_recorded", "1");
+    console.log("Website visit recorded");
+  } catch (e) {
+    console.error("Visitor counter error:", e);
+  }
+})();
+
 async function loadEmergencyNumber() {
   try {
     const snapshot = await getDocs(collection(db, "locations"));
