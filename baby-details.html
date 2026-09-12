@@ -162,7 +162,7 @@ div.className="record";
 div.innerHTML=`
 <strong>${d.motherName||""}</strong><br>
 DOB
-: ${d.dob||""}<br>
+: ${d.dob ? d.dob.split("-")[2]+"/"+d.dob.split("-")[1]+"/"+d.dob.split("-")[0].slice(-2) : ""}<br>
 Time: ${d.birthTime||""}<br>
 Sex: ${d.sex||""}<br>
 Weight: ${d.weight||""}<br>
