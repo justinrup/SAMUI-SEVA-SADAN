@@ -235,6 +235,13 @@ button.edit,
 }
 </style>
 
+
+<style>
+/* ===== NOTICE CONTROL PANEL ===== */
+.notice-admin-preview{margin-top:12px;padding:14px;border-radius:12px;background:#f4fbfc;border:1px solid #d5edf1}
+.notice-admin-item{padding:14px;margin-top:10px;border:1px solid #d5edf1;border-radius:12px;background:#fff}
+.notice-admin-item img{width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-top:8px}
+</style>
 </head>
 
 <body>
@@ -300,6 +307,17 @@ button.edit,
     </div>
 
 
+
+
+  <div class="card" id="noticeManagementCard">
+    <h2>📢 Notice Management</h2>
+    <input id="noticeTitle" placeholder="Notice Title">
+    <textarea id="noticeMessage" rows="5" placeholder="Notice Message"></textarea>
+    <input id="noticeImageUrl" placeholder="ImageKit Background Image URL (Optional)">
+    <button id="saveNotice">➕ Add Notice</button>
+    <div id="noticeMessageStatus"></div>
+    <div id="noticeList">Loading notices...</div>
+  </div>
 
   <div class="card">
     <h2>➕ Add Patient</h2>
@@ -451,6 +469,79 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+
+// ===============================
+// NOTICE MANAGEMENT
+// ===============================
+const noticeTitle = document.getElementById("noticeTitle");
+const noticeMessageInput = document.getElementById("noticeMessage");
+const noticeImageUrl = document.getElementById("noticeImageUrl");
+const saveNotice = document.getElementById("saveNotice");
+const noticeStatus = document.getElementById("noticeMessageStatus");
+const noticeList = document.getElementById("noticeList");
+let editingNoticeId = null;
+
+async function loadNotices(){
+  try{
+    const snap = await getDocs(collection(db,"notices"));
+    noticeList.innerHTML="";
+    if(snap.empty){ noticeList.innerHTML="<p>কোনো Notice এখনো যোগ করা হয়নি।</p>"; return; }
+    snap.forEach(item=>{
+      const d=item.data();
+      const box=document.createElement("div");
+      box.className="notice-admin-item";
+      const status=d.published ? "🌐 Published" : "🔒 Unpublished";
+      box.innerHTML =
+        "<b>📢 "+(d.title||"Notice")+"</b><br>"+
+        "<div style='white-space:pre-wrap;margin-top:6px;'>"+(d.message||"")+"</div>"+
+        (d.imageUrl ? "<img src='"+d.imageUrl+"' alt='Notice background'>" : "")+
+        "<p>"+status+"</p>"+
+        "<button class='edit' onclick=\"editNotice('"+item.id+"')\">✏️ Edit</button> "+
+        "<button onclick=\"toggleNotice('"+item.id+"',"+(d.published===true)+")\">"+(d.published ? "🔒 Unpublish":"🌐 Publish")+"</button> "+
+        "<button class='delete' onclick=\"deleteNotice('"+item.id+"')\">🗑️ Delete</button>";
+      noticeList.appendChild(box);
+    });
+  }catch(error){ noticeList.innerHTML="<p>❌ Notice load করা যায়নি।</p>"; console.error(error); }
+}
+
+saveNotice.addEventListener("click",async()=>{
+  const title=noticeTitle.value.trim(), message=noticeMessageInput.value.trim(), imageUrl=noticeImageUrl.value.trim();
+  if(!title || !message){noticeStatus.textContent="⚠️ Notice Title এবং Message দিন।";return;}
+  try{
+    if(editingNoticeId){
+      await updateDoc(doc(db,"notices",editingNoticeId),{title,message,imageUrl,updatedAt:new Date().toISOString()});
+      noticeStatus.textContent="✅ Notice Update হয়েছে।";
+      editingNoticeId=null; saveNotice.textContent="➕ Add Notice";
+    }else{
+      await addDoc(collection(db,"notices"),{title,message,imageUrl,published:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+      noticeStatus.textContent="✅ Notice যোগ হয়েছে। এখন Publish করতে পারবেন।";
+    }
+    noticeTitle.value="";noticeMessageInput.value="";noticeImageUrl.value="";
+    await loadNotices();
+  }catch(error){noticeStatus.textContent="❌ Notice Save করা যায়নি: "+error.message;console.error(error);}
+});
+
+window.editNotice=async(id)=>{
+  try{
+    const snap=await getDocs(collection(db,"notices"));
+    snap.forEach(item=>{if(item.id===id){const d=item.data();noticeTitle.value=d.title||"";noticeMessageInput.value=d.message||"";noticeImageUrl.value=d.imageUrl||"";editingNoticeId=id;saveNotice.textContent="💾 Update Notice";noticeStatus.textContent="✏️ Edit mode চালু হয়েছে.";window.scrollTo({top:0,behavior:"smooth"});}});
+  }catch(e){console.error(e);}
+};
+
+window.toggleNotice=async(id,status)=>{
+  try{await updateDoc(doc(db,"notices",id),{published:!status,updatedAt:new Date().toISOString()});await loadNotices();}
+  catch(e){alert("Notice publish status পরিবর্তন করা যায়নি।");console.error(e);}
+};
+
+window.deleteNotice=async(id)=>{
+  if(!confirm("এই Notice Delete করতে চান?")) return;
+  try{await deleteDoc(doc(db,"notices",id));await loadNotices();}
+  catch(e){alert("Notice Delete করা যায়নি।");console.error(e);}
+};
+
+loadNotices();
+
 
 
 // Admin protection

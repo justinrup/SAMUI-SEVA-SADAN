@@ -5,12 +5,103 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SAMUI SEVA SADAN NURSING HOME</title>
 <link rel="stylesheet" href="css/style.css?v=20260910">
+
+<style>
+/* ===== SSS MENU TOOLS + FRONT NOTIFICATION ===== */
+.sss-tools-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:12px;background:rgba(0,20,30,.72);z-index:99999}
+.sss-tools-modal.show{display:flex}
+.sss-tool-card{width:min(650px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 20px 70px rgba(0,0,0,.35);padding:22px;position:relative;color:#163447}
+.sss-tool-close{position:absolute;right:12px;top:10px;border:0;background:#eef7f8;color:#075985;border-radius:50%;width:40px;height:40px;font-size:25px;cursor:pointer;z-index:3}
+.sss-tool-card h2{margin:0 48px 18px 0;color:#075985}
+.sss-tool-input,.sss-tool-card select,.sss-tool-card textarea{width:100%;box-sizing:border-box;padding:13px;border:1px solid #b8dce4;border-radius:12px;margin:7px 0;font-size:16px}
+.sss-tool-btn{width:100%;padding:14px;border:0;border-radius:13px;background:#087f8c;color:#fff;font-weight:800;margin-top:10px;font-size:17px}
+.sss-calc-display{font-size:28px;text-align:right;background:#f3fbfc}
+.sss-calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.sss-calc-grid button{padding:15px 8px;border:0;border-radius:10px;background:#eaf5f7;font-size:18px;font-weight:700}
+.sss-calc-grid button.sss-calc-eq{background:#087f8c;color:#fff}
+.sss-weather-box,.sss-notice-box{padding:15px;border-radius:14px;background:#f3fbfc;margin-top:10px}
+.sss-age-wrap{background:#fff;border-radius:18px;padding:6px 2px 2px}
+.sss-age-hero{text-align:center;background:linear-gradient(180deg,#fff,#f7fbff);border-radius:16px;padding:8px 0 18px}
+.sss-age-hero-icon{font-size:92px;line-height:1.05}
+.sss-age-title{text-align:left;font-size:20px;font-weight:800;margin:18px 0 8px}
+
+/* Android-style DOB wheel picker */
+.sss-dob-field{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.sss-dob-field:active{background:#f4fbff;}
+.sss-dob-picker{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.62);z-index:100001;padding:18px;}
+.sss-dob-picker.show{display:flex;}
+.sss-dob-picker-card{width:min(505px,94vw);background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.4);}
+.sss-dob-picker-top{background:#078f82;color:#fff;padding:18px 24px 22px;}
+.sss-dob-picker-top>div:first-child{font-size:20px;font-weight:700;opacity:.95;}
+.sss-dob-picker-top>div:last-child{font-size:34px;font-weight:700;margin-top:5px;}
+.sss-dob-wheel-wrap{height:270px;position:relative;display:grid;grid-template-columns:1fr 1.35fr 1.25fr;overflow:hidden;background:#fff;padding:0 16px;}
+.sss-dob-wheel-highlight{position:absolute;left:16px;right:16px;top:108px;height:54px;border-top:2px solid #222;border-bottom:2px solid #222;pointer-events:none;z-index:2;}
+.sss-dob-wheel{height:270px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;text-align:center;position:relative;z-index:1;}
+.sss-dob-wheel::-webkit-scrollbar{display:none;}
+.sss-dob-wheel:before,.sss-dob-wheel:after{content:"";display:block;height:108px;}
+.sss-dob-wheel button{display:block;width:100%;height:54px;border:0;background:transparent;font-size:22px;color:#aaa;scroll-snap-align:center;padding:0;}
+.sss-dob-wheel button.active{color:#111;font-weight:700;}
+.sss-dob-picker-actions{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #ddd;}
+.sss-dob-picker-actions button{height:64px;border:0;border-right:1px solid #ddd;background:#fff;color:#075985;font-size:18px;font-weight:700;}
+.sss-dob-picker-actions button:last-child{border-right:0;}
+.sss-dob-date-input{display:none;}
+.sss-current-date-fixed{display:flex;align-items:center;gap:10px;cursor:default;user-select:none;pointer-events:none;}
+.sss-fixed-date-display{font-size:20px;font-weight:700;color:#667;}
+.sss-dob-field{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.sss-dob-date-input{flex:1;min-width:0;border:0;background:transparent;font-size:20px;font-weight:700;color:#667;outline:none;padding:8px 0;}
+.sss-current-date-fixed{display:flex;align-items:center;gap:10px;cursor:default;user-select:none;pointer-events:none;}
+.sss-fixed-date-display{font-size:20px;font-weight:700;color:#667;}
+.sss-date-field{display:flex;align-items:center;gap:8px;position:relative;margin-bottom:12px}
+.sss-date-field{display:flex;align-items:center;gap:8px;}
+.sss-date-parts{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:7px;flex:1;}
+.sss-date-parts select,.sss-fixed-date-part{width:100%;box-sizing:border-box;padding:11px 8px;border:1px solid #d7e1e7;border-radius:10px;background:#fff;font-weight:700;font-size:14px;text-align:center;}
+.sss-current-date-fixed .sss-fixed-date-part{background:#eef3f5;color:#344955;cursor:not-allowed;user-select:none;}
+.sss-date-parts{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:7px;flex:1}
+.sss-date-parts select{width:100%;box-sizing:border-box;padding:11px 8px;border:1px solid #d7e1e7;border-radius:10px;background:#fff;font-weight:700;font-size:14px;outline:none}
+.sss-date-parts select:disabled{background:#eef2f4;color:#59656d;border-color:#d5dde1;opacity:1;cursor:not-allowed}
+.sss-date-field input{height:66px;padding:0 16px 0 62px!important;border:2px solid #1f5d8f!important;border-radius:16px!important;font-size:18px!important}
+.sss-date-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:30px;z-index:1;pointer-events:none}
+.sss-age-result{margin-top:14px;text-align:center;font-size:20px;color:#075985;font-weight:800}
+.sss-weather-dashboard{background:#202126;color:#eee;border-radius:22px;padding:14px;overflow:hidden}
+.sss-weather-lang{display:flex;justify-content:flex-end;align-items:center;gap:7px;margin:2px 2px 10px}.sss-weather-lang select{background:#303238;color:#fff;border:1px solid #555;border-radius:10px;padding:9px 10px;font-size:14px;outline:none}.sss-weather-lang label{font-size:13px;color:#cdd0d8}.sss-weather-search{display:flex;gap:8px;margin-bottom:12px}
+.sss-weather-search input{flex:1;min-width:0;background:#303238;color:#fff;border:1px solid #555;border-radius:13px;padding:13px 14px;font-size:16px;outline:none}
+.sss-weather-search button{border:0;border-radius:13px;background:#4d7fc4;color:#fff;padding:0 16px;font-size:19px;cursor:pointer}
+.sss-weather-place{font-size:14px;color:#bfc4cf;margin:2px 4px 8px}
+.sss-weather-main{background:linear-gradient(145deg,#2d3038,#24262c);border-radius:20px;padding:18px;box-shadow:inset 0 1px rgba(255,255,255,.05)}
+.sss-weather-current{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sss-weather-temp{font-size:58px;font-weight:300;line-height:1}
+.sss-weather-condition{font-size:16px;color:#ddd;margin-top:7px}
+.sss-weather-icon{font-size:66px}
+.sss-weather-hourly{display:flex;gap:8px;overflow-x:auto;padding:15px 0 3px;scrollbar-width:thin}
+.sss-hour-card{min-width:68px;text-align:center;color:#c8cbd2;font-size:13px}
+.sss-hour-card b{display:block;font-size:15px;color:#eee;margin-bottom:7px}
+.sss-hour-card .wi{font-size:25px;margin:5px 0}
+.sss-weather-days{display:flex;gap:8px;overflow-x:auto;padding:10px 0 3px}
+.sss-day-card{min-width:90px;background:#292c33;border-radius:15px;padding:12px 8px;text-align:center;color:#ddd}
+.sss-day-card.active{outline:2px solid #bfc8d8}
+.sss-day-card .wi{font-size:28px;margin:7px 0}
+.sss-day-card strong{display:block;font-size:14px}
+.sss-weather-details{border-top:1px solid #484a50;margin-top:13px;padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sss-weather-detail{background:#292c33;border-radius:12px;padding:12px;font-size:13px;color:#cdd0d8}
+.sss-weather-detail b{display:block;color:#fff;font-size:15px;margin-top:3px}
+.sss-weather-loading{text-align:center;padding:40px 10px;color:#ddd}
+.sss-notification-wrap{position:fixed;right:16px;bottom:18px;z-index:9990}
+#sssNotificationBtn{border:0;border-radius:50%;width:58px;height:58px;background:#d32f2f;color:#fff;font-size:25px;box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer}
+#sssNotificationBtn.has-notice{animation:sssPulse 1.8s infinite}
+@keyframes sssPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.sss-notification-badge{position:absolute;right:-2px;top:-2px;background:#ffd54f;color:#6b4200;border-radius:50%;min-width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+@media(max-width:600px){.sss-tool-card{padding:16px}.sss-notification-wrap{right:12px;bottom:12px}.sss-weather-temp{font-size:50px}.sss-weather-details{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 
 <div class="top-strip">
   <div>📍 Khanakul, Hooghly, West Bengal 712417</div>
-  <div class="top-right">
+  <div class="top-right"><button type="button" class="top-search-btn" id="topSearchBtn" aria-label="Search">🔍</button>
+
+<div class="top-search-box" id="topSearchBox">
+  <input type="search" id="topSearchInput" placeholder="Search..." autocomplete="off">
+</div>
 <a href="tel:+919733595341" style="color:inherit;text-decoration:none;">🚑 Emergency</a>
 &nbsp; | &nbsp;
 <a href="tel:+919733595341" style="color:inherit;text-decoration:none;">📞 Call</a>
@@ -251,10 +342,108 @@
       <div id="publicEmergencyList" style="font-size:11px;">Loading...</div>
       <div id="publicDriverList" style="font-size:11px;margin-top:8px;">Loading...</div>
     </div>
+
+    <a href="#" id="sssCalendarMenu"><span>📅</span><b>Calendar</b></a>
+    <a href="#" id="sssCalculatorMenu"><span>🧮</span><b>Calculator</b></a>
+    <a href="#" id="sssAgeCalculatorMenu"><span>🎂</span><b>Age Calculator</b></a>
+    <a href="#" id="sssWeatherMenu"><span>🌤️</span><b>Live Weather</b></a>
+    <a href="#" id="sssNoticeMenu"><span>📢</span><b>Notice</b></a>
     <a href="settings.html"><span>⚙️</span><b>Settings</b></a>
   </nav>
 </aside>
 
+
+<!-- ===== Hidden 3-dot tools: shown only after menu selection ===== -->
+<div class="sss-tools-modal" id="sssCalendarModal">
+  <div class="sss-tool-card">
+    <button class="sss-tool-close" data-close-tool="sssCalendarModal">×</button>
+    <h2>📅 Calendar</h2>
+    <input class="sss-tool-input" type="date" id="sssCalendarDate">
+    <div id="sssCalendarResult" class="sss-notice-box">Select a date.</div>
+  </div>
+</div>
+
+<div class="sss-tools-modal" id="sssCalculatorModal">
+  <div class="sss-tool-card">
+    <button class="sss-tool-close" data-close-tool="sssCalculatorModal">×</button>
+    <h2>🧮 Calculator</h2>
+    <input class="sss-tool-input sss-calc-display" id="sssCalcDisplay" readonly value="0">
+    <div class="sss-calc-grid">
+      <button data-calc="C">C</button><button data-calc="(">(</button><button data-calc=")">)</button><button data-calc="/">÷</button>
+      <button data-calc="7">7</button><button data-calc="8">8</button><button data-calc="9">9</button><button data-calc="*">×</button>
+      <button data-calc="4">4</button><button data-calc="5">5</button><button data-calc="6">6</button><button data-calc="-">−</button>
+      <button data-calc="1">1</button><button data-calc="2">2</button><button data-calc="3">3</button><button data-calc="+">+</button>
+      <button data-calc="0">0</button><button data-calc=".">.</button><button data-calc="⌫">⌫</button><button class="sss-calc-eq" data-calc="=">=</button>
+    </div>
+  </div>
+</div>
+
+<div class="sss-tools-modal" id="sssAgeCalculatorModal">
+  <div class="sss-tool-card">
+    <button class="sss-tool-close" data-close-tool="sssAgeCalculatorModal">×</button>
+    <div class="sss-age-wrap">
+      <div class="sss-age-hero">
+        <div class="sss-age-hero-icon">🎂📅</div>
+        <h2 style="margin:6px 0 0;text-align:center;">Age Calculator</h2>
+      </div>
+      <div class="sss-age-title">Date of Birth <span style="font-size:12px;color:#667;float:right;">✏️ Edit</span></div>
+      <div class="sss-date-field sss-dob-field" id="sssDobOpen">
+        <span class="sss-date-icon">🗓️</span>
+        <span id="sssDobDisplay" class="sss-fixed-date-display">DD/MM/YYYY</span>
+      </div>
+
+      <div class="sss-dob-picker" id="sssDobPicker" aria-hidden="true">
+        <div class="sss-dob-picker-card">
+          <div class="sss-dob-picker-top">
+            <div id="sssDobPickerYear">----</div>
+            <div id="sssDobPickerBig">Select Date</div>
+          </div>
+          <div class="sss-dob-wheel-wrap">
+            <div class="sss-dob-wheel-highlight"></div>
+            <div class="sss-dob-wheel" id="sssDobDayWheel"></div>
+            <div class="sss-dob-wheel" id="sssDobMonthWheel"></div>
+            <div class="sss-dob-wheel" id="sssDobYearWheel"></div>
+          </div>
+          <div class="sss-dob-picker-actions">
+            <button type="button" id="sssDobClear">Clear</button>
+            <button type="button" id="sssDobCancel">Cancel</button>
+            <button type="button" id="sssDobSet">Set</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sss-age-title">Current Date <span style="font-size:12px;color:#777;float:right;">🔒 Fixed</span></div>
+      <div class="sss-date-field sss-current-date-fixed" aria-label="Current date">
+        <span class="sss-date-icon">✅</span>
+        <span id="sssCurrentDateDisplay" class="sss-fixed-date-display">--/--/----</span>
+      </div>
+      <button class="sss-tool-btn" id="sssAgeCalcBtn">Calculate Age</button>
+      <div id="sssAgeResult" class="sss-age-result"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sss-tools-modal" id="sssWeatherModal">
+  <div class="sss-tool-card" style="background:#17181c;padding:12px;">
+    <button class="sss-tool-close" data-close-tool="sssWeatherModal" style="background:#303238;color:#fff;">×</button>
+    <div id="sssWeatherResult" class="sss-weather-dashboard">
+      <div class="sss-weather-lang"><label for="sssWeatherLang">🌐</label><select id="sssWeatherLang"><option value="bn">বাংলা</option><option value="en">English</option><option value="hi">हिन्दी</option></select></div>
+      <div class="sss-weather-loading">🌤️ Weather loading...</div>
+    </div>
+  </div>
+</div>
+
+<div class="sss-tools-modal" id="sssNoticeModal">
+  <div class="sss-tool-card">
+    <button class="sss-tool-close" data-close-tool="sssNoticeModal">×</button>
+    <h2>📢 Notice</h2>
+    <div id="sssNoticeResult" class="sss-notice-box">Loading published notices...</div>
+  </div>
+</div>
+
+<div class="sss-notification-wrap" aria-label="Notifications">
+  <button id="sssNotificationBtn" aria-label="Open notifications">🔔<span class="sss-notification-badge" id="sssNotificationBadge">0</span></button>
+</div>
 <script type="module" src="js/app.js?v=2"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
@@ -308,7 +497,10 @@ async function loadEmergencyNumber() {
 loadEmergencyNumber();
 </script>
 <script type="module">
-import { getDocs, collection } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, getDocs, collection } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+const db = getFirestore(getApp());
+const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const overlay=document.getElementById("sssMenuOverlay"); if(menu) menu.classList.remove("open"); if(overlay) overlay.classList.remove("show"); document.body.classList.remove("menu-open"); };
 (function(){
   const button=document.getElementById("sssMenuButton");
   const menu=document.getElementById("sssSideMenu");
@@ -416,6 +608,407 @@ import { getDocs, collection } from "https://www.gstatic.com/firebasejs/12.2.1/f
     }
   }
 })();
+
+  // ===== 3-DOT TOOLS =====
+  const toolMap = {
+    sssCalendarMenu: "sssCalendarModal",
+    sssCalculatorMenu: "sssCalculatorModal",
+    sssAgeCalculatorMenu: "sssAgeCalculatorModal",
+    sssWeatherMenu: "sssWeatherModal",
+    sssNoticeMenu: "sssNoticeModal"
+  };
+  function openTool(id){
+    const el=document.getElementById(id);
+    if(el) el.classList.add("show");
+  }
+  function closeTool(id){
+    const el=document.getElementById(id);
+    if(el) el.classList.remove("show");
+  }
+  Object.entries(toolMap).forEach(([menuId,modalId])=>{
+    const a=document.getElementById(menuId);
+    if(a) a.addEventListener("click",e=>{
+      e.preventDefault();
+      shut();
+      openTool(modalId);
+      if(modalId==="sssWeatherModal") loadLiveWeather();
+      if(modalId==="sssNoticeModal") loadPublishedNotices();
+    });
+  });
+  document.querySelectorAll("[data-close-tool]").forEach(b=>b.addEventListener("click",()=>closeTool(b.dataset.closeTool)));
+  document.querySelectorAll(".sss-tools-modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show");}));
+
+  // Calendar
+  const calDate=document.getElementById("sssCalendarDate");
+  const calResult=document.getElementById("sssCalendarResult");
+  function updateCalendar(){
+    if(!calDate.value){calResult.textContent="Select a date.";return;}
+    const d=new Date(calDate.value+"T00:00:00");
+    calResult.innerHTML="<b>"+d.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+"</b>";
+  }
+  if(calDate){calDate.value=new Date().toISOString().slice(0,10);calDate.addEventListener("change",updateCalendar);updateCalendar();}
+
+  // Calculator
+  let calcExpr="";
+  const calcDisplay=document.getElementById("sssCalcDisplay");
+  document.querySelectorAll("[data-calc]").forEach(btn=>btn.addEventListener("click",()=>{
+    const v=btn.dataset.calc;
+    if(v==="C") calcExpr="";
+    else if(v==="⌫") calcExpr=calcExpr.slice(0,-1);
+    else if(v==="="){
+      try{
+        if(!/^[0-9+*/().\s-]+$/.test(calcExpr)) throw new Error();
+        calcExpr=String(Function("return ("+calcExpr+")")());
+      }catch(e){calcExpr="Error";}
+    } else if(calcExpr==="Error") calcExpr=v;
+    else calcExpr+=v;
+    calcDisplay.value=calcExpr||"0";
+  }));
+
+  // Age calculator — DOB uses a real scrollable DD / Month / YYYY wheel picker.
+  // Current Date is always the device date, locked and never editable.
+  const ageBtn=document.getElementById("sssAgeCalcBtn");
+  const dobOpen=document.getElementById("sssDobOpen");
+  const dobDisplay=document.getElementById("sssDobDisplay");
+  const dobPicker=document.getElementById("sssDobPicker");
+  const dayWheel=document.getElementById("sssDobDayWheel");
+  const monthWheel=document.getElementById("sssDobMonthWheel");
+  const yearWheel=document.getElementById("sssDobYearWheel");
+  const pickerYear=document.getElementById("sssDobPickerYear");
+  const pickerBig=document.getElementById("sssDobPickerBig");
+  const monthNames=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function pad2(n){return String(n).padStart(2,"0");}
+  function getTodayParts(){
+    const n=new Date();
+    return {day:n.getDate(),month:n.getMonth()+1,year:n.getFullYear()};
+  }
+  function formatDate(d,m,y){return pad2(d)+"/"+pad2(m)+"/"+y;}
+
+  let selectedDob=null;
+  let draftDob=null;
+  let scrollTimers=new WeakMap();
+
+  function updateFixedCurrentDate(){
+    const t=getTodayParts();
+    const el=document.getElementById("sssCurrentDateDisplay");
+    if(el) el.textContent=formatDate(t.day,t.month,t.year);
+    return t;
+  }
+  updateFixedCurrentDate();
+
+  function daysInMonth(y,m){return new Date(y,m,0).getDate();}
+
+  function updatePickerHeader(){
+    if(!draftDob)return;
+    pickerYear.textContent=draftDob.year;
+    pickerBig.textContent=pad2(draftDob.day)+" "+monthNames[draftDob.month-1]+" "+draftDob.year;
+  }
+
+  function setActive(wheel,index){
+    wheel.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("active",i===index));
+  }
+
+  function syncWheelFromScroll(wheel){
+    if(!draftDob || !wheel.__values || wheel.__syncing)return;
+    const values=wheel.__values;
+    const index=Math.max(0,Math.min(values.length-1,Math.round(wheel.scrollTop/54)));
+    const value=values[index];
+
+    if(wheel===dayWheel) draftDob.day=value;
+    if(wheel===monthWheel){
+      draftDob.month=value;
+      draftDob.day=Math.min(draftDob.day,daysInMonth(draftDob.year,draftDob.month));
+    }
+    if(wheel===yearWheel){
+      draftDob.year=value;
+      draftDob.day=Math.min(draftDob.day,daysInMonth(draftDob.year,draftDob.month));
+    }
+
+    setActive(wheel,index);
+    updatePickerHeader();
+
+    // If month/year changed and the selected day became invalid, update only the day wheel.
+    if(wheel!==dayWheel){
+      const maxDay=daysInMonth(draftDob.year,draftDob.month);
+      if(draftDob.day>maxDay) draftDob.day=maxDay;
+      if(dayWheel.__values && dayWheel.__values.length!==maxDay){
+        renderDobWheels();
+        return;
+      }
+      if(dayWheel.__values){
+        const di=dayWheel.__values.indexOf(draftDob.day);
+        if(di>=0){
+          dayWheel.__syncing=true;
+          dayWheel.scrollTop=di*54;
+          setActive(dayWheel,di);
+          requestAnimationFrame(()=>dayWheel.__syncing=false);
+        }
+      }
+    }
+  }
+
+  function attachWheelScroll(wheel){
+    if(wheel.__scrollAttached)return;
+    wheel.__scrollAttached=true;
+    wheel.addEventListener("scroll",()=>{
+      clearTimeout(scrollTimers.get(wheel));
+      scrollTimers.set(wheel,setTimeout(()=>{
+        const idx=Math.max(0,Math.min((wheel.__values||[]).length-1,Math.round(wheel.scrollTop/54)));
+        wheel.__syncing=true;
+        wheel.scrollTop=idx*54;
+        requestAnimationFrame(()=>{
+          wheel.__syncing=false;
+          syncWheelFromScroll(wheel);
+        });
+      },90));
+    },{passive:true});
+  }
+
+  function wheelItems(wheel,values,selected){
+    wheel.innerHTML="";
+    wheel.__values=values;
+    attachWheelScroll(wheel);
+
+    values.forEach((v,i)=>{
+      const b=document.createElement("button");
+      b.type="button";
+      b.dataset.value=v;
+      b.textContent=(wheel===monthWheel?monthNames[v-1]:String(v).padStart(2,"0"));
+      if(v===selected)b.classList.add("active");
+      b.addEventListener("click",()=>{
+        draftDob=draftDob||getTodayParts();
+        if(wheel===dayWheel)draftDob.day=v;
+        if(wheel===monthWheel){
+          draftDob.month=v;
+          draftDob.day=Math.min(draftDob.day,daysInMonth(draftDob.year,draftDob.month));
+        }
+        if(wheel===yearWheel){
+          draftDob.year=v;
+          draftDob.day=Math.min(draftDob.day,daysInMonth(draftDob.year,draftDob.month));
+        }
+        renderDobWheels();
+      });
+      wheel.appendChild(b);
+    });
+
+    const idx=Math.max(0,values.indexOf(selected));
+    wheel.__syncing=true;
+    wheel.scrollTop=idx*54;
+    setActive(wheel,idx);
+    requestAnimationFrame(()=>wheel.__syncing=false);
+  }
+
+  function renderDobWheels(){
+    if(!draftDob)draftDob=getTodayParts();
+    const today=getTodayParts();
+    const maxYear=today.year;
+    const minYear=1900;
+    const maxDay=daysInMonth(draftDob.year,draftDob.month);
+    draftDob.day=Math.min(draftDob.day,maxDay);
+
+    wheelItems(dayWheel,Array.from({length:maxDay},(_,i)=>i+1),draftDob.day);
+    wheelItems(monthWheel,Array.from({length:12},(_,i)=>i+1),draftDob.month);
+    wheelItems(yearWheel,Array.from({length:maxYear-minYear+1},(_,i)=>maxYear-i),draftDob.year);
+    updatePickerHeader();
+  }
+
+  function openDobPicker(){
+    const t=getTodayParts();
+    draftDob=selectedDob ? {...selectedDob} : {day:t.day,month:t.month,year:t.year};
+    renderDobWheels();
+    dobPicker.classList.add("show");
+    dobPicker.setAttribute("aria-hidden","false");
+  }
+
+  function closeDobPicker(){
+    dobPicker.classList.remove("show");
+    dobPicker.setAttribute("aria-hidden","true");
+  }
+
+  if(dobOpen)dobOpen.addEventListener("click",openDobPicker);
+
+  document.getElementById("sssDobCancel")?.addEventListener("click",closeDobPicker);
+
+  document.getElementById("sssDobClear")?.addEventListener("click",()=>{
+    selectedDob=null;
+    dobDisplay.textContent="DD/MM/YYYY";
+    closeDobPicker();
+  });
+
+  document.getElementById("sssDobSet")?.addEventListener("click",()=>{
+    if(!draftDob)return;
+    selectedDob={...draftDob};
+    dobDisplay.textContent=formatDate(selectedDob.day,selectedDob.month,selectedDob.year);
+    closeDobPicker();
+  });
+
+  function calculateAgeNow(){
+    const out=document.getElementById("sssAgeResult");
+    if(!out)return;
+
+    // Current date is taken fresh from the device. There is no editable current-date control.
+    const today=updateFixedCurrentDate();
+
+    if(!selectedDob){
+      out.innerHTML="⚠️ <b>Please select your Date of Birth first.</b>";
+      return;
+    }
+
+    const dob=new Date(selectedDob.year,selectedDob.month-1,selectedDob.day);
+    const now=new Date(today.year,today.month-1,today.day);
+
+    if(dob>now){
+      out.innerHTML="⚠️ <b>Date of Birth cannot be in the future.</b>";
+      return;
+    }
+
+    let years=today.year-selectedDob.year;
+    let months=today.month-selectedDob.month;
+    let days=today.day-selectedDob.day;
+
+    if(days<0){
+      months--;
+      days+=new Date(today.year,today.month-1,0).getDate();
+    }
+    if(months<0){
+      years--;
+      months+=12;
+    }
+
+    out.innerHTML="🎉 <b>Age: "+years+" Years, "+months+" Months, "+days+" Days</b>";
+  }
+
+  if(ageBtn)ageBtn.addEventListener("click",calculateAgeNow);
+
+  // Live weather dashboard — searchable by city/place using Open-Meteo
+  const weatherBox=document.getElementById("sssWeatherResult");
+  const weatherIconMap={0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",48:"🌫️",51:"🌦️",53:"🌦️",55:"🌧️",61:"🌦️",63:"🌧️",65:"🌧️",71:"🌨️",73:"❄️",75:"❄️",80:"🌦️",81:"🌧️",82:"🌧️",95:"⛈️",96:"⛈️",99:"⛈️"};
+  const weatherTextMap={
+    en:{0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",45:"Fog",48:"Rime fog",51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",61:"Light rain",63:"Rain",65:"Heavy rain",71:"Light snow",73:"Snow",75:"Heavy snow",80:"Rain showers",81:"Rain showers",82:"Heavy rain showers",95:"Thunderstorm",96:"Thunderstorm with hail",99:"Thunderstorm with hail"},
+    bn:{0:"পরিষ্কার আকাশ",1:"প্রধানত পরিষ্কার",2:"আংশিক মেঘলা",3:"মেঘাচ্ছন্ন",45:"কুয়াশা",48:"কুয়াশা",51:"হালকা গুঁড়ি গুঁড়ি বৃষ্টি",53:"গুঁড়ি গুঁড়ি বৃষ্টি",55:"ভারী গুঁড়ি গুঁড়ি বৃষ্টি",61:"হালকা বৃষ্টি",63:"বৃষ্টি",65:"ভারী বৃষ্টি",71:"হালকা তুষার",73:"তুষারপাত",75:"ভারী তুষারপাত",80:"বৃষ্টির ঝরনা",81:"বৃষ্টির ঝরনা",82:"ভারী বৃষ্টির ঝরনা",95:"বজ্রঝড়",96:"শিলাসহ বজ্রঝড়",99:"শিলাসহ বজ্রঝড়"},
+    hi:{0:"साफ़ आसमान",1:"मुख्यतः साफ़",2:"आंशिक बादल",3:"बादल छाए",45:"कोहरा",48:"कोहरा",51:"हल्की बूंदाबांदी",53:"बूंदाबांदी",55:"तेज़ बूंदाबांदी",61:"हल्की बारिश",63:"बारिश",65:"तेज़ बारिश",71:"हल्की बर्फ़",73:"बर्फ़बारी",75:"तेज़ बर्फ़बारी",80:"बारिश की फुहार",81:"बारिश की फुहार",82:"तेज़ बारिश की फुहार",95:"आंधी-तूफ़ान",96:"ओलों के साथ आंधी",99:"ओलों के साथ आंधी"}
+  };
+  const weatherLabels={
+    en:{search:"Search city or place...",searching:"Searching weather for",now:"Now",feels:"Feels like",rain:"Rain chance",wind:"Wind",humidity:"Humidity",sun:"Sunrise / Sunset",weather:"Weather",loading:"Weather loading...",current:"Current weather",notfound:"Place not found. Try another city or area.",permission:"Search a city or place to see live weather.",location:"Your location"},
+    bn:{search:"শহর বা এলাকার নাম লিখুন...",searching:"আবহাওয়া খোঁজা হচ্ছে",now:"এখন",feels:"অনুভূত হচ্ছে",rain:"বৃষ্টির সম্ভাবনা",wind:"বাতাস",humidity:"আর্দ্রতা",sun:"সূর্যোদয় / সূর্যাস্ত",weather:"আবহাওয়া",loading:"আবহাওয়া লোড হচ্ছে...",current:"বর্তমান আবহাওয়া",notfound:"এলাকা পাওয়া যায়নি। অন্য শহর বা এলাকার নাম চেষ্টা করুন।",permission:"আবহাওয়া দেখতে শহর বা এলাকার নাম লিখুন।",location:"আপনার অবস্থান"},
+    hi:{search:"शहर या स्थान खोजें...",searching:"मौसम खोजा जा रहा है",now:"अभी",feels:"महसूस हो रहा",rain:"बारिश की संभावना",wind:"हवा",humidity:"नमी",sun:"सूर्योदय / सूर्यास्त",weather:"मौसम",loading:"मौसम लोड हो रहा है...",current:"वर्तमान मौसम",notfound:"स्थान नहीं मिला। दूसरा शहर या क्षेत्र आज़माएँ।",permission:"मौसम देखने के लिए शहर या स्थान खोजें।",location:"आपका स्थान"}
+  };
+  let weatherLang=localStorage.getItem("sssWeatherLang")||"bn";
+  function wl(key){return (weatherLabels[weatherLang]||weatherLabels.bn)[key]||key;}
+  function weatherText(code){return (weatherTextMap[weatherLang]||weatherTextMap.bn)[code]||(weatherLabels[weatherLang]||weatherLabels.bn).current;}
+  function dayName(dateStr){
+    const locale=weatherLang==="bn"?"bn-IN":weatherLang==="hi"?"hi-IN":"en-IN";
+    return new Date(dateStr+"T12:00:00").toLocaleDateString(locale,{weekday:"short"});
+  }
+  function hourLabel(dateStr){
+    const locale=weatherLang==="bn"?"bn-IN":weatherLang==="hi"?"hi-IN":"en-IN";
+    return new Date(dateStr).toLocaleTimeString(locale,{hour:"numeric"});
+  }
+  function timeLabel(dateStr){
+    const locale=weatherLang==="bn"?"bn-IN":weatherLang==="hi"?"hi-IN":"en-IN";
+    return new Date(dateStr).toLocaleTimeString(locale,{hour:"numeric",minute:"2-digit"});
+  }
+  function weatherLanguageControl(){
+    return "<div class='sss-weather-lang'><label for='sssWeatherLang'>🌐</label><select id='sssWeatherLang'><option value='bn'"+(weatherLang==="bn"?" selected":"")+">বাংলা</option><option value='en'"+(weatherLang==="en"?" selected":"")+">English</option><option value='hi'"+(weatherLang==="hi"?" selected":"")+">हिन्दी</option></select></div>";
+  }
+  function attachWeatherLanguage(){
+    const lang=document.getElementById("sssWeatherLang");
+    if(lang) lang.addEventListener("change",async e=>{
+      weatherLang=e.target.value; localStorage.setItem("sssWeatherLang",weatherLang);
+      if(window.sssLastWeatherPlace && window.sssLastWeatherData) renderWeather(window.sssLastWeatherPlace,window.sssLastWeatherData);
+      else loadLiveWeather();
+    });
+  }
+  async function findWeatherPlace(q){
+    const url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=1&language=en&format=json";
+    const r=await fetch(url); if(!r.ok) throw new Error("Place search failed");
+    const j=await r.json();
+    if(!j.results||!j.results.length) throw new Error("Place not found");
+    return j.results[0];
+  }
+  async function fetchWeather(place){
+    const url="https://api.open-meteo.com/v1/forecast?latitude="+place.latitude+"&longitude="+place.longitude+
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"+
+      "&hourly=temperature_2m,weather_code,precipitation_probability"+
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"+
+      "&forecast_days=7&timezone=auto";
+    const r=await fetch(url); if(!r.ok) throw new Error("Weather request failed");
+    return await r.json();
+  }
+  function renderWeather(place,j){
+    window.sssLastWeatherPlace=place; window.sssLastWeatherData=j;
+    const c=j.current, h=j.hourly, d=j.daily;
+    const nowIndex=Math.max(0,h.time.findIndex(t=>t>=c.time));
+    const start=nowIndex<0?0:nowIndex;
+    let hourly="";
+    for(let i=start;i<Math.min(start+8,h.time.length);i++){
+      hourly+="<div class='sss-hour-card'><b>"+(i===start?wl("now"):hourLabel(h.time[i]))+"</b><div class='wi'>"+(weatherIconMap[h.weather_code[i]]||"🌤️")+"</div><span>"+Math.round(h.temperature_2m[i])+"°</span></div>";
+    }
+    let days="";
+    for(let i=0;i<d.time.length;i++){
+      days+="<div class='sss-day-card "+(i===0?"active":"")+"'><strong>"+dayName(d.time[i])+"</strong><div class='wi'>"+(weatherIconMap[d.weather_code[i]]||"🌤️")+"</div><span>"+Math.round(d.temperature_2m_max[i])+"° / "+Math.round(d.temperature_2m_min[i])+"°</span></div>";
+    }
+    weatherBox.innerHTML=weatherLanguageControl()+
+      "<div class='sss-weather-search'><input id='sssWeatherSearch' type='search' placeholder='"+wl("search")+"' value='"+String(place.name||"").replace(/"/g,"&quot;")+"' autocomplete='off'><button id='sssWeatherSearchBtn'>🔍</button></div>"+
+      "<div class='sss-weather-place'>📍 "+place.name+(place.admin1?", "+place.admin1:"")+(place.country?", "+place.country:"")+"</div>"+
+      "<div class='sss-weather-main'><div class='sss-weather-current'><div><div class='sss-weather-temp'>"+Math.round(c.temperature_2m)+"°</div><div class='sss-weather-condition'>"+weatherText(c.weather_code)+" · "+wl("feels")+" "+Math.round(c.apparent_temperature)+"°</div></div><div class='sss-weather-icon'>"+(weatherIconMap[c.weather_code]||"🌤️")+"</div></div>"+
+      "<div class='sss-weather-hourly'>"+hourly+"</div><div class='sss-weather-days'>"+days+"</div>"+
+      "<div class='sss-weather-details'><div class='sss-weather-detail'>🌧️ "+wl("rain")+"<b>"+(h.precipitation_probability[start]||0)+"%</b></div><div class='sss-weather-detail'>💨 "+wl("wind")+"<b>"+Math.round(c.wind_speed_10m)+" km/h</b></div><div class='sss-weather-detail'>💧 "+wl("humidity")+"<b>"+c.relative_humidity_2m+"%</b></div><div class='sss-weather-detail'>🌅 "+wl("sun")+"<b>"+timeLabel(d.sunrise[0])+" / "+timeLabel(d.sunset[0])+"</b></div></div></div>";
+    attachWeatherLanguage();
+    const search=document.getElementById("sssWeatherSearch"), searchBtn=document.getElementById("sssWeatherSearchBtn");
+    async function doSearch(){
+      const q=search.value.trim(); if(!q) return;
+      weatherBox.innerHTML=weatherLanguageControl()+"<div class='sss-weather-loading'>🔎 "+wl("searching")+" <b>"+q+"</b>...</div>"; attachWeatherLanguage();
+      try{const pl=await findWeatherPlace(q); const data=await fetchWeather(pl); renderWeather(pl,data);}
+      catch(e){weatherBox.innerHTML=weatherLanguageControl()+"<div class='sss-weather-loading'>❌ "+wl("notfound")+"</div>"; attachWeatherLanguage();}
+    }
+    searchBtn.addEventListener("click",doSearch); search.addEventListener("keydown",e=>{if(e.key==="Enter") doSearch();});
+  }
+  async function loadLiveWeather(){
+    weatherBox.innerHTML=weatherLanguageControl()+"<div class='sss-weather-loading'>📍 "+wl("loading")+"</div>"; attachWeatherLanguage();
+    try{
+      if(navigator.geolocation){
+        await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(async pos=>{
+          try{const place={name:wl("location"),latitude:pos.coords.latitude,longitude:pos.coords.longitude,country:""}; const data=await fetchWeather(place); renderWeather(place,data); resolve();}catch(e){reject(e);}
+        },reject,{enableHighAccuracy:false,timeout:8000}));
+      }else throw new Error();
+    }catch(e){
+      try{const place=await findWeatherPlace("Khanakul"); const data=await fetchWeather(place); renderWeather(place,data);}
+      catch(err){weatherBox.innerHTML=weatherLanguageControl()+"<div class='sss-weather-loading'>🌤️ "+wl("permission")+"</div>"; attachWeatherLanguage();}
+    }
+  }
+
+  // Published Notice + front notification
+  async function getPublishedNotices(){
+    const snapshot=await getDocs(collection(db,"notices"));
+    const list=[];
+    snapshot.forEach(item=>{const d=item.data();if(d.published===true)list.push({id:item.id,...d});});
+    list.sort((a,b)=>(b.updatedAt||b.createdAt||"").localeCompare(a.updatedAt||a.createdAt||""));
+    return list;
+  }
+  function noticeHtml(d){
+    const bg=d.imageUrl ? "background-image:linear-gradient(rgba(0,30,45,.45),rgba(0,30,45,.45)),url('"+String(d.imageUrl).replace(/'/g,"%27")+"');background-size:cover;background-position:center;" : "";
+    return "<div style=\"padding:18px;border-radius:14px;color:#fff;min-height:130px;"+bg+"background-color:#087f8c;\"><h3 style=\"margin:0 0 8px;\">📢 "+(d.title||"Notice")+"</h3><div style=\"white-space:pre-wrap;line-height:1.5;\">"+(d.message||"")+"</div></div>";
+  }
+  async function loadPublishedNotices(){
+    const box=document.getElementById("sssNoticeResult");
+    try{
+      const list=await getPublishedNotices();
+      box.innerHTML=list.length?list.map(noticeHtml).join("<div style='height:10px'></div>"):"No published notice available.";
+    }catch(e){box.textContent="Notice could not be loaded.";console.error(e);}
+  }
+  async function loadNotification(){
+    const btn=document.getElementById("sssNotificationBtn"), badge=document.getElementById("sssNotificationBadge");
+    try{
+      const list=await getPublishedNotices();
+      badge.textContent=String(list.length); badge.style.display=list.length?"flex":"none";
+      btn.classList.toggle("has-notice",list.length>0);
+    }catch(e){console.error("Notification load error:",e);}
+  }
+  const notificationBtn=document.getElementById("sssNotificationBtn");
+  if(notificationBtn) notificationBtn.addEventListener("click",()=>{openTool("sssNoticeModal");loadPublishedNotices();});
+  loadNotification();
 </script>
 <section class="sss-video-section">
   <div class="container">
