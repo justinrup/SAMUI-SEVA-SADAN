@@ -452,6 +452,132 @@
 </div>
 
 
+
+<!-- ===== FLOATING ASK AI BUTTON ===== -->
+<button id="sssFloatingAskAI"
+        type="button"
+        aria-label="Open ASK AI"
+        title="ASK AI">
+  <span>🤖</span>
+</button>
+
+<style>
+#sssFloatingAskAI{
+  position:fixed;
+  right:16px;
+  bottom:22px;
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#08c9d8,#1769e0);
+  box-shadow:0 8px 25px rgba(0,80,160,.30);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+
+#sssFloatingAskAI span{
+  font-size:31px;
+  line-height:1;
+  pointer-events:none;
+}
+
+#sssFloatingAskAI:active{
+  cursor:grabbing;
+  transform:scale(.94);
+}
+
+#sssFloatingAskAI:hover{
+  transform:scale(1.06);
+  box-shadow:0 10px 30px rgba(0,80,160,.40);
+}
+</style>
+
+<script>
+(function(){
+  const btn = document.getElementById("sssFloatingAskAI");
+  if(!btn) return;
+
+  btn.addEventListener("click", function(e){
+    if(btn.dataset.dragged === "1"){
+      btn.dataset.dragged = "0";
+      e.preventDefault();
+      return;
+    }
+
+    const modal = document.getElementById("sssAskAiModal");
+    if(modal) modal.classList.add("show");
+  });
+
+  let dragging = false;
+  let moved = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+
+  function pointerDown(e){
+    dragging = true;
+    moved = false;
+
+    const r = btn.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = r.left;
+    startTop = r.top;
+
+    btn.setPointerCapture?.(e.pointerId);
+  }
+
+  function pointerMove(e){
+    if(!dragging) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    if(Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
+
+    if(!moved) return;
+
+    let left = startLeft + dx;
+    let top = startTop + dy;
+
+    left = Math.max(5, Math.min(window.innerWidth - btn.offsetWidth - 5, left));
+    top = Math.max(5, Math.min(window.innerHeight - btn.offsetHeight - 5, top));
+
+    btn.style.left = left + "px";
+    btn.style.top = top + "px";
+    btn.style.right = "auto";
+    btn.style.bottom = "auto";
+  }
+
+  function pointerUp(){
+    if(!dragging) return;
+    dragging = false;
+
+    if(moved){
+      setTimeout(function(){
+        btn.dataset.dragged = "1";
+      }, 0);
+    }
+  }
+
+  btn.addEventListener("pointerdown", pointerDown);
+  btn.addEventListener("pointermove", pointerMove);
+  btn.addEventListener("pointerup", pointerUp);
+  btn.addEventListener("pointercancel", pointerUp);
+
+
+})();
+</script>
+
 <!-- ===== ASK AI MODAL ===== -->
 <div class="sss-tools-modal" id="sssAskAiModal">
   <div class="sss-tool-card sss-banking-card">
@@ -655,7 +781,7 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
   const overlay=document.getElementById("sssMenuOverlay");
   if(!button||!menu||!close||!overlay) return;
   const open=()=>{menu.classList.add("open");overlay.classList.add("show");document.body.classList.add("menu-open");};
-  const shut=()=>{menu.classList.remove("open");overlay.classList.remove("show");document.body.classList.remove("menu-open");};
+
   button.addEventListener("click",open); close.addEventListener("click",shut); overlay.addEventListener("click",shut);
   document.querySelectorAll(".sss-menu-list a").forEach(a=>{
     if(a.id !== "helpMenu" && a.id !== "shareWebsiteMenu") a.addEventListener("click",shut);
@@ -761,6 +887,7 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
 
     /* ===== ASK AI JS ===== */
 
+    const askAiMenu = document.getElementById("sssAskAiMenu");
     if (askAiMenu) {
       askAiMenu.addEventListener("click", (e) => {
         e.preventDefault();
