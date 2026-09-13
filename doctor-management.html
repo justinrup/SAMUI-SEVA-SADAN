@@ -56,15 +56,126 @@ button{border:0;border-radius:8px;padding:10px 14px;margin:6px 4px 0 0;font-size
 <input id="hospitalName" placeholder="Hospital name">
 
 <label>Doctor Specialist</label>
-<select id="specialist">
-<option value="">Select Specialist</option>
-<option>Gynae</option>
-<option>Surgeon</option>
-<option>DCH</option>
-<option>Cardio</option>
-<option>General Surgeon</option>
-<option>Medicine</option>
-<option>Other</option>
+<input id="specialist" list="specialistList" placeholder="Search / Select Specialist" autocomplete="off">
+
+<datalist id="specialistList">
+<option value="Gynae">
+<option value="Surgeon">
+<option value="DCH">
+<option value="Cardio">
+<option value="General Surgeon">
+<option value="Medicine">
+<option value="Other">
+
+<option value="General Physician / Medicine Specialist">
+<option value="Cardiologist — Heart Specialist">
+<option value="Neurologist — Brain & Nerve Specialist">
+<option value="Neurosurgeon — Brain & Spine Surgeon">
+<option value="Orthopedic Surgeon — Bone & Joint Specialist">
+<option value="General Surgeon">
+<option value="Gynecologist & Obstetrician — Women & Pregnancy Specialist">
+<option value="Pediatrician — Child Specialist">
+<option value="Neonatologist — Newborn Baby Specialist">
+<option value="ENT Specialist — Ear, Nose & Throat">
+<option value="Ophthalmologist — Eye Specialist">
+<option value="Dentist — Dental Specialist">
+<option value="Dermatologist — Skin & Hair Specialist">
+<option value="Urologist — Urinary & Male Health Specialist">
+<option value="Nephrologist — Kidney Specialist">
+<option value="Gastroenterologist — Stomach & Digestive System Specialist">
+<option value="Hepatologist — Liver Specialist">
+<option value="Pulmonologist / Chest Specialist — Lung & Respiratory Specialist">
+<option value="Endocrinologist — Diabetes & Hormone Specialist">
+<option value="Diabetologist — Diabetes Specialist">
+<option value="Psychiatrist — Mental Health Specialist">
+<option value="Psychologist / Clinical Psychologist">
+<option value="Oncologist — Cancer Specialist">
+<option value="Hematologist — Blood Disorder Specialist">
+<option value="Rheumatologist — Arthritis & Autoimmune Disease Specialist">
+<option value="Anesthesiologist — Anesthesia Specialist">
+<option value="Critical Care Specialist / Intensivist — ICU Specialist">
+<option value="Emergency Medicine Specialist">
+<option value="Radiologist — X-Ray, CT & MRI Specialist">
+<option value="Pathologist — Laboratory & Diagnostic Specialist">
+<option value="Plastic & Reconstructive Surgeon">
+<option value="Vascular Surgeon — Blood Vessel Specialist">
+<option value="Cardiothoracic Surgeon — Heart & Chest Surgeon">
+<option value="Pediatric Surgeon — Child Surgery Specialist">
+<option value="Pediatric Cardiologist — Child Heart Specialist">
+<option value="Pediatric Neurologist — Child Brain & Nerve Specialist">
+<option value="Surgical Oncologist — Cancer Surgeon">
+<option value="Radiation Oncologist — Cancer Radiation Specialist">
+<option value="Geriatrician — Elderly Care Specialist">
+<option value="Pain Management Specialist">
+<option value="Physical Medicine & Rehabilitation Specialist">
+<option value="Physiotherapist">
+<option value="Pulmonary Medicine Specialist">
+<option value="Sleep Medicine Specialist">
+<option value="Infectious Disease Specialist">
+<option value="Allergy & Immunology Specialist">
+<option value="Clinical Geneticist — Genetic Disorder Specialist">
+<option value="Maternal-Fetal Medicine Specialist — High-Risk Pregnancy">
+<option value="Reproductive Medicine / Infertility Specialist">
+<option value="IVF Specialist">
+<option value="Breast Specialist / Breast Surgeon">
+<option value="Colorectal Surgeon">
+<option value="Proctologist — Anorectal Specialist">
+<option value="Bariatric Surgeon — Weight-Loss Surgery Specialist">
+<option value="Laparoscopic Surgeon — Minimally Invasive Surgery">
+<option value="Endoscopic Specialist">
+<option value="Spine Surgeon">
+<option value="Joint Replacement Surgeon">
+<option value="Sports Medicine Specialist">
+<option value="Trauma Surgeon">
+<option value="Hand & Upper Limb Surgeon">
+<option value="Foot & Ankle Surgeon">
+<option value="Oral & Maxillofacial Surgeon">
+<option value="Prosthodontist — Dental Restoration Specialist">
+<option value="Orthodontist — Teeth Alignment Specialist">
+<option value="Periodontist — Gum Specialist">
+<option value="Endodontist — Root Canal Specialist">
+<option value="Pediatric Dentist — Child Dental Specialist">
+<option value="Oral & Dental Surgeon">
+<option value="Cornea Specialist">
+<option value="Retina Specialist">
+<option value="Glaucoma Specialist">
+<option value="Pediatric Ophthalmologist">
+<option value="ENT & Head-Neck Surgeon">
+<option value="Audiologist — Hearing Specialist">
+<option value="Speech & Language Therapist">
+<option value="Allergy Specialist">
+<option value="Thyroid Specialist">
+<option value="Metabolic Medicine Specialist">
+<option value="Clinical Nutritionist / Dietitian">
+<option value="Occupational Therapist">
+<option value="Respiratory Therapist">
+<option value="Audiology & Speech Therapy Specialist">
+<option value="Fertility Specialist">
+<option value="Sexual Medicine Specialist">
+<option value="Andrologist — Male Reproductive Health Specialist">
+<option value="Adolescent Medicine Specialist">
+<option value="Preventive & Lifestyle Medicine Specialist">
+<option value="Family Medicine Specialist">
+<option value="Community Medicine Specialist">
+<option value="Occupational Health Specialist">
+<option value="Public Health Specialist">
+<option value="Nuclear Medicine Specialist">
+<option value="Interventional Radiologist">
+<option value="Interventional Cardiologist">
+<option value="Electrophysiologist — Heart Rhythm Specialist">
+<option value="Cardiac Surgeon">
+<option value="Clinical Pharmacologist">
+<option value="Emergency & Trauma Specialist">
+<option value="Palliative Care Specialist — Supportive & End-of-Life Care">
+</datalist>
+
+<label>APPOINTMENT Ph. NUMBER</label>
+<select id="appointmentPhone">
+<option value="">Select Appointment Phone Number</option>
+<option value="+91 7074848444">+91 7074848444</option>
+<option value="+91 8159 802694">+91 8159 802694</option>
+<option value="+91 9733595341">+91 9733595341</option>
+<option value="+91 97335 72447">+91 97335 72447</option>
 </select>
 
 <label>Doctor Qualification</label>
@@ -77,7 +188,7 @@ button{border:0;border-radius:8px;padding:10px 14px;margin:6px 4px 0 0;font-size
 <input id="doctorTime" placeholder="Example: 10 AM - 1 PM / 5 PM - 8 PM">
 
 <label>📎 Document / Photo <span style="font-weight:normal;color:#777">(Optional)</span></label>
-<input id="doctorFile" type="file" accept="image/*,.pdf,.doc,.docx">
+<input id="doctorFile" type="file" accept="image/*">
 <small style="display:block;margin-top:5px;color:#777">
 File না দিলেও Doctor Save হবে। সর্বোচ্চ 700 KB।
 </small>
@@ -138,6 +249,7 @@ const data={
 name:val("doctorName"),
 hospitalName:val("hospitalName"),
 specialist:document.getElementById("specialist").value,
+appointmentPhone:document.getElementById("appointmentPhone").value,
 qualification:val("qualification"),
 addedOnHospital:val("addedOn"),
 doctorTime:val("doctorTime")
@@ -149,23 +261,46 @@ return alert("Please fill all doctor fields.");
 
 try{
 
-/* Optional attachment */
+/* Upload doctor photo to ImageKit */
 if(file){
 
 if(file.size > 700 * 1024){
-return alert("File is too large. Please select a file up to 700 KB.");
+return alert("Photo is too large. Please select a photo up to 700 KB.");
 }
 
-const attachment=await readFile(file);
+if(!file.type.startsWith("image/")){
+return alert("Please select an image file.");
+}
+
+const formData=new FormData();
+formData.append("file",file);
+
+const uploadResponse=await fetch("/api/upload-doctor-photo",{
+method:"POST",
+body:formData
+});
+
+let uploadResult={};
+
+try{
+uploadResult=await uploadResponse.json();
+}catch(e){
+return alert("Photo upload failed. Server returned an invalid response.");
+}
+
+if(!uploadResponse.ok || !uploadResult.ok || !uploadResult.url){
+return alert(uploadResult.message || "Photo upload failed.");
+}
+
 data.attachment={
 name:file.name,
-type:file.type || "application/octet-stream",
-data:attachment
+type:file.type || "image/jpeg",
+url:uploadResult.url
 };
 
 }else if(id && cache[id] && cache[id].attachment){
 
-/* Edit করার সময় নতুন file না দিলে পুরনো file থাকবে */
+/* Edit করার সময় নতুন photo না দিলে পুরনো photo থাকবে */
 data.attachment=cache[id].attachment;
 
 }
@@ -222,18 +357,19 @@ div.innerHTML=`
 <h3>👨‍⚕️ ${esc(d.name)}</h3>
 <p><b>Hospital:</b> ${esc(d.hospitalName)}</p>
 <p><b>Specialist:</b> ${esc(d.specialist)}</p>
+<p><b>APPOINTMENT Ph. NUMBER:</b> ${esc(d.appointmentPhone || "Not selected")}</p>
 <p><b>Qualification:</b> ${esc(d.qualification)}</p>
 <p><b>Added on Hospital:</b> ${esc(d.addedOnHospital)}</p>
 <p><b>Doctor Time:</b> ${esc(d.doctorTime)}</p>
 
-${d.attachment && d.attachment.data ? `
+${d.attachment && (d.attachment.url || d.attachment.data) ? `
 <p>
-<b>📎 Attachment:</b>
-<a href="${d.attachment.data}" download="${esc(d.attachment.name || "document")}" target="_blank">
-${esc(d.attachment.name || "View Document")}
+<b>📷 Doctor Photo:</b>
+<a href="${d.attachment.url || d.attachment.data}" target="_blank" rel="noopener">
+${esc(d.attachment.name || "View Photo")}
 </a>
 </p>
-` : `<p><b>📎 Attachment:</b> Not uploaded</p>`}
+` : `<p><b>📷 Doctor Photo:</b> Not uploaded</p>`}
 
 <p><b>Status:</b> <span class="status ${published?"ok":"no"}">${published?"Published":"Unpublished"}</span></p>
 
@@ -260,6 +396,7 @@ document.getElementById("doctorId").value=id;
 document.getElementById("doctorName").value=d.name||"";
 document.getElementById("hospitalName").value=d.hospitalName||"";
 document.getElementById("specialist").value=d.specialist||"";
+document.getElementById("appointmentPhone").value=d.appointmentPhone||"";
 document.getElementById("qualification").value=d.qualification||"";
 document.getElementById("addedOn").value=d.addedOnHospital||"";
 document.getElementById("doctorTime").value=d.doctorTime||"";
@@ -302,6 +439,7 @@ function clearForm(){
 .forEach(id=>document.getElementById(id).value="");
 
 document.getElementById("specialist").value="";
+document.getElementById("appointmentPhone").value="";
 document.getElementById("doctorFile").value="";
 document.getElementById("title").textContent="➕ Add Doctor";
 document.getElementById("saveText").textContent="Save Doctor";
