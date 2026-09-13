@@ -999,12 +999,21 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
     }catch(e){box.textContent="Notice could not be loaded.";console.error(e);}
   }
   async function loadNotification(){
+    const wrap=document.querySelector(".sss-notification-wrap");
     const btn=document.getElementById("sssNotificationBtn"), badge=document.getElementById("sssNotificationBadge");
     try{
       const list=await getPublishedNotices();
-      badge.textContent=String(list.length); badge.style.display=list.length?"flex":"none";
-      btn.classList.toggle("has-notice",list.length>0);
-    }catch(e){console.error("Notification load error:",e);}
+      const hasNotice=list.length>0;
+      if(wrap) wrap.style.display=hasNotice?"block":"none";
+      if(badge){
+        badge.textContent=String(list.length);
+        badge.style.display=hasNotice?"flex":"none";
+      }
+      if(btn) btn.classList.toggle("has-notice",hasNotice);
+    }catch(e){
+      if(wrap) wrap.style.display="none";
+      console.error("Notification load error:",e);
+    }
   }
   const notificationBtn=document.getElementById("sssNotificationBtn");
   if(notificationBtn) notificationBtn.addEventListener("click",()=>{openTool("sssNoticeModal");loadPublishedNotices();});
