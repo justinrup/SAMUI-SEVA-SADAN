@@ -141,34 +141,7 @@
   color:#163447;
 }
 
-.sss-netbank-category{
-  margin:12px 0;
-  padding:12px;
-  border:1px solid #e1e9ed;
-  border-radius:13px;
-  background:#f9fbfc;
-}
 
-.sss-netbank-category h3{
-  margin:0 0 10px;
-  font-size:14px;
-  color:#163447;
-}
-
-.sss-bank-list{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-
-.sss-bank-list div{
-  padding:8px 9px;
-  border-radius:8px;
-  background:#fff;
-  border:1px solid #edf1f3;
-  font-size:12px;
-  line-height:1.4;
-}
 
 @media(max-width:600px){
   .sss-banking-card{
@@ -178,18 +151,6 @@
   .sss-upi-item{
     padding:9px 10px;
     font-size:12px;
-  }
-
-  .sss-netbank-category{
-    padding:10px;
-  }
-
-  .sss-netbank-category h3{
-    font-size:13px;
-  }
-
-  .sss-bank-list div{
-    font-size:11.5px;
   }
 }
 
@@ -491,7 +452,6 @@
 </div>
 
 
-<!-- ===== BANKING: NET BANKING MODAL ===== -->
 <!-- ===== ASK AI MODAL ===== -->
 <div class="sss-tools-modal" id="sssAskAiModal">
   <div class="sss-tool-card sss-banking-card">
@@ -799,7 +759,7 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
   // ===== 3-DOT TOOLS =====
   
 
-    /* ===== NETBANKING + ASK AI JS ===== */
+    /* ===== ASK AI JS ===== */
 
     if (askAiMenu) {
       askAiMenu.addEventListener("click", (e) => {
@@ -1255,6 +1215,9 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
     </div>
   </div>
 </section>
+
+
+
 
 </body>
 </html>
