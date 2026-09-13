@@ -3,6 +3,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
   setPersistence,
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
@@ -19,6 +20,15 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// If already logged in, open Admin Panel without asking for password again.
+if (loginForm) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      window.location.href = "admin-dashboard.html";
+    }
+  });
+}
 
 const loginForm = document.getElementById("adminLoginForm");
 
