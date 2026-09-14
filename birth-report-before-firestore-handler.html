@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Birth Report | Samui Seva Sadan</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
+  authDomain: "samui-seva-sadan.firebaseapp.com",
+  projectId: "samui-seva-sadan",
+  storageBucket: "samui-seva-sadan.firebasestorage.app",
+  messagingSenderId: "358488171058",
+  appId: "1:358488171058:web:8be9c94e38f6618049522b",
+  measurementId: "G-ML4BQ4QVLB"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+</script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eef5f6;font-family:Arial,"Noto Sans Bengali","Noto Sans Devanagari",sans-serif;color:#17343a}
+.header{background:linear-gradient(135deg,#087f83,#16a0a3);color:#fff;padding:18px 20px;position:sticky;top:0;z-index:5;box-shadow:0 3px 12px #0002}
+.header h1{margin:0;font-size:24px}.header p{margin:5px 0 0}
+.wrap{max-width:1200px;margin:20px auto;padding:0 12px}
+.toolbar{background:#fff;border-radius:14px;padding:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 12px #0001;margin-bottom:16px}
+.toolbar label{font-weight:700}.toolbar select{padding:9px 12px;border:1px solid #b9ced1;border-radius:8px;font-size:15px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 14px #0001;margin-bottom:16px;overflow:hidden}
+.card h2{font-size:18px;margin:0;padding:13px 16px;background:#e7f5f5;border-bottom:1px solid #cfe2e4}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-weight:700;font-size:14px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #b9ced1;border-radius:8px;font-size:15px;background:#fff}
+textarea{min-height:70px;resize:vertical}
+.radio{display:flex;gap:16px;flex-wrap:wrap;padding:8px 0}.radio label{font-weight:400}
+.radio input{width:auto}
+.boxes{display:flex;gap:4px;flex-wrap:wrap}.boxes input{width:38px;height:40px;text-align:center;padding:4px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px;border-top:1px solid #e1ecee}
+button{border:0;border-radius:9px;padding:11px 18px;font-size:15px;font-weight:700;cursor:pointer}
+.save{background:#087f83;color:#fff}.print{background:#eef2f3;color:#17343a}.back{background:#ddd}
+.status{padding:0 16px 16px;font-weight:700}
+.filebox{border:2px dashed #9fc4c7;padding:16px;border-radius:10px;background:#f7fbfb}
+.small{font-size:12px;color:#61787d}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+@media print{
+ .header,.toolbar,.actions,.no-print{display:none!important}
+ body{background:#fff}.wrap{max-width:none;margin:0}.card{box-shadow:none;border:1px solid #aaa;break-inside:avoid}
+ input,select,textarea{border:0;padding:4px}.card h2{background:#eee}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <h1 id="title">জন্ম প্রতিবেদন</h1>
+  <p>Samui Seva Sadan — Birth Report</p>
+</header>
+
+<div class="wrap">
+  <div class="toolbar no-print">
+    <label id="langLabel">ভাষা / Language / भाषा</label>
+    <select id="language" onchange="setLanguage(this.value)">
+      <option value="bn">বাংলা</option>
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+  </div>
+
+  <form id="birthForm">
+    <section class="card">
+      <h2 id="sec1">আইনগত তথ্য</h2>
+      <div class="grid">
+        <div class="field">
+          <label id="l1">১. জন্ম তারিখ</label>
+          <input type="date" name="birthDate" required>
+        </div>
+        <div class="field">
+          <label id="l2">২. লিঙ্গ</label>
+          <div class="radio">
+            <label><input type="radio" name="sex" value="Male"> <span data-i="male">পুরুষ</span></label>
+            <label><input type="radio" name="sex" value="Female"> <span data-i="female">স্ত্রী</span></label>
+            <label><input type="radio" name="sex" value="Other"> <span data-i="other">অন্যান্য</span></label>
+          </div>
+        </div>
+        <div class="field full"><label id="l3">৩. শিশুর নাম (যদি থাকে)</label><input name="childName"></div>
+        <div class="field"><label id="l4">৪. পিতার নাম</label><input name="fatherName"></div>
+        <div class="field"><label id="l4a">পিতার আধার/আইডি নম্বর (যদি থাকে)</label><input name="fatherId"></div>
+        <div class="field"><label id="l4b">পিতার ফোন নম্বর (যদি থাকে)</label><input name="fatherPhone"></div>
+        <div class="field"><label id="l5">৫. মাতার নাম</label><input name="motherName" required></div>
+        <div class="field"><label id="l5a">মাতার আধার/আইডি নম্বর (যদি থাকে)</label><input name="motherId"></div>
+        <div class="field"><label id="l5b">মাতার ফোন নম্বর (যদি থাকে)</label><input name="motherPhone"></div>
+        <div class="field full"><label id="l6">৬. শিশুর জন্মের সময় পিতা-মাতার ঠিকানা</label><textarea name="parentsAddressAtBirth"></textarea></div>
+        <div class="field full"><label id="l6a">গ্রাম / ওয়ার্ড</label><input name="birthVillageWard"></div>
+        <div class="field"><label id="l6b">ব্লক / মিউনিসিপ্যালিটি</label><input name="birthBlockMunicipality"></div>
+        <div class="field"><label id="l6c">পোস্ট / থানা / জেলা</label><input name="birthPostPoliceDistrict"></div>
+        <div class="field full"><label id="l7">৭. পিতা-মাতার স্থায়ী ঠিকানা</label><textarea name="permanentAddress"></textarea></div>
+        <div class="field"><label id="l7a">গ্রাম / ওয়ার্ড</label><input name="permVillageWard"></div>
+        <div class="field"><label id="l7b">ব্লক / মিউনিসিপ্যালিটি</label><input name="permBlockMunicipality"></div>
+        <div class="field"><label id="l7c">পোস্ট / থানা / জেলা</label><input name="permPostPoliceDistrict"></div>
+        <div class="field full"><label id="l8">৮. জন্মের স্থান</label>
+          <div class="radio">
+            <label><input type="radio" name="birthPlace" value="hospital"><span data-i="hospital">হাসপাতাল / প্রতিষ্ঠান</span></label>
+            <label><input type="radio" name="birthPlace" value="home"><span data-i="home">বাড়ি</span></label>
+            <label><input type="radio" name="birthPlace" value="other"><span data-i="otherPlace">অন্য জন্মস্থান</span></label>
+          </div>
+        </div>
+        <div class="field full"><label id="l8a">হাসপাতাল / প্রতিষ্ঠানের নাম বা ঠিকানা</label><input name="birthInstitution"></div>
+        <div class="field full"><label id="l9">৯. সংবাদদাতার নাম ও ঠিকানা</label><textarea name="informant"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="sec2">পরিসংখ্যান সংক্রান্ত তথ্য</h2>
+      <div class="grid">
+        <div class="field full"><label id="l10a">১০(ক). মাতার বর্তমান গ্রাম / শহরের নাম</label><input name="motherCurrentVillageCity"></div>
+        <div class="field full"><label id="l10b">১০(খ). গ্রাম / শহর (প্রযোজ্যটিতে টিক দিন)</label><input name="motherVillageCityType"></div>
+        <div class="field"><label id="l10c">১০(গ). জেলার নাম</label><input name="district"></div>
+        <div class="field"><label id="l10d">১০(ঘ). রাজ্যের নাম</label><input name="state"></div>
+        <div class="field full"><label id="l11">১১. পরিবারের ধর্ম</label>
+          <select name="religion">
+            <option value="">--</option>
+<option value="Hindu" data-opt="hindu">হিন্দু</option>
+<option value="Muslim" data-opt="muslim">মুসলিম</option>
+<option value="Christian" data-opt="christian">খ্রিস্টান</option>
+<option value="Sikh" data-opt="sikh">শিখ</option>
+<option value="Other" data-opt="religionOther">অন্যান্য</option>
+          </select>
+        </div>
+        <div class="field"><label id="l12">১২. পিতার শিক্ষাগত মান</label><input name="fatherEducation"></div>
+        <div class="field"><label id="l13">১৩. মাতার শিক্ষাগত মান</label><input name="motherEducation"></div>
+        <div class="field"><label id="l14">১৪. পিতার পেশা</label><input name="fatherOccupation"></div>
+        <div class="field"><label id="l15">১৫. মাতার পেশা</label><input name="motherOccupation"></div>
+        <div class="field"><label id="l16">১৬. প্রথম বিবাহের সময় মাতার বয়স (পূর্ণ বছরে)</label><input type="number" min="0" name="motherMarriageAge"></div>
+        <div class="field"><label id="l17">১৭. এই সন্তানটির জন্মের সময় মাতার বয়স (পূর্ণ বছরে)</label><input type="number" min="0" name="motherAgeAtBirth"></div>
+        <div class="field full"><label id="l18">১৮. মাতার জীবিত প্রসূত সন্তান সংখ্যা, এই সন্তানসহ</label><input type="number" min="0" name="liveBornChildren"></div>
+        <div class="field full"><label id="l19">১৯. প্রসবকালীন পরিচর্যা / প্রসবের সময় সহায়তাকারী</label>
+          <select name="deliveryAttendant">
+            <option value="">--</option>
+            <option value="govt" data-opt="govtFacility">চিকিৎসা কেন্দ্র - সরকারি</option>
+            <option value="private" data-opt="privateFacility">চিকিৎসা কেন্দ্র - ব্যক্তিগত নার্সিংহোম / বেসরকারি</option>
+            <option value="trained" data-opt="trainedAttendant">ডাক্তার, নার্স অথবা প্রশিক্ষিত ধাত্রী (দাই)</option>
+            <option value="traditional" data-opt="traditionalMidwife">চিরাচরিত দাই</option>
+            <option value="other" data-opt="relativeOther">আত্মীয় অথবা অন্যান্য</option>
+          </select>
+        </div>
+        <div class="field full"><label id="l20">২০. প্রসবের পদ্ধতি</label>
+          <select name="deliveryMethod">
+            <option value="">--</option>
+            <option value="normal" data-opt="normalDelivery">স্বাভাবিক</option>
+            <option value="cesarean" data-opt="cesareanDelivery">সিজারিয়ান</option>
+            <option value="forceps" data-opt="forcepsDelivery">ফোর্সেপ</option>
+            <option value="vacuum" data-opt="vacuumDelivery">ভ্যাকুয়াম</option>
+            <option value="other" data-opt="deliveryOther">অন্যান্য</option>
+          </select>
+        </div>
+        <div class="field"><label id="l21">২১. জন্মের সময় শিশুর ওজন (কি.গ্রা.)</label><input type="number" step="0.01" name="birthWeight"></div>
+        <div class="field"><label id="l22">২২. গর্ভের স্থিতিকাল (সপ্তাহে)</label><input type="number" min="0" name="gestationalAge"></div>
+        <div class="field full"><label id="remarks">মন্তব্য (যদি থাকে)</label><textarea name="remarks"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="sec3">নিবন্ধন ও নথি</h2>
+      <div class="grid">
+        <div class="field full filebox">
+          <label id="uploadLabel">জন্ম প্রতিবেদন / পূরণ করা ফর্ম আপলোড</label>
+          <input type="file" name="birthReportFile" accept="image/*,.pdf">
+          <div class="small" id="uploadHelp">PDF, JPG, PNG ইত্যাদি আপলোড করা যাবে।</div>
+        </div>
+        <div class="field"><label id="regNo">জন্ম নিবন্ধন নম্বর</label><input name="registrationNo"></div>
+        <div class="field"><label id="regDate">নিবন্ধনের তারিখ</label><input type="date" name="registrationDate"></div>
+        <div class="field full"><label id="sign1">পিতা / মাতার স্বাক্ষর / এন.টি.ও তারিখসহ</label><input name="parentSignature"></div>
+        <div class="field full"><label id="sign2">নিবন্ধক / উপ-নিবন্ধকের স্বাক্ষর (তারিখসহ)</label><input name="registrarSignature"></div>
+      </div>
+      <div class="actions no-print">
+        <button type="submit" class="save" id="saveBtn">সংরক্ষণ</button>
+        <button type="button" class="print" onclick="window.print()" id="printBtn">প্রিন্ট</button>
+        <button type="button" class="back" onclick="history.back()" id="backBtn">ফিরে যান</button>
+      </div>
+      <div class="status" id="status"></div>
+    </section>
+  </form>
+</div>
+
+<script>
+const T={
+bn:{
+title:"জন্ম প্রতিবেদন",lang:"ভাষা / Language / भाषा",sec1:"আইনগত তথ্য",sec2:"পরিসংখ্যান সংক্রান্ত তথ্য",sec3:"নিবন্ধন ও নথি",
+l1:"১. জন্ম তারিখ",l2:"২. লিঙ্গ",l3:"৩. শিশুর নাম (যদি থাকে)",l4:"৪. পিতার নাম",l4a:"পিতার আধার/আইডি নম্বর (যদি থাকে)",l4b:"পিতার ফোন নম্বর (যদি থাকে)",l5:"৫. মাতার নাম",l5a:"মাতার আধার/আইডি নম্বর (যদি থাকে)",l5b:"মাতার ফোন নম্বর (যদি থাকে)",l6:"৬. শিশুর জন্মের সময় পিতা-মাতার ঠিকানা",l6a:"গ্রাম / ওয়ার্ড",l6b:"ব্লক / মিউনিসিপ্যালিটি",l6c:"পোস্ট / থানা / জেলা",l7:"৭. পিতা-মাতার স্থায়ী ঠিকানা",l7a:"গ্রাম / ওয়ার্ড",l7b:"ব্লক / মিউনিসিপ্যালিটি",l7c:"পোস্ট / থানা / জেলা",l8:"৮. জন্মের স্থান",l8a:"হাসপাতাল / প্রতিষ্ঠানের নাম বা ঠিকানা",l9:"৯. সংবাদদাতার নাম ও ঠিকানা",
+l10a:"১০(ক). মাতার বর্তমান গ্রাম / শহরের নাম",l10b:"১০(খ). গ্রাম / শহর (প্রযোজ্যটিতে টিক দিন)",l10c:"১০(গ). জেলার নাম",l10d:"১০(ঘ). রাজ্যের নাম",l11:"১১. পরিবারের ধর্ম",l12:"১২. পিতার শিক্ষাগত মান",l13:"১৩. মাতার শিক্ষাগত মান",l14:"১৪. পিতার পেশা",l15:"১৫. মাতার পেশা",l16:"১৬. প্রথম বিবাহের সময় মাতার বয়স (পূর্ণ বছরে)",l17:"১৭. এই সন্তানটির জন্মের সময় মাতার বয়স (পূর্ণ বছরে)",l18:"১৮. মাতার জীবিত প্রসূত সন্তান সংখ্যা, এই সন্তানসহ",l19:"১৯. প্রসবকালীন পরিচর্যা / প্রসবের সময় সহায়তাকারী",l20:"২০. প্রসবের পদ্ধতি",l21:"২১. জন্মের সময় শিশুর ওজন (কি.গ্রা.)",l22:"২২. গর্ভের স্থিতিকাল (সপ্তাহে)",hindu:"হিন্দু",muslim:"মুসলিম",christian:"খ্রিস্টান",sikh:"শিখ",religionOther:"অন্যান্য",govtFacility:"চিকিৎসা কেন্দ্র - সরকারি",privateFacility:"চিকিৎসা কেন্দ্র - ব্যক্তিগত নার্সিংহোম / বেসরকারি",trainedAttendant:"ডাক্তার, নার্স অথবা প্রশিক্ষিত ধাত্রী (দাই)",traditionalMidwife:"চিরাচরিত দাই",relativeOther:"আত্মীয় অথবা অন্যান্য",normalDelivery:"স্বাভাবিক",cesareanDelivery:"সিজারিয়ান",forcepsDelivery:"ফোর্সেপ",vacuumDelivery:"ভ্যাকুয়াম",deliveryOther:"অন্যান্য",remarks:"মন্তব্য (যদি থাকে)",uploadLabel:"জন্ম প্রতিবেদন / পূরণ করা ফর্ম আপলোড",uploadHelp:"PDF, JPG, PNG ইত্যাদি আপলোড করা যাবে।",regNo:"জন্ম নিবন্ধন নম্বর",regDate:"নিবন্ধনের তারিখ",sign1:"পিতা / মাতার স্বাক্ষর / এন.টি.ও তারিখসহ",sign2:"নিবন্ধক / উপ-নিবন্ধকের স্বাক্ষর (তারিখসহ)",saveBtn:"সংরক্ষণ",printBtn:"প্রিন্ট",backBtn:"ফিরে যান",male:"পুরুষ",female:"স্ত্রী",other:"অন্যান্য",hospital:"হাসপাতাল / প্রতিষ্ঠান",home:"বাড়ি",otherPlace:"অন্য জন্মস্থান"
+},
+en:{
+title:"Birth Report",lang:"Language / भाषा / ভাষা",sec1:"Legal Information",sec2:"Statistical Information",sec3:"Registration & Documents",
+l1:"1. Date of Birth",l2:"2. Sex",l3:"3. Name of Child (if any)",l4:"4. Father's Name",l4a:"Father's Aadhaar / ID No. (if any)",l4b:"Father's Phone No. (if any)",l5:"5. Mother's Name",l5a:"Mother's Aadhaar / ID No. (if any)",l5b:"Mother's Phone No. (if any)",l6:"6. Address of Parents at the Time of Birth",l6a:"Village / Ward",l6b:"Block / Municipality",l6c:"Post / Police Station / District",l7:"7. Permanent Address of Parents",l7a:"Village / Ward",l7b:"Block / Municipality",l7c:"Post / Police Station / District",l8:"8. Place of Birth",l8a:"Name / Address of Hospital or Institution",l9:"9. Informant's Name & Address",
+l10a:"10(a). Mother's Current Village / Town / City",l10b:"10(b). Village / Town / City",l10c:"10(c). District",l10d:"10(d). State",l11:"11. Religion of Family",l12:"12. Father's Educational Level",l13:"13. Mother's Educational Level",l14:"14. Father's Occupation",l15:"15. Mother's Occupation",l16:"16. Mother's Age at First Marriage (completed years)",l17:"17. Mother's Age at Birth of This Child (completed years)",l18:"18. Number of Live-Born Children of Mother, Including This Child",l19:"19. Person / Facility Assisting at Delivery",l20:"20. Method of Delivery",l21:"21. Birth Weight of Child (kg)",l22:"22. Gestational Age (weeks)",hindu:"Hindu",muslim:"Muslim",christian:"Christian",sikh:"Sikh",religionOther:"Other",govtFacility:"Government medical institution",privateFacility:"Private medical institution / nursing home",trainedAttendant:"Doctor, nurse or trained midwife (Dai)",traditionalMidwife:"Traditional Dai",relativeOther:"Relative or other",normalDelivery:"Normal",cesareanDelivery:"Cesarean",forcepsDelivery:"Forceps",vacuumDelivery:"Vacuum",deliveryOther:"Other",remarks:"Remarks (if any)",uploadLabel:"Upload Birth Report / Completed Form",uploadHelp:"PDF, JPG, PNG and other supported files can be uploaded.",regNo:"Birth Registration Number",regDate:"Registration Date",sign1:"Father / Mother's Signature / Date",sign2:"Registrar / Sub-Registrar Signature / Date",saveBtn:"Save",printBtn:"Print",backBtn:"Back",male:"Male",female:"Female",other:"Other",hospital:"Hospital / Institution",home:"Home",otherPlace:"Other Place of Birth"
+},
+hi:{
+title:"जन्म रिपोर्ट",lang:"हिन्दी / English / বাংলা",sec1:"कानूनी जानकारी",sec2:"सांख्यिकीय जानकारी",sec3:"पंजीकरण और दस्तावेज़",
+l1:"1. जन्म तिथि",l2:"2. लिंग",l3:"3. बच्चे का नाम (यदि हो)",l4:"4. पिता का नाम",l4a:"पिता का आधार / आईडी नंबर (यदि हो)",l4b:"पिता का फोन नंबर (यदि हो)",l5:"5. माता का नाम",l5a:"माता का आधार / आईडी नंबर (यदि हो)",l5b:"माता का फोन नंबर (यदि हो)",l6:"6. जन्म के समय माता-पिता का पता",l6a:"गांव / वार्ड",l6b:"ब्लॉक / नगरपालिका",l6c:"डाक / थाना / जिला",l7:"7. माता-पिता का स्थायी पता",l7a:"गांव / वार्ड",l7b:"ब्लॉक / नगरपालिका",l7c:"डाक / थाना / जिला",l8:"8. जन्म स्थान",l8a:"अस्पताल / संस्था का नाम या पता",l9:"9. सूचनादाता का नाम और पता",
+l10a:"10(क). माता का वर्तमान गांव / शहर",l10b:"10(ख). गांव / शहर",l10c:"10(ग). जिला",l10d:"10(घ). राज्य",l11:"11. परिवार का धर्म",l12:"12. पिता की शैक्षिक योग्यता",l13:"13. माता की शैक्षिक योग्यता",l14:"14. पिता का व्यवसाय",l15:"15. माता का व्यवसाय",l16:"16. पहली शादी के समय माता की आयु (पूर्ण वर्ष)",l17:"17. इस बच्चे के जन्म के समय माता की आयु (पूर्ण वर्ष)",l18:"18. इस बच्चे सहित माता के जीवित जन्मे बच्चों की संख्या",l19:"19. प्रसव के समय सहायता / देखभाल करने वाला",l20:"20. प्रसव की विधि",l21:"21. जन्म के समय बच्चे का वजन (किग्रा.)",l22:"22. गर्भावस्था की अवधि (सप्ताह)",hindu:"हिन्दू",muslim:"मुस्लिम",christian:"ईसाई",sikh:"सिख",religionOther:"अन्य",govtFacility:"सरकारी चिकित्सा केंद्र",privateFacility:"निजी चिकित्सा केंद्र / नर्सिंग होम",trainedAttendant:"डॉक्टर, नर्स या प्रशिक्षित दाई",traditionalMidwife:"पारंपरिक दाई",relativeOther:"रिश्तेदार या अन्य",normalDelivery:"सामान्य प्रसव",cesareanDelivery:"सीजेरियन",forcepsDelivery:"फोरसेप्स",vacuumDelivery:"वैक्यूम",deliveryOther:"अन्य",remarks:"टिप्पणी (यदि हो)",uploadLabel:"जन्म रिपोर्ट / भरा हुआ फॉर्म अपलोड करें",uploadHelp:"PDF, JPG, PNG आदि फाइल अपलोड की जा सकती है।",regNo:"जन्म पंजीकरण संख्या",regDate:"पंजीकरण तिथि",sign1:"पिता / माता के हस्ताक्षर / दिनांक",sign2:"रजिस्ट्रार / उप-रजिस्ट्रार के हस्ताक्षर / दिनांक",saveBtn:"सहेजें",printBtn:"प्रिंट",backBtn:"वापस",male:"पुरुष",female:"महिला",other:"अन्य",hospital:"अस्पताल / संस्था",home:"घर",otherPlace:"अन्य जन्म स्थान"
+}};
+function setLanguage(lang){
+ const t=T[lang]||T.bn;
+ document.documentElement.lang=lang;
+ Object.keys(t).forEach(k=>{
+   const el=document.getElementById(k); if(el) el.textContent=t[k];
+ });
+ document.querySelectorAll("[data-i]").forEach(el=>{
+   const key=el.dataset.i; if(t[key]) el.textContent=t[key];
+ });
+ document.querySelectorAll("option[data-opt]").forEach(el=>{
+   const key=el.dataset.opt;
+   if(t[key]) el.textContent=t[key];
+ });
+ localStorage.setItem("birthReportLanguage",lang);
+}
+document.getElementById("birthForm").addEventListener("submit",async function(e){
+ e.preventDefault();
+
+ const s=document.getElementById("status");
+ const form=document.getElementById("birthForm");
+ const data={};
+
+ form.querySelectorAll("input, textarea, select").forEach(el=>{
+   if(el.type==="file") return;
+   if(el.type==="radio"){
+     if(el.checked) data[el.name]=el.value;
+   }else{
+     data[el.name]=el.value;
+   }
+ });
+
+ data.language=document.getElementById("language").value;
+ data.createdAt=new Date().toISOString();
+ data.updatedAt=new Date().toISOString();
+ data.published=false;
+
+ try{
+   const res=await fetch("/api/save-birth-report",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify(data)
+   });
+
+   if(!res.ok) throw new Error("Server save failed");
+
+   s.textContent=T[document.getElementById("language").value].saveBtn+" ✓";
+ }catch(error){
+   console.error(error);
+   s.textContent="❌ Save failed. Please try again.";
+ }
+});
+setLanguage(localStorage.getItem("birthReportLanguage")||"bn");
+</script>
+</body>
+</html>

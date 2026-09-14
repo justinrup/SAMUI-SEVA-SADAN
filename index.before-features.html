@@ -218,7 +218,6 @@
 }
 </style>
 
-  <script src="settings.js"></script>
 </head>
 <body>
 
@@ -274,7 +273,7 @@
       <div class="hero-points">Compassionate Care &nbsp; | &nbsp; Better Health &nbsp; | &nbsp; Brighter Tomorrow</div>
       <p>We provide professional medical care, personalized attention and a safe, comfortable environment for your loved ones.</p>
       <div class="hero-actions">
-        <a href="javascript:void(0)" class="btn btn-primary" onclick="openAppointmentOptions()">▣ &nbsp; Book Appointment</a>
+        <a href="#contact" class="btn btn-primary">▣ &nbsp; Book Appointment</a>
         <a href="#services" class="btn btn-light">Our Services &nbsp; →</a>
       </div>
     </div>
@@ -395,12 +394,13 @@
     <span class="section-kicker">→ Our Facilities</span>
     <h2>Modern Facilities for<br>Better Care</h2>
     <ul><li>Clean & Spacious Rooms</li><li>AC / Non-AC Rooms</li><li>24/7 Nursing Support</li><li>Pathology & Diagnostic Lab</li><li>Pharmacy</li><li>Ambulance Service</li></ul>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <a href="facilities.html" class="btn btn-primary small">View All Facilities →</a>
-      <a href="birth-report.html" class="btn btn-primary small">👶 Birth Report</a>
-    </div>
+    <a href="facilities.html" class="btn btn-primary small">View All Facilities →</a>
   </div>
   <div class="facility-grid" id="homeFacilities">
+    <div class="facility-card"><div class="facility-image room"></div><h3>Patient Rooms</h3><p>Comfortable & Clean</p></div>
+    <div class="facility-card"><div class="facility-image nursing"></div><h3>Nursing Support</h3><p>Dedicated Care</p></div>
+    <div class="facility-card"><div class="facility-image clean"></div><h3>Clean Environment</h3><p>Safe & Hygienic</p></div>
+    <div class="facility-card"><div class="facility-image care"></div><h3>Patient Care</h3><p>Always With You</p></div>
   </div>
 </section>
 
@@ -1781,158 +1781,6 @@ const shut = ()=>{ const menu=document.getElementById("sssSideMenu"); const over
     }
   });
 })();
-</script>
-
-
-<!-- BOOK APPOINTMENT CONTACT POPUP -->
-<div id="appointmentModal" class="appointment-modal">
-  <div class="appointment-box">
-
-    <button class="appointment-close" type="button"
-            onclick="closeAppointmentOptions()">✕</button>
-
-    <h2>📅 Book Appointment</h2>
-    <p>Choose a contact option</p>
-
-    <div class="appointment-options">
-
-      <a href="https://wa.me/917074848444"
-         class="appointment-btn whatsapp" target="_blank">
-        🟢 WhatsApp
-      </a>
-
-      <a href="https://wa.me/918159802694"
-         class="appointment-btn whatsapp" target="_blank">
-        🟢 WhatsApp
-      </a>
-
-      <a href="tel:+917074848444" class="appointment-btn">
-        📞 Call
-      </a>
-
-      <a href="tel:+918159802694" class="appointment-btn">
-        📞 Call
-      </a>
-
-      <a href="sms:+917074848444" class="appointment-btn">
-        💬 SMS
-      </a>
-
-      <a href="sms:+918159802694" class="appointment-btn">
-        💬 SMS
-      </a>
-
-      <a href="mailto:justinrup2017@gmail.com"
-         class="appointment-btn email">
-        📧 Email
-      </a>
-
-    </div>
-  </div>
-</div>
-
-<style>
-.appointment-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  z-index: 99999;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.appointment-box {
-  width: 100%;
-  max-width: 430px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 25px 20px;
-  position: relative;
-  box-shadow: 0 15px 50px rgba(0,0,0,.3);
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.appointment-box h2 {
-  margin: 5px 0 6px;
-  color: #087f8c;
-}
-
-.appointment-box p {
-  margin-bottom: 20px;
-  color: #666;
-}
-
-.appointment-close {
-  position: absolute;
-  right: 12px;
-  top: 10px;
-  border: 0;
-  background: #eee;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.appointment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.appointment-btn {
-  display: block;
-  padding: 14px 12px;
-  border-radius: 12px;
-  background: #087f8c;
-  color: white !important;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.appointment-btn.whatsapp {
-  background: #25D366;
-}
-
-.appointment-btn.email {
-  background: #555;
-}
-
-.appointment-btn:active {
-  transform: scale(.98);
-}
-</style>
-
-<script>
-function openAppointmentOptions() {
-  var modal = document.getElementById("appointmentModal");
-  if (modal) {
-    modal.style.display = "flex";
-  }
-}
-
-function closeAppointmentOptions() {
-  var modal = document.getElementById("appointmentModal");
-  if (modal) {
-    modal.style.display = "none";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  var modal = document.getElementById("appointmentModal");
-
-  if (modal) {
-    modal.addEventListener("click", function (e) {
-      if (e.target === modal) {
-        closeAppointmentOptions();
-      }
-    });
-  }
-});
 </script>
 
 </body>

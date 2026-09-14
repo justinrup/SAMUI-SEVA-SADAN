@@ -125,10 +125,6 @@ body{
 </button>
 </div>
 
-<button id="resetSettings" class="back" style="border:0;cursor:pointer;font-size:15px;background:#b91c1c;margin-top:10px;">
-🔄 Reset Settings
-</button>
-
 <a class="back" href="index.html">🏠 Back to Home</a>
 
 </div>
@@ -166,20 +162,6 @@ document.querySelectorAll(".option").forEach(btn=>{
 });
 
 updateActive();
-
-document.getElementById("resetSettings").addEventListener("click",()=>{
-  if(confirm("Reset all settings to default?")){
-    localStorage.removeItem("sss_language");
-    localStorage.removeItem("sss_fontSize");
-    localStorage.removeItem("sss_textColor");
-    localStorage.removeItem("sss_textStyle");
-    localStorage.removeItem("sss_theme");
-
-    updateActive();
-    alert("Settings reset successfully.");
-  }
-});
-
 </script>
 
 </body>
