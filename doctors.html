@@ -218,44 +218,55 @@ async function loadDoctors(){
 
       let attachmentHTML = "";
 
-      if(d.attachment && d.attachment.data){
+      if(d.attachment && (d.attachment.url || d.attachment.data)){
 
-        if(
+        const photoUrl = d.attachment.url || "";
+
+        if(photoUrl){
+
+          attachmentHTML = `
+            <img
+              class="doctor-photo"
+              src="${esc(photoUrl)}"
+              alt="${esc(d.name || "Doctor")}"
+              loading="lazy"
+            >
+
+            <a
+              class="attachment"
+              href="${esc(photoUrl)}"
+              target="_blank"
+              rel="noopener"
+            >
+              📎 View Doctor Photo
+            </a>
+          `;
+
+        }else if(
           d.attachment.type &&
           d.attachment.type.startsWith("image/")
         ){
 
           const photoData = String(d.attachment.data || "");
-          const photoUrl = dataUrlToBlobUrl(photoData);
+          const legacyPhotoUrl = dataUrlToBlobUrl(photoData);
 
-          if(!photoUrl){
-
-            attachmentHTML = `
-              <div style="padding:15px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;color:#664d03;">
-                <b>⚠️ Doctor Photo Data Error</b>
-                <br>
-                Data length: ${photoData.length}
-                <br>
-                Starts with: ${esc(photoData.substring(0,40))}
-              </div>
-            `;
-
-          }else{
+          if(legacyPhotoUrl){
 
             attachmentHTML = `
               <img
                 class="doctor-photo"
-                src="${photoUrl}"
+                src="${legacyPhotoUrl}"
                 alt="${esc(d.name || "Doctor")}"
+                loading="lazy"
               >
 
               <a
                 class="attachment"
-                href="${photoUrl}"
-                download="${esc(d.attachment.name || "doctor-photo.jpg")}"
+                href="${legacyPhotoUrl}"
                 target="_blank"
+                rel="noopener"
               >
-                📎 View / Download Photo
+                📎 View Doctor Photo
               </a>
             `;
 
@@ -266,9 +277,10 @@ async function loadDoctors(){
           attachmentHTML = `
             <a
               class="attachment"
-              href="${d.attachment.data}"
+              href="${esc(d.attachment.data)}"
               download="${esc(d.attachment.name || "document")}"
               target="_blank"
+              rel="noopener"
             >
               📎 View / Download Document
             </a>
