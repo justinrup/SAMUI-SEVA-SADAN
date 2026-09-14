@@ -353,6 +353,7 @@ def ask_ai():
         }), 400
 
     api_key = ENV.get("OPENAI_API_KEY", "").strip()
+    print("OPENAI KEY CHECK:", "FOUND" if api_key else "MISSING")
 
     if not api_key:
         return jsonify({
