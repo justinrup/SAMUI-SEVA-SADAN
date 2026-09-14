@@ -317,6 +317,363 @@ button.edit,
 }
 </style>
 
+
+
+
+
+<style id="sss-admin-move-resize">
+
+/* ===== ADMIN 3-DOT CUSTOMIZATION ===== */
+
+#sssAdminCustomizeWrap{
+  display:inline-flex !important;
+  align-items:center;
+  position:fixed !important;
+  left:12px !important;
+  top:12px !important;
+  transform:none !important;
+  margin:0 !important;
+  vertical-align:middle;
+  z-index:1000000 !important;
+}
+
+#sssAdminThreeDot{
+  width:46px;
+  height:42px;
+  border:2px solid #ff9933;
+  border-radius:10px;
+  background:linear-gradient(
+    to bottom,
+    #ff9933 0%,
+    #ff9933 33%,
+    #ffffff 33%,
+    #ffffff 66%,
+    #138808 66%,
+    #138808 100%
+  );
+  color:#111;
+  font-size:27px;
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.20);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-shadow:0 1px 1px rgba(255,255,255,.8);
+}
+
+#sssAdminThreeDot:hover{
+  transform:scale(1.04);
+  box-shadow:0 4px 13px rgba(0,0,0,.25);
+}
+
+#sssAdminCustomizeMenu{
+  display:none;
+  position:absolute;
+  top:50px;
+  right:0;
+  width:210px;
+  padding:10px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  box-shadow:0 8px 28px rgba(0,0,0,.22);
+}
+
+#sssAdminCustomizeMenu.show{
+  display:block;
+}
+
+.sss-custom-menu-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  width:100%;
+  padding:10px 8px;
+  margin:3px 0;
+  border-radius:8px;
+  background:#f8f8f8;
+  font-size:14px;
+  font-weight:700;
+  color:#222;
+}
+
+.sss-custom-menu-row button{
+  border:0;
+  border-radius:16px;
+  padding:6px 11px;
+  min-width:72px;
+  font-size:12px;
+  font-weight:800;
+  color:#fff;
+  cursor:pointer;
+}
+
+.sss-toggle-off{
+  background:#dc2626 !important;
+}
+
+.sss-toggle-on{
+  background:#16a34a !important;
+}
+
+#sssAdminReset{
+  width:100%;
+  border:0;
+  border-radius:8px;
+  padding:10px;
+  margin-top:6px;
+  background:#444;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.sss-admin-custom-card{
+  position:relative !important;
+  min-width:260px;
+  min-height:100px;
+  transition:box-shadow .15s;
+}
+
+.sss-admin-move-enabled{
+  resize:both;
+  overflow:auto !important;
+  touch-action:none;
+}
+
+.sss-admin-move-enabled.sss-dragging{
+  z-index:9999 !important;
+  box-shadow:0 12px 35px rgba(0,0,0,.28);
+}
+
+.sss-admin-dragbar{
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.sss-admin-move-enabled .sss-admin-dragbar,
+.sss-admin-custom-enabled .sss-admin-dragbar{
+  cursor:move !important;
+}
+
+.sss-admin-custom-enabled.sss-custom-dragging{
+  opacity:.78;
+  outline:2px dashed #16a34a;
+}
+
+.sss-admin-custom-enabled{
+  position:relative !important;
+}
+
+.sss-admin-move-enabled::after{
+  content:"↘";
+  position:absolute;
+  right:5px;
+  bottom:3px;
+  font-size:15px;
+  opacity:.45;
+  pointer-events:none;
+}
+
+@media(max-width:700px){
+
+  #sssAdminThreeDot{
+    width:40px;
+    height:40px;
+    font-size:22px;
+  }
+
+  #sssAdminCustomizeMenu{
+    right:0;
+    width:200px;
+  }
+
+  .sss-admin-custom-card{
+    min-width:220px;
+    max-width:100%;
+  }
+}
+
+</style>
+
+
+<style id="sss-admin-menu-final">
+#sssAdminCustomizeWrap{
+  position:fixed !important;
+  left:16px !important;
+  top:16px !important;
+  width:54px !important;
+  height:54px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  transform:none !important;
+  z-index:2147483647 !important;
+}
+
+#sssAdminThreeDot{
+  width:52px !important;
+  height:52px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  margin:0 !important;
+  font-size:30px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  color:#111 !important;
+  background:linear-gradient(
+    to bottom,
+    #ff9933 0%,
+    #ff9933 33%,
+    #ffffff 33%,
+    #ffffff 66%,
+    #138808 66%,
+    #138808 100%
+  ) !important;
+  border:3px solid #ff9933 !important;
+  border-radius:10px !important;
+  box-shadow:0 3px 12px rgba(0,0,0,.3) !important;
+  cursor:pointer !important;
+}
+
+#sssAdminCustomizeMenu{
+  position:absolute !important;
+  left:0 !important;
+  right:auto !important;
+  top:60px !important;
+  width:220px !important;
+  display:none !important;
+  background:#fff !important;
+  border:1px solid #ddd !important;
+  border-radius:12px !important;
+  padding:10px !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.25) !important;
+}
+
+#sssAdminCustomizeMenu.show{
+  display:block !important;
+}
+</style>
+
+
+<style id="sss-tricolor-menu-final">
+#sssAdminThreeDot{
+  width:52px !important;
+  height:52px !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  background:#fff !important;
+  border:3px solid #ff9933 !important;
+  border-radius:10px !important;
+  box-shadow:0 3px 12px rgba(0,0,0,.30) !important;
+}
+
+#sssAdminThreeDot .sss-line{
+  display:block !important;
+  width:30px !important;
+  height:4px !important;
+  border-radius:4px !important;
+  flex:none !important;
+}
+
+#sssAdminThreeDot .sss-orange{
+  background:#ff9933 !important;
+}
+
+#sssAdminThreeDot .sss-blue{
+  background:#0000ff !important;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 3px #0000ff !important;
+}
+
+#sssAdminThreeDot .sss-green{
+  background:#138808 !important;
+}
+
+#sssAdminThreeDot:hover{
+  transform:scale(1.05) !important;
+}
+
+#sssAdminCustomizeWrap{
+  position:fixed !important;
+  left:16px !important;
+  top:16px !important;
+  z-index:2147483647 !important;
+}
+</style>
+
+
+<style id="sss-menu-indian-lines-final">
+#sssAdminThreeDot{
+  width:46px !important;
+  height:46px !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
+#sssAdminThreeDot .sss-line{
+  width:32px !important;
+  height:4px !important;
+  display:block !important;
+  border-radius:3px !important;
+}
+
+#sssAdminThreeDot .sss-orange{
+  background:#ff9933 !important;
+}
+
+#sssAdminThreeDot .sss-blue{
+  background:#ffffff !important;
+  box-shadow:0 0 2px #777 !important;
+  position:relative !important;
+}
+
+#sssAdminThreeDot .sss-blue::after{
+  content:"" !important;
+  position:absolute !important;
+  width:6px !important;
+  height:6px !important;
+  border-radius:50% !important;
+  background:#0000ff !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+}
+
+#sssAdminThreeDot .sss-green{
+  background:#138808 !important;
+}
+
+#sssAdminCustomizeWrap{
+  position:fixed !important;
+  left:14px !important;
+  top:12px !important;
+  background:transparent !important;
+  z-index:2147483647 !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -2301,6 +2658,521 @@ setTimeout(() => {
 })();
 </script>
 
+
+
+
+
+<script id="sss-admin-move-resize-script">
+(function(){
+
+  const MOVE_KEY = "sss_admin_move_mode";
+  const CUSTOM_KEY = "sss_admin_customize_mode";
+  const POS_KEY = "sss_admin_card_positions";
+  const ORDER_KEY = "sss_admin_card_order";
+
+  let moveEnabled =
+    localStorage.getItem(MOVE_KEY) === "on";
+
+  let customizeEnabled =
+    localStorage.getItem(CUSTOM_KEY) === "on";
+
+  let positions =
+    JSON.parse(localStorage.getItem(POS_KEY) || "{}");
+
+  let orderData =
+    JSON.parse(localStorage.getItem(ORDER_KEY) || "{}");
+
+  document.addEventListener("DOMContentLoaded", function(){
+
+    const header =
+      document.querySelector("header") ||
+      document.querySelector(".header") ||
+      document.querySelector("h1")?.parentElement;
+
+    if(!header) return;
+
+    /* ===== 3 DOT BUTTON ===== */
+
+    const wrap = document.createElement("div");
+    wrap.id = "sssAdminCustomizeWrap";
+
+    const dot = document.createElement("button");
+    dot.id = "sssAdminThreeDot";
+    dot.type = "button";
+    dot.innerHTML = `
+  <span class="sss-line sss-orange"></span>
+  <span class="sss-line sss-blue"></span>
+  <span class="sss-line sss-green"></span>
+`;
+    dot.title = "Admin Customize";
+
+    const menu = document.createElement("div");
+    menu.id = "sssAdminCustomizeMenu";
+
+    const moveRow = document.createElement("div");
+    moveRow.className = "sss-custom-menu-row";
+
+    const moveText = document.createElement("span");
+    moveText.textContent = "🖱️ Move";
+
+    const moveBtn = document.createElement("button");
+
+    const customRow = document.createElement("div");
+    customRow.className = "sss-custom-menu-row";
+
+    const customText = document.createElement("span");
+    customText.textContent = "🎨 Customize";
+
+    const customBtn = document.createElement("button");
+
+    const resetBtn = document.createElement("button");
+    resetBtn.id = "sssAdminReset";
+    resetBtn.type = "button";
+    resetBtn.textContent = "🔄 Reset";
+
+    moveRow.appendChild(moveText);
+    moveRow.appendChild(moveBtn);
+
+    customRow.appendChild(customText);
+    customRow.appendChild(customBtn);
+
+    menu.appendChild(moveRow);
+    menu.appendChild(customRow);
+    menu.appendChild(resetBtn);
+
+    wrap.appendChild(dot);
+    wrap.appendChild(menu);
+
+    header.appendChild(wrap);
+
+    /* ===== CARDS ===== */
+
+    const cards = Array.from(document.querySelectorAll(
+      ".container > .card, .control-panel-content > .card"
+    ));
+
+    cards.forEach((card,index)=>{
+
+      if(card.dataset.sssCustomReady === "1") return;
+
+      card.dataset.sssCustomReady = "1";
+      card.classList.add("sss-admin-custom-card");
+
+      const heading = card.querySelector("h2");
+
+      if(heading){
+        heading.classList.add("sss-admin-dragbar");
+      }
+
+      card.dataset.sssCardId =
+        "sss_card_" + index + "_" +
+        (heading ? heading.textContent.trim().slice(0,30) : "");
+
+      const id = card.dataset.sssCardId;
+
+      /* Restore position */
+      if(positions[id]){
+        card.style.transform =
+          "translate(" +
+          positions[id].x + "px," +
+          positions[id].y + "px)";
+      }
+    });
+
+    /* ===== RESTORE ORDER ===== */
+
+    document.querySelectorAll(
+      ".container, .control-panel-content"
+    ).forEach(parent=>{
+
+      const children = Array.from(parent.children)
+        .filter(el=>el.classList.contains("sss-admin-custom-card"));
+
+      if(!children.length) return;
+
+      const parentKey =
+        parent.classList.contains("control-panel-content")
+        ? "control"
+        : "main";
+
+      const saved =
+        orderData[parentKey] || [];
+
+      if(saved.length){
+
+        saved.forEach(id=>{
+          const card = children.find(
+            c=>c.dataset.sssCardId === id
+          );
+
+          if(card) parent.appendChild(card);
+        });
+
+      }
+
+    });
+
+    function updateButtons(){
+
+      moveBtn.textContent =
+        moveEnabled ? "ON" : "OFF";
+
+      moveBtn.className =
+        moveEnabled
+        ? "sss-toggle-on"
+        : "sss-toggle-off";
+
+      customBtn.textContent =
+        customizeEnabled ? "ON" : "OFF";
+
+      customBtn.className =
+        customizeEnabled
+        ? "sss-toggle-on"
+        : "sss-toggle-off";
+
+      document.querySelectorAll(
+        ".sss-admin-custom-card"
+      ).forEach(card=>{
+
+        card.classList.toggle(
+          "sss-admin-move-enabled",
+          moveEnabled
+        );
+
+        card.classList.toggle(
+          "sss-admin-custom-enabled",
+          customizeEnabled
+        );
+
+      });
+    }
+
+    /* ===== MOVE ===== */
+
+    document.querySelectorAll(
+      ".sss-admin-custom-card"
+    ).forEach(card=>{
+
+      const heading = card.querySelector("h2");
+
+      if(!heading) return;
+
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+      let startLeft = 0;
+      let startTop = 0;
+
+      heading.addEventListener("pointerdown", function(e){
+
+        if(!moveEnabled) return;
+
+        if(customizeEnabled) return;
+
+        if(e.target.closest(
+          "button,input,textarea,select,a,summary,details,label"
+        )) return;
+
+        dragging = true;
+
+        card.classList.add("sss-dragging");
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        startLeft =
+          parseFloat(card.dataset.sssMoveX || "0");
+
+        startTop =
+          parseFloat(card.dataset.sssMoveY || "0");
+
+        heading.setPointerCapture?.(e.pointerId);
+
+        e.preventDefault();
+      });
+
+      heading.addEventListener("pointermove", function(e){
+
+        if(!dragging) return;
+
+        const x =
+          startLeft + (e.clientX - startX);
+
+        const y =
+          startTop + (e.clientY - startY);
+
+        card.style.transform =
+          "translate(" + x + "px," + y + "px)";
+
+        card.dataset.sssMoveX = x;
+        card.dataset.sssMoveY = y;
+
+        positions[card.dataset.sssCardId] = {
+          x:x,
+          y:y
+        };
+
+        localStorage.setItem(
+          POS_KEY,
+          JSON.stringify(positions)
+        );
+      });
+
+      heading.addEventListener("pointerup", function(){
+
+        if(!dragging) return;
+
+        dragging = false;
+        card.classList.remove("sss-dragging");
+      });
+
+      heading.addEventListener("pointercancel", function(){
+
+        dragging = false;
+        card.classList.remove("sss-dragging");
+      });
+
+    });
+
+    /* ===== CUSTOMIZE / REORDER ===== */
+
+    document.querySelectorAll(
+      ".sss-admin-custom-card"
+    ).forEach(card=>{
+
+      const heading = card.querySelector("h2");
+
+      if(!heading) return;
+
+      let customDragging = false;
+      let startX = 0;
+      let startY = 0;
+
+      heading.addEventListener("pointerdown", function(e){
+
+        if(!customizeEnabled) return;
+
+        if(moveEnabled) return;
+
+        if(e.target.closest(
+          "button,input,textarea,select,a,summary,details,label"
+        )) return;
+
+        customDragging = true;
+
+        card.classList.add("sss-custom-dragging");
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        heading.setPointerCapture?.(e.pointerId);
+
+        e.preventDefault();
+      });
+
+      heading.addEventListener("pointermove", function(e){
+
+        if(!customDragging) return;
+
+        const parent = card.parentElement;
+
+        if(!parent) return;
+
+        const others = Array.from(parent.children)
+          .filter(el =>
+            el.classList.contains("sss-admin-custom-card") &&
+            el !== card
+          );
+
+        let nearest = null;
+        let best = Infinity;
+
+        others.forEach(other=>{
+
+          const r = other.getBoundingClientRect();
+
+          const centerY =
+            r.top + r.height / 2;
+
+          const distance =
+            Math.abs(e.clientY - centerY);
+
+          if(distance < best){
+            best = distance;
+            nearest = other;
+          }
+
+        });
+
+        if(nearest){
+
+          const r =
+            nearest.getBoundingClientRect();
+
+          if(e.clientY < r.top + r.height/2){
+            parent.insertBefore(card, nearest);
+          }else{
+            parent.insertBefore(
+              card,
+              nearest.nextSibling
+            );
+          }
+        }
+
+      });
+
+      heading.addEventListener("pointerup", function(){
+
+        if(!customDragging) return;
+
+        customDragging = false;
+
+        card.classList.remove(
+          "sss-custom-dragging"
+        );
+
+        saveOrder();
+      });
+
+      heading.addEventListener("pointercancel", function(){
+
+        customDragging = false;
+
+        card.classList.remove(
+          "sss-custom-dragging"
+        );
+      });
+
+    });
+
+    function saveOrder(){
+
+      const mainParent =
+        document.querySelector(".container");
+
+      const controlParent =
+        document.querySelector(".control-panel-content");
+
+      orderData.main = mainParent
+        ? Array.from(mainParent.children)
+          .filter(x=>x.classList.contains("sss-admin-custom-card"))
+          .map(x=>x.dataset.sssCardId)
+        : [];
+
+      orderData.control = controlParent
+        ? Array.from(controlParent.children)
+          .filter(x=>x.classList.contains("sss-admin-custom-card"))
+          .map(x=>x.dataset.sssCardId)
+        : [];
+
+      localStorage.setItem(
+        ORDER_KEY,
+        JSON.stringify(orderData)
+      );
+    }
+
+    /* ===== 3 DOT OPEN/CLOSE ===== */
+
+    dot.addEventListener("click", function(e){
+
+      e.stopPropagation();
+
+      menu.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function(e){
+
+      if(!wrap.contains(e.target)){
+        menu.classList.remove("show");
+      }
+
+    });
+
+    /* ===== MOVE ON/OFF ===== */
+
+    moveBtn.addEventListener("click", function(e){
+
+      e.stopPropagation();
+
+      moveEnabled = !moveEnabled;
+
+      if(moveEnabled){
+        customizeEnabled = false;
+        localStorage.setItem(CUSTOM_KEY,"off");
+      }
+
+      localStorage.setItem(
+        MOVE_KEY,
+        moveEnabled ? "on" : "off"
+      );
+
+      updateButtons();
+    });
+
+    /* ===== CUSTOMIZE ON/OFF ===== */
+
+    customBtn.addEventListener("click", function(e){
+
+      e.stopPropagation();
+
+      customizeEnabled = !customizeEnabled;
+
+      if(customizeEnabled){
+        moveEnabled = false;
+        localStorage.setItem(MOVE_KEY,"off");
+      }
+
+      localStorage.setItem(
+        CUSTOM_KEY,
+        customizeEnabled ? "on" : "off"
+      );
+
+      updateButtons();
+    });
+
+    /* ===== RESET ===== */
+
+    resetBtn.addEventListener("click", function(e){
+
+      e.stopPropagation();
+
+      if(!confirm(
+        "Reset Admin Panel customization to default?"
+      )){
+        return;
+      }
+
+      localStorage.removeItem(MOVE_KEY);
+      localStorage.removeItem(CUSTOM_KEY);
+      localStorage.removeItem(POS_KEY);
+      localStorage.removeItem(ORDER_KEY);
+
+      moveEnabled = false;
+      customizeEnabled = false;
+
+      /* Remove saved transforms */
+      document.querySelectorAll(
+        ".sss-admin-custom-card"
+      ).forEach(card=>{
+        card.style.transform = "";
+        delete card.dataset.sssMoveX;
+        delete card.dataset.sssMoveY;
+      });
+
+      alert(
+        "Admin Panel has been reset to default."
+      );
+
+      location.reload();
+    });
+
+    updateButtons();
+
+  });
+
+})();
+</script>
+
 </body>
 </html>
 
@@ -2480,3 +3352,7 @@ body::before {
     display: none !important;
 }
 </style>
+
+
+
+
