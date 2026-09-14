@@ -580,51 +580,343 @@
 
 <!-- ===== ASK AI MODAL ===== -->
 <div class="sss-tools-modal" id="sssAskAiModal">
-  <div class="sss-tool-card sss-banking-card">
+  <div class="sss-askai-card">
 
-    <button class="sss-tool-close" data-close-tool="sssAskAiModal">×</button>
+    <div class="sss-askai-header">
+      <div class="sss-askai-brand">
+        <div class="sss-askai-logo">🤖</div>
+        <div>
+          <div class="sss-askai-title">ASK AI</div>
+          <div class="sss-askai-status">Medical Assistant</div>
+        </div>
+      </div>
+      <button class="sss-tool-close" data-close-tool="sssAskAiModal">×</button>
+    </div>
 
-    <h2>🤖 ASK AI</h2>
+    <div class="sss-askai-chat" id="sssAskAiChat">
 
-    <div style="text-align:center;padding:10px 4px 18px;">
-      <div style="font-size:48px;margin-bottom:8px;">🤖</div>
+      <div class="sss-askai-message bot">
+        <div class="sss-askai-avatar">🤖</div>
+        <div class="sss-askai-bubble">
+          <b>Namaskar! 👋</b><br>
+          I am the SAMUI SEVA SADAN Medical Assistant.
+          <br><br>
+          You can ask me medical or healthcare-related questions.
+        </div>
+      </div>
 
-      <h3 style="margin:6px 0 10px;color:#163447;">
-        AI Assistant
-      </h3>
+    </div>
 
-      <p style="font-size:14px;line-height:1.6;color:#526773;margin:0 0 18px;">
-        Ask questions, get information and assistance using an AI assistant.
-      </p>
+    <div class="sss-askai-suggestions">
+      <button type="button" data-ask="What are common symptoms of fever?">🌡️ Fever</button>
+      <button type="button" data-ask="What should I do for a minor cut?">🩹 First Aid</button>
+      <button type="button" data-ask="What is anaesthesia?">💉 Anaesthesia</button>
+      <button type="button" data-ask="Explain a blood report generally.">🩸 Blood Report</button>
+    </div>
 
-      <a
-        href="https://chatgpt.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="
-          display:inline-flex;
-          align-items:center;
-          justify-content:center;
-          gap:8px;
-          padding:12px 20px;
-          border-radius:12px;
-          background:#163447;
-          color:#fff;
-          text-decoration:none;
-          font-weight:800;
-          font-size:14px;
-        "
+    <div class="sss-askai-input-area">
+      <input
+        type="text"
+        id="sssAskAiInput"
+        placeholder="Ask a medical question..."
+        autocomplete="off"
       >
-        🤖 Open AI Assistant
-      </a>
+      <button type="button" id="sssAskAiSend">➤</button>
+    </div>
 
-      <p style="font-size:11px;color:#7a8a91;margin-top:14px;">
-        Opens the AI assistant in a new tab.
-      </p>
+    <div class="sss-askai-note">
+      ⚕️ Medical information only • For emergencies, contact a qualified healthcare professional.
     </div>
 
   </div>
 </div>
+
+<style>
+.sss-askai-card{
+  width:min(94vw,520px);
+  height:min(82vh,700px);
+  background:#f5f8fa;
+  border-radius:22px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 18px 55px rgba(0,40,70,.30);
+}
+
+.sss-askai-header{
+  min-height:68px;
+  padding:10px 14px;
+  background:#075e54;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.sss-askai-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.sss-askai-logo{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
+
+.sss-askai-title{
+  font-size:17px;
+  font-weight:900;
+}
+
+.sss-askai-status{
+  font-size:11px;
+  opacity:.85;
+  margin-top:2px;
+}
+
+.sss-askai-header .sss-tool-close{
+  position:static;
+  color:#fff;
+  background:transparent;
+  font-size:27px;
+}
+
+.sss-askai-chat{
+  flex:1;
+  overflow-y:auto;
+  padding:18px 12px;
+  background:#eaf1f4;
+}
+
+.sss-askai-message{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.sss-askai-message.user{
+  justify-content:flex-end;
+}
+
+.sss-askai-avatar{
+  width:28px;
+  height:28px;
+  min-width:28px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+}
+
+.sss-askai-bubble{
+  max-width:82%;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff;
+  color:#263840;
+  font-size:13px;
+  line-height:1.55;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+
+.sss-askai-message.user .sss-askai-bubble{
+  background:#d9fdd3;
+}
+
+.sss-askai-suggestions{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:8px;
+  background:#fff;
+}
+
+.sss-askai-suggestions button{
+  white-space:nowrap;
+  border:1px solid #d3e0e5;
+  background:#f8fbfc;
+  border-radius:18px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.sss-askai-input-area{
+  display:flex;
+  gap:7px;
+  padding:9px;
+  background:#fff;
+  border-top:1px solid #dfe7ea;
+}
+
+#sssAskAiInput{
+  flex:1;
+  min-width:0;
+  border:1px solid #d3dde1;
+  border-radius:22px;
+  padding:11px 14px;
+  outline:none;
+  font-size:13px;
+}
+
+#sssAskAiSend{
+  width:43px;
+  height:43px;
+  border:0;
+  border-radius:50%;
+  background:#075e54;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+}
+
+.sss-askai-note{
+  text-align:center;
+  padding:5px 8px 8px;
+  background:#fff;
+  color:#718087;
+  font-size:9px;
+}
+
+@media(max-width:480px){
+  .sss-askai-card{
+    width:96vw;
+    height:86vh;
+    border-radius:18px;
+  }
+}
+</style>
+
+<script>
+(function(){
+  const input = document.getElementById("sssAskAiInput");
+  const send = document.getElementById("sssAskAiSend");
+  const chat = document.getElementById("sssAskAiChat");
+
+  if(!input || !send || !chat) return;
+
+  function addMessage(text, type){
+    const row = document.createElement("div");
+    row.className = "sss-askai-message " + type;
+
+    if(type === "bot"){
+      row.innerHTML =
+        '<div class="sss-askai-avatar">🤖</div>' +
+        '<div class="sss-askai-bubble"></div>';
+    }else{
+      row.innerHTML =
+        '<div class="sss-askai-bubble"></div>';
+    }
+
+    row.querySelector(".sss-askai-bubble").textContent = text;
+    chat.appendChild(row);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function isMedicalQuestion(text){
+    const q = text.toLowerCase();
+
+    const medicalWords = [
+      "medical","health","doctor","hospital","nurse","nursing",
+      "medicine","medication","tablet","capsule","injection",
+      "disease","illness","symptom","fever","pain","cough",
+      "cold","flu","blood","report","anaesthesia","anesthesia",
+      "operation","surgery","ot","patient","pregnancy","baby",
+      "wound","injury","first aid","emergency","ambulance",
+      "heart","chest","breath","breathing","diabetes","pressure",
+      "blood pressure","sugar","infection","vomit","vomiting",
+      "diarrhea","diarrhoea","headache","stomach","skin",
+      "nursing home","healthcare","health care","treatment",
+      "dose","dosage","side effect","symptoms","diagnosis"
+    ];
+
+    return medicalWords.some(word => q.includes(word));
+  }
+
+  async function answerQuestion(){
+    const text = input.value.trim();
+    if(!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    if(!isMedicalQuestion(text)){
+      addMessage(
+        "⚕️ Sorry, I can answer only medical-related questions.\\nPlease ask a medical or healthcare-related question.",
+        "bot"
+      );
+      return;
+    }
+
+    addMessage("🤖 Thinking...", "bot");
+
+    const messages = chat.querySelectorAll(".sss-askai-message.bot");
+    const thinkingBubble = messages[messages.length - 1]?.querySelector(".sss-askai-bubble");
+
+    try{
+      const response = await fetch("/api/ask-ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question: text
+        })
+      });
+
+      const result = await response.json();
+
+      if(!response.ok || !result.ok){
+        throw new Error(result.message || "AI service failed");
+      }
+
+      if(thinkingBubble){
+        thinkingBubble.textContent = result.answer;
+      }else{
+        addMessage(result.answer, "bot");
+      }
+
+    }catch(error){
+      console.error("ASK AI ERROR:", error);
+
+      if(thinkingBubble){
+        thinkingBubble.textContent =
+          "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.";
+      }else{
+        addMessage(
+          "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.",
+          "bot"
+        );
+      }
+    }
+  }
+
+  send.addEventListener("click", answerQuestion);
+
+  input.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      e.preventDefault();
+      answerQuestion();
+    }
+  });
+
+  document.querySelectorAll("[data-ask]").forEach(function(button){
+    button.addEventListener("click", function(){
+      input.value = button.getAttribute("data-ask") || "";
+      answerQuestion();
+    });
+  });
+})();
+</script>
 
 <!-- ===== Hidden 3-dot tools: shown only after menu selection ===== -->
 <div class="sss-tools-modal" id="sssCalendarModal">
