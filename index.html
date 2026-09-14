@@ -952,14 +952,15 @@
     }catch(error){
       console.error("ASK AI ERROR:", error);
 
+      const errorText =
+        error && error.message
+          ? "⚠️ " + error.message
+          : "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.";
+
       if(thinkingBubble){
-        thinkingBubble.textContent =
-          "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.";
+        thinkingBubble.textContent = errorText;
       }else{
-        addMessage(
-          "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.",
-          "bot"
-        );
+        addMessage(errorText, "bot");
       }
     }
   }
