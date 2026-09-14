@@ -395,9 +395,16 @@ def ask_ai():
 
         if response.status_code >= 400:
             print("OPENAI ERROR:", result)
+            error_message = ""
+            if isinstance(result, dict):
+                error_data = result.get("error")
+                if isinstance(error_data, dict):
+                    error_message = str(error_data.get("message", "")).strip()
+
             return jsonify({
                 "ok": False,
-                "message": "AI service request failed."
+                "message": "AI service request failed.",
+                "debug": error_message[:500]
             }), 500
 
         answer = result.get("output_text", "").strip()
