@@ -584,10 +584,10 @@
 
     <div class="sss-askai-header">
       <div class="sss-askai-brand">
-        <div class="sss-askai-logo">🤖</div>
+        <div class="sss-askai-logo" aria-label="AI Medical Assistant">🤖</div>
         <div>
           <div class="sss-askai-title">ASK AI</div>
-          <div class="sss-askai-status">Medical Assistant</div>
+          <div class="sss-askai-status">AI Medical Assistant • বাংলা / English / हिंदी</div>
         </div>
       </div>
       <button class="sss-tool-close" data-close-tool="sssAskAiModal">×</button>
@@ -599,19 +599,56 @@
         <div class="sss-askai-avatar">🤖</div>
         <div class="sss-askai-bubble">
           <b>Namaskar! 👋</b><br>
-          I am the SAMUI SEVA SADAN Medical Assistant.
+          I am the <b>SAMUI SEVA SADAN AI Medical Assistant</b>.
           <br><br>
-          You can ask me medical or healthcare-related questions.
+          Ask your medical or healthcare question in <b>বাংলা, English, हिंदी</b>, or another language.
         </div>
       </div>
 
     </div>
 
     <div class="sss-askai-suggestions">
-      <button type="button" data-ask="What are common symptoms of fever?">🌡️ Fever</button>
-      <button type="button" data-ask="What should I do for a minor cut?">🩹 First Aid</button>
-      <button type="button" data-ask="What is anaesthesia?">💉 Anaesthesia</button>
-      <button type="button" data-ask="Explain a blood report generally.">🩸 Blood Report</button>
+      <div class="sss-askai-question-title">🤖 Related Medical Questions</div>
+
+      <button type="button" data-ask="জ্বরের জন্য সাধারণত কী ধরনের ওষুধ ব্যবহার করা হয়?">
+        🌡️ জ্বরের জন্য সাধারণত কী ধরনের ওষুধ ব্যবহার করা হয়?
+      </button>
+
+      <button type="button" data-ask="Paracetamol কী কাজে ব্যবহার করা হয়?">
+        💊 Paracetamol কী কাজে ব্যবহার করা হয়?
+      </button>
+
+      <button type="button" data-ask="Paracetamol খাওয়ার সময় কী কী সতর্কতা আছে?">
+        💊 Paracetamol খাওয়ার সময় কী কী সতর্কতা আছে?
+      </button>
+
+      <button type="button" data-ask="সর্দি-কাশির জন্য কী করা যায়?">
+        🤧 সর্দি-কাশির জন্য কী করা যায়?
+      </button>
+
+      <button type="button" data-ask="অ্যান্টিবায়োটিক কখন প্রয়োজন হয়?">
+        💊 অ্যান্টিবায়োটিক কখন প্রয়োজন হয়?
+      </button>
+
+      <button type="button" data-ask="অ্যান্টিবায়োটিক নিজের থেকে খাওয়া উচিত কি?">
+        ⚠️ অ্যান্টিবায়োটিক নিজের থেকে খাওয়া উচিত কি?
+      </button>
+
+      <button type="button" data-ask="গ্যাস বা অ্যাসিডিটির জন্য কী করা যায়?">
+        🩺 গ্যাস বা অ্যাসিডিটির জন্য কী করা যায়?
+      </button>
+
+      <button type="button" data-ask="মাথাব্যথার সাধারণ কারণ কী হতে পারে?">
+        🤕 মাথাব্যথার সাধারণ কারণ কী হতে পারে?
+      </button>
+
+      <button type="button" data-ask="শিশুর জ্বর হলে কী করা উচিত?">
+        👶 শিশুর জ্বর হলে কী করা উচিত?
+      </button>
+
+      <button type="button" data-ask="কোন লক্ষণে দ্রুত ডাক্তার দেখানো দরকার?">
+        🚨 কোন লক্ষণে দ্রুত ডাক্তার দেখানো দরকার?
+      </button>
     </div>
 
     <div class="sss-askai-input-area">
@@ -823,9 +860,10 @@
   }
 
   function isMedicalQuestion(text){
-    const q = text.toLowerCase();
+    const q = String(text || "").toLowerCase().trim();
 
     const medicalWords = [
+      // English
       "medical","health","doctor","hospital","nurse","nursing",
       "medicine","medication","tablet","capsule","injection",
       "disease","illness","symptom","fever","pain","cough",
@@ -835,8 +873,33 @@
       "heart","chest","breath","breathing","diabetes","pressure",
       "blood pressure","sugar","infection","vomit","vomiting",
       "diarrhea","diarrhoea","headache","stomach","skin",
-      "nursing home","healthcare","health care","treatment",
-      "dose","dosage","side effect","symptoms","diagnosis"
+      "healthcare","health care","treatment","dose","dosage",
+      "side effect","symptoms","diagnosis","paracetamol",
+      "antibiotic","antibiotics","gas","acidity","dental",
+
+      // Bengali
+      "জ্বর","ওষুধ","মেডিসিন","ট্যাবলেট","ক্যাপসুল","ইনজেকশন",
+      "রোগ","অসুস্থ","উপসর্গ","ব্যথা","কাশি","সর্দি","ফ্লু",
+      "রক্ত","রিপোর্ট","অ্যানেস্থেশিয়া","অ্যানাস্থেশিয়া",
+      "অপারেশন","সার্জারি","রোগী","গর্ভাবস্থা","গর্ভবতী",
+      "শিশু","বাচ্চা","ক্ষত","আঘাত","প্রাথমিক চিকিৎসা","জরুরি",
+      "অ্যাম্বুলেন্স","হৃদয়","হৃদপিণ্ড","বুক","শ্বাস","ডায়াবেটিস",
+      "চাপ","রক্তচাপ","সুগার","ইনফেকশন","বমি","ডায়রিয়া",
+      "মাথাব্যথা","পেট","ত্বক","চিকিৎসা","ডোজ","পার্শ্বপ্রতিক্রিয়া",
+      "রোগ নির্ণয়","প্যারাসিটামল","অ্যান্টিবায়োটিক","গ্যাস",
+      "অ্যাসিডিটি","ডাক্তার","হাসপাতাল","স্বাস্থ্য","মেডিকেল",
+      "দাঁত","দাঁতের",
+
+      // Hindi
+      "बुखार","दवा","दवाई","गोली","कैप्सूल","इंजेक्शन",
+      "बीमारी","लक्षण","दर्द","खांसी","सर्दी","फ्लू","खून",
+      "रिपोर्ट","ऑपरेशन","सर्जरी","मरीज","गर्भावस्था","बच्चा",
+      "घाव","चोट","प्राथमिक उपचार","आपातकाल","एम्बुलेंस",
+      "दिल","सीना","सांस","मधुमेह","ब्लड प्रेशर","शुगर",
+      "संक्रमण","उल्टी","दस्त","सिरदर्द","पेट","त्वचा",
+      "इलाज","खुराक","साइड इफेक्ट","निदान","पैरासिटामोल",
+      "एंटीबायोटिक","गैस","एसिडिटी","डॉक्टर","अस्पताल","स्वास्थ्य",
+      "दांत"
     ];
 
     return medicalWords.some(word => q.includes(word));
