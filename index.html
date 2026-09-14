@@ -939,7 +939,8 @@
       const result = await response.json();
 
       if(!response.ok || !result.ok){
-        throw new Error(result.message || "AI service failed");
+        const detail = result.debug ? " " + result.debug : "";
+        throw new Error((result.message || "AI service failed") + detail);
       }
 
       if(thinkingBubble){
