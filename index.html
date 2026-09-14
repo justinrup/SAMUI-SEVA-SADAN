@@ -859,52 +859,6 @@
     chat.scrollTop = chat.scrollHeight;
   }
 
-  function isMedicalQuestion(text){
-    const q = String(text || "").toLowerCase().trim();
-
-    const medicalWords = [
-      // English
-      "medical","health","doctor","hospital","nurse","nursing",
-      "medicine","medication","tablet","capsule","injection",
-      "disease","illness","symptom","fever","pain","cough",
-      "cold","flu","blood","report","anaesthesia","anesthesia",
-      "operation","surgery","ot","patient","pregnancy","baby",
-      "wound","injury","first aid","emergency","ambulance",
-      "heart","chest","breath","breathing","diabetes","pressure",
-      "blood pressure","sugar","infection","vomit","vomiting",
-      "diarrhea","diarrhoea","headache","stomach","skin",
-      "healthcare","health care","treatment","dose","dosage",
-      "side effect","symptoms","diagnosis","paracetamol",
-      "antibiotic","antibiotics","gas","acidity","dental",
-
-      // Bengali
-      "জ্বর","ওষুধ","মেডিসিন","ট্যাবলেট","ক্যাপসুল","ইনজেকশন",
-      "রোগ","অসুস্থ","উপসর্গ","ব্যথা","কাশি","সর্দি","ফ্লু",
-      "রক্ত","রিপোর্ট","অ্যানেস্থেশিয়া","অ্যানাস্থেশিয়া",
-      "অপারেশন","সার্জারি","রোগী","গর্ভাবস্থা","গর্ভবতী",
-      "শিশু","বাচ্চা","ক্ষত","আঘাত","প্রাথমিক চিকিৎসা","জরুরি",
-      "অ্যাম্বুলেন্স","হৃদয়","হৃদপিণ্ড","বুক","শ্বাস","ডায়াবেটিস",
-      "চাপ","রক্তচাপ","সুগার","ইনফেকশন","বমি","ডায়রিয়া",
-      "মাথাব্যথা","পেট","ত্বক","চিকিৎসা","ডোজ","পার্শ্বপ্রতিক্রিয়া",
-      "রোগ নির্ণয়","প্যারাসিটামল","অ্যান্টিবায়োটিক","গ্যাস",
-      "অ্যাসিডিটি","ডাক্তার","হাসপাতাল","স্বাস্থ্য","মেডিকেল",
-      "দাঁত","দাঁতের",
-
-      // Hindi
-      "बुखार","दवा","दवाई","गोली","कैप्सूल","इंजेक्शन",
-      "बीमारी","लक्षण","दर्द","खांसी","सर्दी","फ्लू","खून",
-      "रिपोर्ट","ऑपरेशन","सर्जरी","मरीज","गर्भावस्था","बच्चा",
-      "घाव","चोट","प्राथमिक उपचार","आपातकाल","एम्बुलेंस",
-      "दिल","सीना","सांस","मधुमेह","ब्लड प्रेशर","शुगर",
-      "संक्रमण","उल्टी","दस्त","सिरदर्द","पेट","त्वचा",
-      "इलाज","खुराक","साइड इफेक्ट","निदान","पैरासिटामोल",
-      "एंटीबायोटिक","गैस","एसिडिटी","डॉक्टर","अस्पताल","स्वास्थ्य",
-      "दांत"
-    ];
-
-    return medicalWords.some(word => q.includes(word));
-  }
-
   async function answerQuestion(){
     const text = input.value.trim();
     if(!text) return;
@@ -912,20 +866,13 @@
     addMessage(text, "user");
     input.value = "";
 
-    if(!isMedicalQuestion(text)){
-      addMessage(
-        "⚕️ Sorry, I can answer only medical-related questions.\\nPlease ask a medical or healthcare-related question.",
-        "bot"
-      );
-      return;
-    }
-
     addMessage("🤖 Thinking...", "bot");
 
-    const messages = chat.querySelectorAll(".sss-askai-message.bot");
-    const thinkingBubble = messages[messages.length - 1]?.querySelector(".sss-askai-bubble");
+    const botMessages = chat.querySelectorAll(".sss-askai-message.bot");
+    const thinkingBubble =
+      botMessages[botMessages.length - 1]?.querySelector(".sss-askai-bubble");
 
-    try{
+    try {
       const response = await fetch("/api/ask-ai", {
         method: "POST",
         headers: {
@@ -936,31 +883,42 @@
         })
       });
 
-      const result = await response.json();
+      let result = {};
+
+      try {
+        result = await response.json();
+      } catch(e) {
+        throw new Error("AI server returned an invalid response.");
+      }
 
       if(!response.ok || !result.ok){
-        const detail = result.debug ? " " + result.debug : "";
-        throw new Error((result.message || "AI service failed") + detail);
+        throw new Error(
+          result.message || "AI service request failed."
+        );
       }
 
       if(thinkingBubble){
-        thinkingBubble.textContent = result.answer;
+        thinkingBubble.textContent =
+          result.answer || "No answer received.";
       }else{
-        addMessage(result.answer, "bot");
+        addMessage(
+          result.answer || "No answer received.",
+          "bot"
+        );
       }
 
-    }catch(error){
-      console.error("ASK AI ERROR:", error);
+    } catch(error) {
+      console.error("NEW ASK AI ERROR:", error);
 
-      const errorText =
+      const message =
         error && error.message
           ? "⚠️ " + error.message
-          : "⚠️ Sorry, the AI service is temporarily unavailable. Please try again later.";
+          : "⚠️ AI service is temporarily unavailable. Please try again.";
 
       if(thinkingBubble){
-        thinkingBubble.textContent = errorText;
+        thinkingBubble.textContent = message;
       }else{
-        addMessage(errorText, "bot");
+        addMessage(message, "bot");
       }
     }
   }
