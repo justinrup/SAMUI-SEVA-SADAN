@@ -411,6 +411,20 @@ def ask_ai():
         answer = result.get("output_text", "").strip()
 
         if not answer:
+            try:
+                parts = []
+                for item in result.get("output", []):
+                    for content in item.get("content", []):
+                        if content.get("type") == "output_text":
+                            text = content.get("text", "").strip()
+                            if text:
+                                parts.append(text)
+                answer = "\n".join(parts).strip()
+            except Exception as parse_error:
+                print("OPENAI OUTPUT PARSE ERROR:", repr(parse_error))
+
+        if not answer:
+            print("OPENAI EMPTY OUTPUT:", result)
             return jsonify({
                 "ok": False,
                 "message": "AI did not return an answer."
