@@ -49,6 +49,13 @@ body{
 <div class="container">
 
 <div class="card">
+<button id="displayToggle" class="option" type="button" style="border:0;background:transparent;">
+<span>🖥️ Display</span><span id="displayArrow">›</span>
+</button>
+
+<div id="displayOptions" style="display:none;">
+
+<div class="card">
 <h2>🌐 Language / ভাষা / भाषा</h2>
 <button class="option" data-group="language" data-value="en">
 <span>🇬🇧 English</span><span>›</span>
@@ -129,6 +136,9 @@ body{
 🔄 Reset Settings
 </button>
 
+</div>
+</div>
+
 <a class="back" href="admin-login.html"
 style="background:linear-gradient(135deg,#166534,#15803d);">
 🔐 ADMIN PORTAL
@@ -139,6 +149,17 @@ style="background:linear-gradient(135deg,#166534,#15803d);">
 </div>
 
 <script>
+const displayToggle = document.getElementById("displayToggle");
+const displayOptions = document.getElementById("displayOptions");
+const displayArrow = document.getElementById("displayArrow");
+
+displayToggle.addEventListener("click", () => {
+  const open = displayOptions.style.display !== "none";
+  displayOptions.style.display = open ? "none" : "block";
+  displayArrow.textContent = open ? "›" : "⌄";
+});
+
+
 const defaults={
  language:"en",
  fontSize:"medium",

@@ -712,9 +712,6 @@ button.edit,
       6️⃣ 📄 Document Upload
     </button>
 
-    <button type="button" onclick="location.href='birth-report.html'">
-      7️⃣ 👶 Birth Report
-    </button>
   </div>
 
   <div class="card" id="birthReportManagementCard">
@@ -767,6 +764,146 @@ button.edit,
 
 
 
+
+  <div class="card" id="liveMarqueeStudioCard">
+    <h2>📢 Live Marquee Studio</h2>
+
+    <div id="marqueeDesignerBox" style="display:none;margin-top:12px;padding:14px;border:1px solid #dbe4f0;border-radius:14px;background:linear-gradient(180deg,#f8fbff,#ffffff);">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <h3 style="margin:0;">🎨 Marquee Designer</h3>
+
+        <select id="marqueeLanguage" style="min-width:130px;padding:8px;border-radius:8px;">
+          <option value="bn">বাংলা</option>
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+        </select>
+      </div>
+
+      <textarea id="marqueeText" rows="3"
+        placeholder="এখানে চলন্ত লেখা লিখুন..."
+        style="width:100%;box-sizing:border-box;margin-top:12px;padding:10px;border-radius:9px;"></textarea>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:10px;">
+
+        <select id="marqueePreset">
+          <option value="">🎨 Style Preset</option>
+          <option value="windows11">Windows 11 Modern</option>
+          <option value="clean">Modern Clean</option>
+          <option value="premium">Premium</option>
+          <option value="hospital">Hospital</option>
+          <option value="emergency">Emergency</option>
+          <option value="news">News Ticker</option>
+          <option value="gradient">Gradient</option>
+          <option value="bold">Bold Alert</option>
+        </select>
+
+        <select id="marqueeFontFamily">
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="'Segoe UI', sans-serif">Segoe UI / Windows</option>
+          <option value="'Segoe UI Variable', 'Segoe UI', sans-serif">Segoe UI Variable</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="Tahoma, sans-serif">Tahoma</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Times New Roman, serif">Times New Roman</option>
+          <option value="Impact, sans-serif">Impact</option>
+          <option value="cursive">Cursive</option>
+        </select>
+
+        <input id="marqueeFontSize" type="number" min="10" max="80" value="18" placeholder="Font Size">
+
+        <select id="marqueeFontWeight">
+          <option value="400">Regular</option>
+          <option value="500">Medium</option>
+          <option value="600">Semi Bold</option>
+          <option value="700">Bold</option>
+          <option value="800">Extra Bold</option>
+          <option value="900">Black</option>
+        </select>
+
+        <input id="marqueeTextColor" type="color" value="#ffffff" title="Text Color">
+
+        <input id="marqueeBackgroundColor" type="color" value="#0b5ed7" title="Background Color">
+
+        <select id="marqueeTextTransform">
+          <option value="none">Normal</option>
+          <option value="uppercase">UPPERCASE</option>
+          <option value="lowercase">lowercase</option>
+          <option value="capitalize">Title Case</option>
+        </select>
+
+        <select id="marqueeAlign">
+          <option value="left">⬅️ Left</option>
+          <option value="center">↔️ Center</option>
+          <option value="right">➡️ Right</option>
+        </select>
+
+        <select id="marqueeDirection">
+          <option value="left">🔄 Right → Left</option>
+          <option value="right">🔄 Left → Right</option>
+        </select>
+
+        <input id="marqueeSpeed" type="number" min="5" max="100" value="35" placeholder="Scroll Speed">
+
+        <input id="marqueeLetterSpacing" type="number" min="-5" max="20" step="0.5" value="0" placeholder="Letter Spacing">
+
+        <input id="marqueeLineHeight" type="number" min="0.8" max="3" step="0.1" value="1.4" placeholder="Line Height">
+
+        <select id="marqueeCurve">
+          <option value="normal">↪️ Normal</option>
+          <option value="arc">Arc / বাঁক</option>
+          <option value="wave">Wave / ঢেউ</option>
+          <option value="up">Curve Up</option>
+          <option value="down">Curve Down</option>
+        </select>
+      </div>
+
+      <details style="margin-top:10px;">
+        <summary style="cursor:pointer;font-weight:700;">✨ Advanced Text Style</summary>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:10px;">
+
+          <label><input type="checkbox" id="marqueeBold"> Bold</label>
+          <label><input type="checkbox" id="marqueeItalic"> Italic</label>
+          <label><input type="checkbox" id="marqueeUnderline"> Underline</label>
+          <label><input type="checkbox" id="marqueeStrike"> Strike</label>
+          <label><input type="checkbox" id="marqueeGradientEnabled"> 🌈 Gradient Text</label>
+          <label><input type="checkbox" id="marqueeShadow"> 🌑 Text Shadow</label>
+
+          <input id="marqueeGradientColor1" type="color" value="#ff0000" title="Gradient Color 1">
+          <input id="marqueeGradientColor2" type="color" value="#ffff00" title="Gradient Color 2">
+
+          <input id="marqueeStrokeWidth" type="number" min="0" max="8" step="1" value="0" placeholder="Stroke Width">
+
+          <input id="marqueeStrokeColor" type="color" value="#000000" title="Stroke Color">
+
+          <input id="marqueeShadowBlur" type="number" min="0" max="20" value="4" placeholder="Shadow Blur">
+
+          <input id="marqueeShadowDistance" type="number" min="0" max="15" value="2" placeholder="Shadow Distance">
+        </div>
+      </details>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+        <button type="button" id="saveMarquee">💾 Save</button>
+        <button type="button" id="publishMarquee">🌐 Publish</button>
+        <button type="button" id="unpublishMarquee">🔒 Unpublish</button>
+        <button type="button" id="resetMarquee">🔄 Reset Settings</button>
+      </div>
+
+      <div id="marqueePreview" style="margin-top:12px;padding:10px;border-radius:10px;overflow:hidden;background:#0b5ed7;color:#fff;text-align:center;">
+        <small>👁️ Live Preview</small>
+        <div id="marqueePreviewText" style="margin-top:5px;font-size:18px;font-weight:600;">
+          আপনার Marquee এখানে Preview হবে
+        </div>
+      </div>
+
+      <div id="marqueeStatus" style="margin-top:10px;"></div>
+    </div>
+
+    <button type="button" id="openMarqueeDesigner">
+      🎨 Open Marquee Designer
+    </button>
+  </div>
 
   <div class="card" id="noticeManagementCard">
     <h2>📢 Notice Management</h2>
@@ -909,7 +1046,11 @@ import {
   getDocs,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
+  query,
+  orderBy,
+  limit,
+  serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -931,6 +1072,528 @@ const db = getFirestore(app);
 
 
 // ===============================
+
+// LIVE MARQUEE STUDIO LOGIC
+(function(){
+  const openBtn = document.getElementById("openMarqueeDesigner");
+  const box = document.getElementById("marqueeDesignerBox");
+  const status = document.getElementById("marqueeStatus");
+
+  if (!openBtn || !box) return;
+
+  const $ = id => document.getElementById(id);
+
+  openBtn.addEventListener("click", () => {
+    box.style.display = box.style.display === "none" ? "block" : "none";
+  });
+
+  const defaultMarquee = {
+    text: "",
+    fontFamily: "Arial, sans-serif",
+    fontSize: 18,
+    fontWeight: 600,
+    textColor: "#ffffff",
+    backgroundColor: "#0b5ed7",
+    textTransform: "none",
+    align: "center",
+    direction: "left",
+    speed: 35,
+    letterSpacing: 0,
+    lineHeight: 1.4,
+    curve: "normal",
+    bold: false,
+    italic: false,
+    underline: false,
+    strike: false,
+    gradientEnabled: false,
+    gradientColor1: "#ff0000",
+    gradientColor2: "#ffff00",
+    shadow: false,
+    shadowBlur: 4,
+    shadowDistance: 2,
+    strokeWidth: 0,
+    strokeColor: "#000000"
+  };
+
+  async function getMarquee(){
+    try {
+      const q = query(
+        collection(db, "live_marquee"),
+        orderBy("updatedAt", "desc"),
+        limit(1)
+      );
+      const snap = await getDocs(q);
+
+      if (snap.empty) return null;
+
+      return {
+        id: snap.docs[0].id,
+        ...snap.docs[0].data()
+      };
+    } catch(e) {
+      console.error("MARQUEE LOAD ERROR:", e);
+      return null;
+    }
+  }
+
+  function setValue(id, value, fallback){
+    const el = $(id);
+    if (!el) return;
+    el.value = value ?? fallback;
+  }
+
+  function setChecked(id, value){
+    const el = $(id);
+    if (el) el.checked = !!value;
+  }
+
+  function applyPreview(){
+    const preview = $("marqueePreview");
+    const text = $("marqueePreviewText");
+
+    if (!preview || !text) return;
+
+    const bg = $("marqueeBackgroundColor")?.value || "#0b5ed7";
+    const color = $("marqueeTextColor")?.value || "#ffffff";
+    const size = Number($("marqueeFontSize")?.value) || 18;
+    const weight = $("marqueeFontWeight")?.value || "600";
+    const font = $("marqueeFontFamily")?.value || "Arial, sans-serif";
+    const transform = $("marqueeTextTransform")?.value || "none";
+    const align = $("marqueeAlign")?.value || "center";
+    const spacing = Number($("marqueeLetterSpacing")?.value) || 0;
+    const lineHeight = Number($("marqueeLineHeight")?.value) || 1.4;
+    const strokeWidth = Number($("marqueeStrokeWidth")?.value) || 0;
+    const strokeColor = $("marqueeStrokeColor")?.value || "#000000";
+    const shadow = $("marqueeShadow")?.checked;
+    const shadowBlur = Number($("marqueeShadowBlur")?.value) || 4;
+    const shadowDistance = Number($("marqueeShadowDistance")?.value) || 2;
+    const gradient = $("marqueeGradientEnabled")?.checked;
+
+    preview.style.background = bg;
+    text.textContent =
+      ($("marqueeText")?.value || "").trim() ||
+      "আপনার Marquee এখানে Preview হবে";
+
+    text.style.fontFamily = font;
+    text.style.fontSize = size + "px";
+    text.style.fontWeight = weight;
+    text.style.textAlign = align;
+    text.style.textTransform = transform;
+    text.style.letterSpacing = spacing + "px";
+    text.style.lineHeight = lineHeight;
+    text.style.fontStyle = $("marqueeItalic")?.checked ? "italic" : "normal";
+    text.style.textDecoration =
+      $("marqueeUnderline")?.checked && $("marqueeStrike")?.checked
+        ? "underline line-through"
+        : $("marqueeUnderline")?.checked
+          ? "underline"
+          : $("marqueeStrike")?.checked
+            ? "line-through"
+            : "none";
+
+    text.style.webkitTextStroke =
+      strokeWidth > 0 ? strokeWidth + "px " + strokeColor : "0 transparent";
+
+    text.style.textShadow = shadow
+      ? shadowDistance + "px " + shadowDistance + "px " +
+        shadowBlur + "px rgba(0,0,0,.55)"
+      : "none";
+
+    if (gradient) {
+      text.style.background =
+        "linear-gradient(90deg," +
+        ($("marqueeGradientColor1")?.value || "#ff0000") +
+        "," +
+        ($("marqueeGradientColor2")?.value || "#ffff00") +
+        ")";
+      text.style.webkitBackgroundClip = "text";
+      text.style.backgroundClip = "text";
+      text.style.webkitTextFillColor = "transparent";
+    } else {
+      text.style.background = "none";
+      text.style.webkitBackgroundClip = "initial";
+      text.style.backgroundClip = "initial";
+      text.style.webkitTextFillColor = color;
+      text.style.color = color;
+    }
+
+    if ($("marqueeBold")) {
+      text.style.fontWeight =
+        $("marqueeBold").checked ? "700" : weight;
+    }
+
+    if ($("marqueeCurve")) {
+      const curve = $("marqueeCurve").value;
+
+      if (curve === "arc") {
+        text.style.transform = "perspective(300px) rotateX(12deg)";
+      } else if (curve === "up") {
+        text.style.transform = "rotate(-3deg)";
+      } else if (curve === "down") {
+        text.style.transform = "rotate(3deg)";
+      } else if (curve === "wave") {
+        text.style.transform = "skewX(-6deg)";
+      } else {
+        text.style.transform = "none";
+      }
+    }
+  }
+
+  function attachPreviewListeners(){
+    [
+      "marqueeText",
+      "marqueeFontFamily",
+      "marqueeFontSize",
+      "marqueeFontWeight",
+      "marqueeTextColor",
+      "marqueeBackgroundColor",
+      "marqueeTextTransform",
+      "marqueeAlign",
+      "marqueeLetterSpacing",
+      "marqueeLineHeight",
+      "marqueeCurve",
+      "marqueeBold",
+      "marqueeItalic",
+      "marqueeUnderline",
+      "marqueeStrike",
+      "marqueeGradientEnabled",
+      "marqueeGradientColor1",
+      "marqueeGradientColor2",
+      "marqueeShadow",
+      "marqueeShadowBlur",
+      "marqueeShadowDistance",
+      "marqueeStrokeWidth",
+      "marqueeStrokeColor"
+    ].forEach(id => {
+      const el = $(id);
+      if (el) {
+        el.addEventListener("input", applyPreview);
+        el.addEventListener("change", applyPreview);
+      }
+    });
+  }
+
+  function loadIntoForm(data){
+    const d = {...defaultMarquee, ...(data || {})};
+
+    setValue("marqueeText", d.text, "");
+    setValue("marqueeFontFamily", d.fontFamily, defaultMarquee.fontFamily);
+    setValue("marqueeFontSize", d.fontSize, 18);
+    setValue("marqueeFontWeight", d.fontWeight, 600);
+    setValue("marqueeTextColor", d.textColor, "#ffffff");
+    setValue("marqueeBackgroundColor", d.backgroundColor, "#0b5ed7");
+    setValue("marqueeTextTransform", d.textTransform, "none");
+    setValue("marqueeAlign", d.align, "center");
+    setValue("marqueeDirection", d.direction, "left");
+    setValue("marqueeSpeed", d.speed, 35);
+    setValue("marqueeLetterSpacing", d.letterSpacing, 0);
+    setValue("marqueeLineHeight", d.lineHeight, 1.4);
+    setValue("marqueeCurve", d.curve, "normal");
+    setValue("marqueeGradientColor1", d.gradientColor1, "#ff0000");
+    setValue("marqueeGradientColor2", d.gradientColor2, "#ffff00");
+    setValue("marqueeStrokeWidth", d.strokeWidth, 0);
+    setValue("marqueeStrokeColor", d.strokeColor, "#000000");
+    setValue("marqueeShadowBlur", d.shadowBlur, 4);
+    setValue("marqueeShadowDistance", d.shadowDistance, 2);
+
+    setChecked("marqueeBold", d.bold);
+    setChecked("marqueeItalic", d.italic);
+    setChecked("marqueeUnderline", d.underline);
+    setChecked("marqueeStrike", d.strike);
+    setChecked("marqueeGradientEnabled", d.gradientEnabled);
+    setChecked("marqueeShadow", d.shadow);
+
+    applyPreview();
+  }
+
+  async function loadMarquee(){
+    const data = await getMarquee();
+    if (data) loadIntoForm(data);
+    else loadIntoForm(defaultMarquee);
+  }
+
+  function collectData(){
+    return {
+      text: ($("marqueeText")?.value || "").trim(),
+      fontFamily: $("marqueeFontFamily")?.value || defaultMarquee.fontFamily,
+      fontSize: Number($("marqueeFontSize")?.value) || 18,
+      fontWeight: $("marqueeFontWeight")?.value || "600",
+      textColor: $("marqueeTextColor")?.value || "#ffffff",
+      backgroundColor: $("marqueeBackgroundColor")?.value || "#0b5ed7",
+      textTransform: $("marqueeTextTransform")?.value || "none",
+      align: $("marqueeAlign")?.value || "center",
+      direction: $("marqueeDirection")?.value || "left",
+      speed: Number($("marqueeSpeed")?.value) || 35,
+      letterSpacing: Number($("marqueeLetterSpacing")?.value) || 0,
+      lineHeight: Number($("marqueeLineHeight")?.value) || 1.4,
+      curve: $("marqueeCurve")?.value || "normal",
+      bold: $("marqueeBold")?.checked || false,
+      italic: $("marqueeItalic")?.checked || false,
+      underline: $("marqueeUnderline")?.checked || false,
+      strike: $("marqueeStrike")?.checked || false,
+      gradientEnabled: $("marqueeGradientEnabled")?.checked || false,
+      gradientColor1: $("marqueeGradientColor1")?.value || "#ff0000",
+      gradientColor2: $("marqueeGradientColor2")?.value || "#ffff00",
+      shadow: $("marqueeShadow")?.checked || false,
+      shadowBlur: Number($("marqueeShadowBlur")?.value) || 4,
+      shadowDistance: Number($("marqueeShadowDistance")?.value) || 2,
+      strokeWidth: Number($("marqueeStrokeWidth")?.value) || 0,
+      strokeColor: $("marqueeStrokeColor")?.value || "#000000"
+    };
+  }
+
+  async function saveMarquee(published){
+    const data = collectData();
+
+    if (!data.text) {
+      status.textContent = "⚠️ Please enter marquee text.";
+      return;
+    }
+
+    data.published = published;
+    data.updatedAt = serverTimestamp();
+
+    try {
+      const existing = await getMarquee();
+
+      if (existing && existing.id) {
+        await updateDoc(
+          doc(db, "live_marquee", existing.id),
+          data
+        );
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(
+          collection(db, "live_marquee"),
+          data
+        );
+      }
+
+      status.textContent = published
+        ? "✅ Marquee saved and published successfully."
+        : "✅ Marquee settings saved successfully.";
+
+    } catch(e) {
+      console.error("MARQUEE SAVE ERROR:", e);
+      status.textContent = "❌ Could not save marquee.";
+    }
+  }
+
+  $("saveMarquee")?.addEventListener("click", () => {
+    saveMarquee(false);
+  });
+
+  $("publishMarquee")?.addEventListener("click", () => {
+    saveMarquee(true);
+  });
+
+  $("unpublishMarquee")?.addEventListener("click", async () => {
+    try {
+      const existing = await getMarquee();
+
+      if (!existing || !existing.id) {
+        status.textContent = "⚠️ No marquee found.";
+        return;
+      }
+
+      await updateDoc(
+        doc(db, "live_marquee", existing.id),
+        {
+          published: false,
+          updatedAt: serverTimestamp()
+        }
+      );
+
+      status.textContent = "🔒 Marquee unpublished.";
+
+    } catch(e) {
+      console.error("MARQUEE UNPUBLISH ERROR:", e);
+      status.textContent = "❌ Could not unpublish marquee.";
+    }
+  });
+
+  $("resetMarquee")?.addEventListener("click", () => {
+    if (!confirm("Reset all Marquee Designer settings?")) return;
+
+    loadIntoForm(defaultMarquee);
+    status.textContent = "🔄 Marquee settings reset.";
+  });
+
+  $("marqueePreset")?.addEventListener("change", () => {
+    const preset = $("marqueePreset").value;
+
+    const presets = {
+      windows11: {
+        fontFamily: "'Segoe UI Variable', 'Segoe UI', sans-serif",
+        fontSize: 18,
+        fontWeight: 600,
+        textColor: "#ffffff",
+        backgroundColor: "#2563eb",
+        shadow: true,
+        shadowBlur: 5,
+        shadowDistance: 2
+      },
+      clean: {
+        fontFamily: "'Segoe UI', sans-serif",
+        fontSize: 18,
+        fontWeight: 500,
+        textColor: "#ffffff",
+        backgroundColor: "#0f766e",
+        shadow: false
+      },
+      premium: {
+        fontFamily: "Georgia, serif",
+        fontSize: 20,
+        fontWeight: 700,
+        textColor: "#ffffff",
+        backgroundColor: "#111827",
+        shadow: true,
+        shadowBlur: 7,
+        shadowDistance: 3
+      },
+      hospital: {
+        fontFamily: "'Segoe UI', sans-serif",
+        fontSize: 18,
+        fontWeight: 600,
+        textColor: "#ffffff",
+        backgroundColor: "#0b5ed7",
+        shadow: false
+      },
+      emergency: {
+        fontFamily: "Arial, sans-serif",
+        fontSize: 20,
+        fontWeight: 800,
+        textColor: "#ffffff",
+        backgroundColor: "#dc2626",
+        shadow: true,
+        shadowBlur: 5,
+        shadowDistance: 2
+      },
+      news: {
+        fontFamily: "Arial, sans-serif",
+        fontSize: 17,
+        fontWeight: 700,
+        textColor: "#ffffff",
+        backgroundColor: "#111827",
+        shadow: false
+      },
+      gradient: {
+        fontFamily: "'Segoe UI Variable', 'Segoe UI', sans-serif",
+        fontSize: 20,
+        fontWeight: 800,
+        textColor: "#ffffff",
+        backgroundColor: "#111827",
+        gradientEnabled: true,
+        gradientColor1: "#00e5ff",
+        gradientColor2: "#ff00cc",
+        shadow: true
+      },
+      bold: {
+        fontFamily: "Impact, sans-serif",
+        fontSize: 22,
+        fontWeight: 900,
+        textColor: "#ffffff",
+        backgroundColor: "#7c2d12",
+        shadow: true,
+        shadowBlur: 6,
+        shadowDistance: 3
+      }
+    };
+
+    const selected = presets[preset];
+    if (!selected) return;
+
+    Object.entries(selected).forEach(([key, value]) => {
+      const id = {
+        fontFamily: "marqueeFontFamily",
+        fontSize: "marqueeFontSize",
+        fontWeight: "marqueeFontWeight",
+        textColor: "marqueeTextColor",
+        backgroundColor: "marqueeBackgroundColor",
+        gradientEnabled: "marqueeGradientEnabled",
+        gradientColor1: "marqueeGradientColor1",
+        gradientColor2: "marqueeGradientColor2",
+        shadow: "marqueeShadow",
+        shadowBlur: "marqueeShadowBlur",
+        shadowDistance: "marqueeShadowDistance"
+      }[key];
+
+      if (!id) return;
+
+      const el = $(id);
+
+      if (!el) return;
+
+      if (el.type === "checkbox") el.checked = !!value;
+      else el.value = value;
+    });
+
+    applyPreview();
+  });
+
+  const language = $("marqueeLanguage");
+
+  function updateLanguage(){
+    if (!language) return;
+
+    const lang = language.value;
+
+    const labels = {
+      bn: {
+        placeholder: "এখানে চলন্ত লেখা লিখুন...",
+        preset: "🎨 স্টাইল প্রিসেট",
+        save: "💾 সংরক্ষণ",
+        publish: "🌐 প্রকাশ করুন",
+        unpublish: "🔒 প্রকাশ বন্ধ",
+        reset: "🔄 সেটিংস রিসেট",
+        advanced: "✨ উন্নত Text Style",
+        preview: "👁️ Live Preview"
+      },
+      en: {
+        placeholder: "Enter scrolling text here...",
+        preset: "🎨 Style Preset",
+        save: "💾 Save",
+        publish: "🌐 Publish",
+        unpublish: "🔒 Unpublish",
+        reset: "🔄 Reset Settings",
+        advanced: "✨ Advanced Text Style",
+        preview: "👁️ Live Preview"
+      },
+      hi: {
+        placeholder: "यहाँ चलने वाला टेक्स्ट लिखें...",
+        preset: "🎨 स्टाइल प्रीसेट",
+        save: "💾 सेव",
+        publish: "🌐 प्रकाशित करें",
+        unpublish: "🔒 प्रकाशन बंद करें",
+        reset: "🔄 सेटिंग रीसेट",
+        advanced: "✨ उन्नत Text Style",
+        preview: "👁️ लाइव प्रीव्यू"
+      }
+    };
+
+    const L = labels[lang] || labels.bn;
+
+    if ($("marqueeText")) $("marqueeText").placeholder = L.placeholder;
+    if ($("marqueePreset")) $("marqueePreset").options[0].textContent = L.preset;
+    if ($("saveMarquee")) $("saveMarquee").textContent = L.save;
+    if ($("publishMarquee")) $("publishMarquee").textContent = L.publish;
+    if ($("unpublishMarquee")) $("unpublishMarquee").textContent = L.unpublish;
+    if ($("resetMarquee")) $("resetMarquee").textContent = L.reset;
+
+    const summary = document.querySelector("#marqueeDesignerBox details summary");
+    if (summary) summary.textContent = L.advanced;
+
+    const previewSmall = document.querySelector("#marqueePreview small");
+    if (previewSmall) previewSmall.textContent = L.preview;
+  }
+
+  language?.addEventListener("change", updateLanguage);
+
+  attachPreviewListeners();
+  updateLanguage();
+  loadMarquee();
+
+})();
 // NOTICE MANAGEMENT
 // ===============================
 const noticeTitle = document.getElementById("noticeTitle");
@@ -1762,6 +2425,91 @@ loadFacilities();
 
 // SETUP EXISTING 4 FACILITIES
 
+
+// AUTO ADD PATIENT CARE + CLEAN ENVIRONMENT
+// Existing facilities are NOT changed or deleted.
+
+async function ensurePatientCareFacilities() {
+
+  try {
+
+    const snap = await getDocs(collection(db, "facilities"));
+
+    const existingNames = new Set();
+
+    snap.forEach(function(item) {
+      const d = item.data();
+
+      if (d.name) {
+        existingNames.add(
+          String(d.name).trim().toLowerCase()
+        );
+      }
+    });
+
+    const defaults = [
+      {
+        name: "Patient Care",
+        description: `রোগীর যত্ন ও সেবা
+
+প্রতিটি রোগীর সুস্থতা, নিরাপত্তা ও স্বাচ্ছন্দ্যকে সর্বোচ্চ গুরুত্ব দিয়ে আন্তরিক ও যত্নশীল সেবা প্রদান করা হয়।
+
+• রোগীর নিয়মিত পর্যবেক্ষণ ও প্রয়োজনীয় যত্ন
+• প্রশিক্ষিত নার্স ও স্বাস্থ্যকর্মীদের সহযোগিতা
+• চিকিৎসকের পরামর্শ অনুযায়ী ওষুধ ও চিকিৎসা সহায়তা
+• রোগীর আরাম ও নিরাপত্তার প্রতি বিশেষ নজর
+• রোগী ও পরিবারের সদস্যদের সহযোগিতা
+• জরুরি পরিস্থিতিতে দ্রুত চিকিৎসা সহায়তা
+
+যত্ন, সহানুভূতি ও দায়িত্বের সঙ্গে—প্রতিটি রোগীর পাশে আমরা।`
+      },
+
+      {
+        name: "Clean Environment",
+        description: `পরিচ্ছন্ন ও স্বাস্থ্যকর পরিবেশ
+
+রোগী ও তাঁদের পরিবারের সুস্থতা ও স্বাচ্ছন্দ্যের জন্য পরিচ্ছন্ন, নিরাপদ ও স্বাস্থ্যকর পরিবেশ নিশ্চিত করা হয়।
+
+• নিয়মিত পরিষ্কার-পরিচ্ছন্নতা
+• জীবাণুমুক্ত ও স্বাস্থ্যসম্মত পরিবেশ
+• রোগীর কক্ষ ও চিকিৎসা এলাকার পরিচ্ছন্নতা
+• পরিষ্কার ও স্বাস্থ্যকর স্যানিটেশন
+• বর্জ্য যথাযথ ব্যবস্থাপনা
+• শান্ত ও আরামদায়ক পরিবেশ
+
+পরিচ্ছন্ন পরিবেশ, নিরাপদ স্বাস্থ্যসেবা—আপনার সুস্থতাই আমাদের অগ্রাধিকার।`
+      }
+    ];
+
+    let added = false;
+
+    for (const item of defaults) {
+
+      if (existingNames.has(item.name.toLowerCase())) {
+        continue;
+      }
+
+      await addDoc(collection(db, "facilities"), {
+        name: item.name,
+        description: item.description,
+        published: true,
+        createdAt: new Date().toISOString()
+      });
+
+      added = true;
+    }
+
+    if (added) {
+      await loadFacilities();
+    }
+
+  } catch (error) {
+    console.error("Patient Care facilities setup error:", error);
+  }
+}
+
+ensurePatientCareFacilities();
+
 const setupDefaultFacilities = document.getElementById("setupDefaultFacilities");
 const setupFacilityMessage = document.getElementById("setupFacilityMessage");
 
@@ -1782,11 +2530,33 @@ if (setupDefaultFacilities) {
       },
       {
         name: "Clean Environment",
-        description: "A clean and comfortable healthcare environment."
+        description: `পরিচ্ছন্ন ও স্বাস্থ্যকর পরিবেশ
+
+রোগী ও তাঁদের পরিবারের সুস্থতা ও স্বাচ্ছন্দ্যের জন্য পরিচ্ছন্ন, নিরাপদ ও স্বাস্থ্যকর পরিবেশ নিশ্চিত করা হয়।
+
+• নিয়মিত পরিষ্কার-পরিচ্ছন্নতা
+• জীবাণুমুক্ত ও স্বাস্থ্যসম্মত পরিবেশ
+• রোগীর কক্ষ ও চিকিৎসা এলাকার পরিচ্ছন্নতা
+• পরিষ্কার ও স্বাস্থ্যকর স্যানিটেশন
+• বর্জ্য যথাযথ ব্যবস্থাপনা
+• শান্ত ও আরামদায়ক পরিবেশ
+
+পরিচ্ছন্ন পরিবেশ, নিরাপদ স্বাস্থ্যসেবা—আপনার সুস্থতাই আমাদের অগ্রাধিকার।`
       },
       {
         name: "Patient Care",
-        description: "Supportive care focused on patient comfort."
+        description: `রোগীর যত্ন ও সেবা
+
+প্রতিটি রোগীর সুস্থতা, নিরাপত্তা ও স্বাচ্ছন্দ্যকে সর্বোচ্চ গুরুত্ব দিয়ে আন্তরিক ও যত্নশীল সেবা প্রদান করা হয়।
+
+• রোগীর নিয়মিত পর্যবেক্ষণ ও প্রয়োজনীয় যত্ন
+• প্রশিক্ষিত নার্স ও স্বাস্থ্যকর্মীদের সহযোগিতা
+• চিকিৎসকের পরামর্শ অনুযায়ী ওষুধ ও চিকিৎসা সহায়তা
+• রোগীর আরাম ও নিরাপত্তার প্রতি বিশেষ নজর
+• রোগী ও পরিবারের সদস্যদের সহযোগিতা
+• জরুরি পরিস্থিতিতে দ্রুত চিকিৎসা সহায়তা
+
+যত্ন, সহানুভূতি ও দায়িত্বের সঙ্গে—প্রতিটি রোগীর পাশে আমরা।`
       }
     ];
 

@@ -219,6 +219,240 @@
 </style>
 
   <script src="settings.js"></script>
+
+<style id="sss-facility-options-style">
+.sss-special-facilities{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+  margin-top:20px;
+}
+
+.sss-facility-option{
+  border:0;
+  min-height:210px;
+  border-radius:22px;
+  padding:30px 24px;
+  cursor:pointer;
+  text-align:center;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+  transition:transform .2s ease,box-shadow .2s ease;
+  font-family:inherit;
+}
+
+.sss-facility-option:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 36px rgba(0,0,0,.18);
+}
+
+.sss-patient-care{
+  background:linear-gradient(135deg,#168a4a,#35b86b);
+}
+
+.sss-clean-environment{
+  background:linear-gradient(135deg,#1769aa,#2d9cdb);
+}
+
+.sss-facility-icon{
+  font-size:42px;
+  line-height:1;
+}
+
+.sss-facility-title{
+  font-size:27px;
+  font-weight:800;
+}
+
+.sss-facility-subtitle{
+  font-size:16px;
+  font-weight:600;
+}
+
+.sss-facility-action{
+  margin-top:10px;
+  padding:8px 16px;
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:30px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.sss-facility-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+}
+
+.sss-facility-modal.sss-show{
+  display:block;
+}
+
+.sss-facility-modal-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.68);
+}
+
+.sss-facility-modal-box{
+  position:relative;
+  width:min(760px,calc(100% - 28px));
+  max-height:85vh;
+  overflow:auto;
+  margin:7vh auto 0;
+  background:#fff;
+  border-radius:20px;
+  padding:32px 28px;
+  box-shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+.sss-facility-modal-close{
+  position:absolute;
+  right:12px;
+  top:8px;
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:#eee;
+  font-size:28px;
+  cursor:pointer;
+  line-height:1;
+}
+
+.sss-facility-modal-box h2{
+  margin:0 45px 18px 0;
+  font-size:28px;
+}
+
+.sss-facility-modal-box p{
+  font-size:16px;
+  line-height:1.75;
+  white-space:pre-line;
+}
+
+@media(max-width:700px){
+  .sss-special-facilities{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  .sss-facility-option{
+    min-height:180px;
+  }
+
+  .sss-facility-title{
+    font-size:23px;
+  }
+
+  .sss-facility-modal-box{
+    margin-top:5vh;
+    padding:28px 20px;
+  }
+}
+</style>
+
+
+<style id="sss-facility-settings-style">
+.sss-facility-toolbar{
+  display:flex;
+  justify-content:flex-end;
+  margin:4px 0 8px;
+}
+.sss-facility-settings{
+  border:0;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+  padding:5px 8px;
+  border-radius:50%;
+}
+.sss-facility-settings:hover{
+  background:rgba(0,0,0,.07);
+}
+.sss-facility-settings-panel{
+  max-width:360px;
+  margin:0 0 14px auto;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+.sss-facility-settings-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.sss-facility-settings-head button{
+  border:0;
+  background:transparent;
+  font-size:24px;
+  cursor:pointer;
+}
+.sss-facility-settings-panel label{
+  display:block;
+  margin:9px 0;
+  font-size:13px;
+  font-weight:600;
+}
+.sss-facility-settings-panel input,
+.sss-facility-settings-panel select{
+  width:100%;
+  box-sizing:border-box;
+  margin-top:4px;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:7px;
+}
+#sssFacilitySettingsSave{
+  width:100%;
+  margin-top:10px;
+  padding:9px;
+  border:0;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+}
+.sss-facility-message-body{
+  white-space:pre-wrap;
+  line-height:1.75;
+}
+.sss-facility-message-theme-dark{
+  background:#222;
+  color:#fff;
+  padding:18px;
+  border-radius:12px;
+}
+.sss-facility-message-theme-soft{
+  background:#f7f7f7;
+  padding:18px;
+  border-radius:12px;
+}
+.sss-facility-message-bg-soft{
+  background:rgba(0,0,0,.035);
+  padding:18px;
+  border-radius:12px;
+}
+.sss-facility-message-bg-gradient{
+  background:linear-gradient(135deg,#f5f5f5,#ffffff);
+  padding:18px;
+  border-radius:12px;
+}
+@media(max-width:600px){
+  .sss-facility-settings-panel{
+    max-width:none;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -283,6 +517,19 @@
       <div class="support-badge"><b>♡ &nbsp; 24/7</b><span>Medical Support</span></div>
     </div>
   </div>
+</section>
+
+<!-- LIVE MARQUEE DISPLAY -->
+<section id="sssLiveMarquee"
+  style="display:none;margin:18px auto 24px;max-width:1200px;
+  border:3px solid #0b5ed7;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.12);">
+
+  <div id="sssMarqueeTrack"
+    style="white-space:nowrap;display:inline-block;
+    padding:10px 30px;font-size:18px;font-weight:600;">
+  </div>
+
 </section>
 
 <section class="quick-care-section">
@@ -363,6 +610,9 @@
   </div>
 </section>
 
+
+
+
 <section id="services" class="services-section section-shell">
   <div class="section-heading"><div><span class="section-kicker">→ Our Services</span><h2>Quality Healthcare Services</h2></div><a href="services.html" class="outline-btn">View All Services →</a></div>
   <div class="service-grid">
@@ -374,6 +624,7 @@
     <a href="admin-dashboard.html" class="service-card"><div>🚑</div><h3>ER</h3><p>Emergency patient records.</p></a>
     <a href="admin-dashboard.html" class="service-card"><div>🩸</div><h3>Blood Report</h3><p>Blood tests and report upload.</p></a>
     <a href="admin-dashboard.html" class="service-card"><div>📄</div><h3>Documents</h3><p>Upload and manage medical documents.</p></a>
+    <a href="birth-report.html" class="service-card"><div aria-label="Birth Report" style="font-size:48px;">📄👣</div><h3>Birth Report</h3><p>Birth report and newborn birth records.</p></a>
   </div>
 </section>
 
@@ -400,7 +651,94 @@
       <a href="birth-report.html" class="btn btn-primary small">👶 Birth Report</a>
     </div>
   </div>
-  <div class="facility-grid" id="homeFacilities">
+  <div class="sss-facility-toolbar">
+    <button type="button" id="sssFacilitySettingsBtn" class="sss-facility-settings" title="Settings" aria-label="Settings">⚙️</button>
+  </div>
+
+  <div id="sssFacilitySettingsPanel" class="sss-facility-settings-panel" hidden>
+    <div class="sss-facility-settings-head">
+      <strong>⚙️ Settings</strong>
+      <button type="button" id="sssFacilitySettingsClose">×</button>
+    </div>
+
+    <label>Text Color
+      <input type="color" id="sssFacilityTextColor" value="#222222">
+    </label>
+
+    <label>Font Style
+      <select id="sssFacilityFontStyle">
+        <option value="normal">Normal</option>
+        <option value="italic">Italic</option>
+      </select>
+    </label>
+
+    <label>Font Size
+      <select id="sssFacilityFontSize">
+        <option value="14px">Small</option>
+        <option value="16px" selected>Medium</option>
+        <option value="18px">Large</option>
+        <option value="20px">Extra Large</option>
+      </select>
+    </label>
+
+    <label>Font Weight
+      <select id="sssFacilityFontWeight">
+        <option value="400">Normal</option>
+        <option value="500">Medium</option>
+        <option value="700">Bold</option>
+      </select>
+    </label>
+
+    <label>Theme
+      <select id="sssFacilityTheme">
+        <option value="light">Light</option>
+        <option value="soft">Soft</option>
+        <option value="dark">Dark</option>
+      </select>
+    </label>
+
+    <label>Background Style
+      <select id="sssFacilityBackground">
+        <option value="plain">Plain</option>
+        <option value="soft">Soft</option>
+        <option value="gradient">Gradient</option>
+      </select>
+    </label>
+
+    <label>Text Alignment
+      <select id="sssFacilityAlignment">
+        <option value="left">Left</option>
+        <option value="center">Center</option>
+        <option value="right">Right</option>
+      </select>
+    </label>
+
+    <button type="button" id="sssFacilitySettingsSave">💾 Save</button>
+    <button type="button" id="sssFacilitySettingsReset" style="width:100%;margin-top:8px;padding:9px;border:0;border-radius:8px;cursor:pointer;font-weight:700;">↩️ Reset</button>
+  </div>
+
+  <div class="facility-grid sss-special-facilities" id="homeFacilities">
+    <button type="button" class="sss-facility-option sss-patient-care" data-facility="Patient Care">
+      <span class="sss-facility-icon">❤️</span>
+      <span class="sss-facility-title">Patient Care</span>
+      <span class="sss-facility-subtitle">রোগীর যত্ন ও সেবা</span>
+      <span class="sss-facility-action">বিস্তারিত দেখুন →</span>
+    </button>
+
+    <button type="button" class="sss-facility-option sss-clean-environment" data-facility="Clean Environment">
+      <span class="sss-facility-icon">🧹</span>
+      <span class="sss-facility-title">Clean Environment</span>
+      <span class="sss-facility-subtitle">পরিচ্ছন্ন ও স্বাস্থ্যকর পরিবেশ</span>
+      <span class="sss-facility-action">বিস্তারিত দেখুন →</span>
+    </button>
+  </div>
+
+  <div id="sssFacilityModal" class="sss-facility-modal" aria-hidden="true">
+    <div class="sss-facility-modal-overlay" data-close-facility></div>
+    <div class="sss-facility-modal-box" role="dialog" aria-modal="true">
+      <button type="button" class="sss-facility-modal-close" data-close-facility aria-label="Close">×</button>
+      <div id="sssFacilityModalContent"></div>
+    </div>
   </div>
 </section>
 
@@ -1095,9 +1433,130 @@
   <button id="sssNotificationBtn" aria-label="Open notifications">🔔<span class="sss-notification-badge" id="sssNotificationBadge">0</span></button>
 </div>
 <script type="module" src="js/app.js?v=2"></script>
+
+<script type="module" id="sss-live-marquee-js">
+import { getApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+// LIVE MARQUEE DISPLAY LOGIC
+(async function(){
+
+  const box = document.getElementById("sssLiveMarquee");
+  const track = document.getElementById("sssMarqueeTrack");
+
+  if (!box || !track) return;
+
+  try {
+    const db = getFirestore(getApp());
+
+    const q = query(
+      collection(db, "live_marquee"),
+      orderBy("updatedAt", "desc"),
+      limit(1)
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      box.style.display = "none";
+      return;
+    }
+
+    const data = snap.docs[0].data();
+
+    if (data.published !== true || !data.text) {
+      box.style.display = "none";
+      return;
+    }
+
+    const text = String(data.text);
+
+    const fontFamily = data.fontFamily || "Arial, sans-serif";
+    const fontSize = Number(data.fontSize) || 18;
+    const textColor = data.textColor || "#ffffff";
+    const backgroundColor = data.backgroundColor || "#0b5ed7";
+    const direction = data.direction || "left";
+    const speed = Math.max(5, Number(data.speed) || 35);
+    const bold = data.bold === true;
+    const shadow = data.shadow === true;
+
+    box.style.display = "block";
+    box.style.background = backgroundColor;
+
+    track.textContent = text;
+    track.style.fontFamily = fontFamily;
+    track.style.fontSize = fontSize + "px";
+    track.style.color = textColor;
+    track.style.fontWeight = bold ? "700" : "400";
+    track.style.textShadow = shadow
+      ? "2px 2px 4px rgba(0,0,0,.55)"
+      : "none";
+
+    const animationName =
+      direction === "right"
+        ? "sssMarqueeRight"
+        : "sssMarqueeLeft";
+
+    const duration = Math.max(8, 100 / speed * 10);
+
+    track.style.animation =
+      animationName + " " + duration + "s linear infinite";
+
+    if (!document.getElementById("sssMarqueeAnimationStyle")) {
+      const style = document.createElement("style");
+      style.id = "sssMarqueeAnimationStyle";
+
+      style.textContent = `
+        #sssLiveMarquee {
+          position: relative;
+          overflow: hidden;
+        }
+
+        #sssMarqueeTrack {
+          position: relative;
+          will-change: transform;
+        }
+
+        @keyframes sssMarqueeLeft {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(-100%);
+          }
+        }
+
+        @keyframes sssMarqueeRight {
+          from {
+            transform: translateX(-100%);
+          }
+          to {
+            transform: translateX(100%);
+          }
+        }
+      `;
+
+      document.head.appendChild(style);
+    }
+
+  } catch (error) {
+    console.error("LIVE MARQUEE LOAD ERROR:", error);
+    box.style.display = "none";
+  }
+
+})();
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDeJryLHlGc9Mx_kpo1IhmqnLC5EVYGBvM",
   authDomain: "samui-seva-sadan.firebaseapp.com",
@@ -1933,6 +2392,223 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+</script>
+
+
+
+<script type="module" id="sss-facility-settings-js">
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getApp, getApps } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+(async function(){
+  const btn = document.getElementById("sssFacilitySettingsBtn");
+  const panel = document.getElementById("sssFacilitySettingsPanel");
+  const close = document.getElementById("sssFacilitySettingsClose");
+  const save = document.getElementById("sssFacilitySettingsSave");
+  const reset = document.getElementById("sssFacilitySettingsReset");
+
+  if(!btn || !panel || !save || !reset || !getApps().length) return;
+
+  const auth = getAuth(getApp());
+  const db = getFirestore(getApp());
+
+  let isAdmin = false;
+
+  onAuthStateChanged(auth, user => {
+    isAdmin = !!user;
+    btn.style.display = isAdmin ? "" : "none";
+  });
+
+  btn.addEventListener("click", () => {
+    if(!isAdmin) return;
+    panel.hidden = !panel.hidden;
+  });
+
+  close.addEventListener("click", () => {
+    panel.hidden = true;
+  });
+
+  const settings = {
+    textColor: document.getElementById("sssFacilityTextColor"),
+    fontStyle: document.getElementById("sssFacilityFontStyle"),
+    fontSize: document.getElementById("sssFacilityFontSize"),
+    fontWeight: document.getElementById("sssFacilityFontWeight"),
+    theme: document.getElementById("sssFacilityTheme"),
+    background: document.getElementById("sssFacilityBackground"),
+    alignment: document.getElementById("sssFacilityAlignment")
+  };
+
+  try{
+    const snap = await getDoc(doc(db,"facility_settings","main"));
+    if(snap.exists()){
+      const d = snap.data();
+      Object.keys(settings).forEach(k => {
+        if(d[k] != null) settings[k].value = d[k];
+      });
+    }
+  }catch(e){
+    console.error("Facility settings load error:",e);
+  }
+
+  save.addEventListener("click", async () => {
+    if(!isAdmin) return;
+
+    const data = {};
+    Object.keys(settings).forEach(k => data[k] = settings[k].value);
+
+    try{
+      await setDoc(doc(db,"facility_settings","main"), data, {merge:true});
+      applySettings(data);
+      panel.hidden = true;
+      alert("✅ Settings saved successfully.");
+    }catch(e){
+      console.error(e);
+      alert("❌ Settings save করা যায়নি।");
+    }
+  });
+
+  reset.addEventListener("click", async () => {
+    if(!isAdmin) return;
+
+    const defaults = {
+      textColor: "#222222",
+      fontStyle: "normal",
+      fontSize: "16px",
+      fontWeight: "400",
+      theme: "light",
+      background: "plain",
+      alignment: "left"
+    };
+
+    try{
+      await setDoc(doc(db,"facility_settings","main"), defaults, {merge:false});
+
+      Object.keys(settings).forEach(k => {
+        settings[k].value = defaults[k];
+      });
+
+      applySettings(defaults);
+      panel.hidden = true;
+
+      alert("↩️ Settings reset successfully.");
+    }catch(e){
+      console.error("Facility settings reset error:",e);
+      alert("❌ Settings reset করা যায়নি।");
+    }
+  });
+
+  function applySettings(d){
+    const body = document.querySelector(".sss-facility-message-body");
+    if(!body) return;
+
+    body.style.color = d.textColor || "#222222";
+    body.style.fontStyle = d.fontStyle || "normal";
+    body.style.fontSize = d.fontSize || "16px";
+    body.style.fontWeight = d.fontWeight || "400";
+    body.style.textAlign = d.alignment || "left";
+
+    body.classList.remove(
+      "sss-facility-message-theme-dark",
+      "sss-facility-message-theme-soft",
+      "sss-facility-message-bg-soft",
+      "sss-facility-message-bg-gradient"
+    );
+
+    if(d.theme === "dark") body.classList.add("sss-facility-message-theme-dark");
+    if(d.theme === "soft") body.classList.add("sss-facility-message-theme-soft");
+
+    if(d.background === "soft") body.classList.add("sss-facility-message-bg-soft");
+    if(d.background === "gradient") body.classList.add("sss-facility-message-bg-gradient");
+  }
+
+  window.sssApplyFacilitySettings = applySettings;
+})();
+</script>
+
+<script type="module" id="sss-dynamic-facilities">
+import { getApp, getApps } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+(async function(){
+  const cards = document.querySelectorAll(".sss-facility-option");
+  const modal = document.getElementById("sssFacilityModal");
+  const content = document.getElementById("sssFacilityModalContent");
+
+  if(!cards.length || !modal || !content) return;
+
+  let facilities = [];
+
+  try{
+    if(!getApps().length) return;
+
+    const db = getFirestore(getApp());
+    const snapshot = await getDocs(collection(db,"facilities"));
+
+    facilities = snapshot.docs
+      .map(d => ({id:d.id, ...d.data()}))
+      .filter(x => x.published === true);
+
+  }catch(error){
+    console.error("Facilities load error:", error);
+    return;
+  }
+
+  function normalize(value){
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function escapeHtml(value){
+    return String(value || "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
+  function openFacility(name){
+    const item = facilities.find(x => normalize(x.name) === normalize(name));
+
+    if(!item){
+      content.innerHTML = `
+        <h2>${escapeHtml(name)}</h2>
+        <p>এই পরিষেবার বিস্তারিত তথ্য বর্তমানে প্রকাশিত হয়নি।</p>
+      `;
+    }else{
+      content.innerHTML = `
+        <h2>${escapeHtml(item.name || name)}</h2>
+        <div class="sss-facility-message-body">${escapeHtml(item.description || "বিস্তারিত তথ্য পাওয়া যায়নি।")}</div>
+      `;
+    }
+
+    modal.classList.add("sss-show");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";
+  }
+
+  function closeFacility(){
+    modal.classList.remove("sss-show");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+  }
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      openFacility(card.dataset.facility);
+    });
+  });
+
+  modal.querySelectorAll("[data-close-facility]").forEach(el => {
+    el.addEventListener("click", closeFacility);
+  });
+
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape" && modal.classList.contains("sss-show")){
+      closeFacility();
+    }
+  });
+})();
 </script>
 
 </body>
